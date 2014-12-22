@@ -15,9 +15,9 @@
 
 int main(int argc, char *argv[])
 {	
-	time_t 			actual_time;	// Aktualni cas
-	struct tm 		tm;				// Aktualni cas v jednotkach casu
-	char 			*release_type;	// Druh releasu firmwaru
+	time_t			actual_time;	// Aktualni cas
+	struct tm		tm;				// Aktualni cas v jednotkach casu
+	char			*release_type;	// Druh releasu firmwaru
 	int				result;			// navratovy kod	
 	char			command[100];	// Obecny prikaz
 	char			date[50];		// Aktualni cas jako retezec	
@@ -27,12 +27,12 @@ int main(int argc, char *argv[])
 	char			***routers;		// Pole tabulkty routers
 	int				i;				// Promene na prochazeni poli	
 	pid_t			pid;			// Pid vytvoreneho procesu
-	int 			childs;			// Pocet vytvorenych procesu
+	int				childs;			// Pocet vytvorenych procesu
 	int				status;			// Status ukonceneho procesu
 	int				childs_remote;	// Pocet procesu remote
 	
 	/******************************************************************
-	 *  Zpracovani parametru 3
+	 *  Zpracovani parametru
 	 *****************************************************************/
 	
 	
