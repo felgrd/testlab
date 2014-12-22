@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	int				childs_remote;	// Pocet procesu remote
 	
 	/******************************************************************
-	 *  Zpracovani parametru 2
+	 *  Zpracovani parametru 3
 	 *****************************************************************/
 	
 	
