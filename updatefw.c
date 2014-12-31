@@ -12,26 +12,48 @@
 #define DEFAULT_USER		"root"
 #define	DEFAULT_PASS		"root"
 
+/**
+ * @file updatefw.c
+ * 
+ * @brief tl_updatefw [-i <ip>] [-f <firmware>] [-d <dir>] 
+ * [-u <user>] [-p <pass>] -r <release> [-t <protocol>] [<ID>]
+ * <br> tl_updateconf [-i <ip>] [-f <firmware>] [-d <dir>] 
+ * [-u <user>] [-p <pass>] -r <release> [-t <protocol>] [<ID>]
+ * 
+ * @author David Felgr 
+ * @version 1.0.0
+ * 
+ * Program tl_updatefw update new firmware to the router. 
+ * Program tl_updateconf update new configuration to the router.
+ * New firmware or configuration is uploaded via http or https protocol.
+ * Program is required id of router or ip address, name of firmware and
+ * protocol.
+ * 
+ * @param -i <ip> IP address of the router updated.
+ * @param -f <firmware> Name of new firmware or configuration.
+ * @param -d <dir> Directory of new firmware or configuration.
+ * @param -u <user> User login your tested router.
+ * @param -p <pass> Password login your tested router.
+ * @param -r <release> Release id of your tested router.
+ * @param -t <protocol> Protocol of connectivity your tested router.
+ * @param <id> Router id of your tested router.
+ * 
+ * @returns The return value is the same as curl. http://curl.haxx.se/docs/manpage.html
+ */
+ 
+ 
 void help(void){
-	printf("usage tl_updatefw\n");
+	#ifdef FW
+		printf("usage tl_updatefw [-i <ip>] [-f <firmware>] [-d <dir>] "\
+		"[-u <user>] [-p <pass>] [-t <protocol>] -r <release> [<ID>]\n");
+    #elif CONF
+		printf("usage tl_updateconf [-i <ip>] [-f <firmware>] [-d <dir>] "\
+		"[-u <user>] [-p <pass>] [-t <protocol>] -r <release> [<ID>]\n");		
+    #endif
 }
 
-/**
- * ## @package confupdate
-#  This module upload configuration to router.
-#  
-#  @param -r <router> Address of router.
-#  @param -f <firmware> Firmware of router.
-#  @param [-c <confdir>] The directory where the desired configuration.
-# The default directory is ./configuration.
-#  @param [-u <user>] User name of router. The default user is root.
-#  @param [-p <pass>] Password of router. The default password is root.
-#  @param -h Print help.
-
- * */
-
 int main(int argc, char *argv[]){
-	int				router;
+	int 			router;
 	char			ip[20];
 	char			firmware[PATH_MAX];
 	char			imagedir[PATH_MAX];
@@ -40,12 +62,12 @@ int main(int argc, char *argv[]){
 	char			release[20];
 	char			protocol[20];	
 	char			parameter;	
-	int				selIP;
-	int				selFW;	
-	int				selPR;
+	int 			selIP;
+	int 			selFW;	
+	int 			selPR;
 	char			*product;
 	int 			result;
-	int				fifo_fd;	
+	int 			fifo_fd;	
 	char			command[255];
 	char			file[255];	
 	message_remote	remote_request;		// Format posilanych dat
