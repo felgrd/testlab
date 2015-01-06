@@ -1,0 +1,89 @@
+BIN_CHECK_PRODUCT = tl_checkproduct
+OBJ_CHECK_PRODUCT = check_product.o
+
+BIN_ROUTER_READY = tl_routerready
+OBJ_ROUTER_READY = ready.o
+
+BIN_REMOTE = tl_remote
+OBJ_REMOTE = remote.o
+
+BIN_REMOTE_CHANGE = tl_remotechange
+OBJ_REMOTE_CHANGE = remote_change.o
+
+BIN_REMOTE_INFO = tl_remoteinfo
+OBJ_REMOTE_INFO = remote_info.o
+
+BIN_STATUS = tl_status
+OBJ_STATUS = status.o
+
+BIN_UPDATE_FW = tl_updatefw
+OBJ_UPDATE_FW = updatefw.o
+SOURCE_UPDATE_FW = updatefw.c
+
+BIN_UPDATE_CONF = tl_updateconf
+OBJ_UPDATE_CONF = updateconf.o
+SOURCE_UPDATE_CONF = updatefw.c
+
+CFLAGS = -Wall -I/usr/include/testlab -I/usr/include/mysql
+LIB_UTILS = -ltl_utils 
+LIB_DATABASE = -ltl_database
+LIB_CSPIPE = -ltl_cspipe
+
+
+all: $(BIN_CHECK_PRODUCT) $(BIN_REMOTE) $(BIN_REMOTE_CHANGE) \
+	 $(BIN_REMOTE_INFO) $(BIN_STATUS) $(BIN_UPDATE_FW) \
+	 $(BIN_UPDATE_CONF)
+
+$(BIN_REMOTE) : $(OBJ_REMOTE) 
+	$(CC) -Wall -o $(BIN_REMOTE) $(OBJ_REMOTE) $(LIB_CSPIPE)
+
+$(BIN_REMOTE_CHANGE) : $(OBJ_REMOTE_CHANGE) 
+	$(CC) -Wall -o $(BIN_REMOTE_CHANGE) $(OBJ_REMOTE_CHANGE) $(LIB_CSPIPE)
+	
+$(BIN_REMOTE_INFO) : $(OBJ_REMOTE_INFO) 
+	$(CC) -Wall -o $(BIN_REMOTE_INFO) $(OBJ_REMOTE_INFO) $(LIB_CSPIPE)
+	
+$(BIN_STATUS) : $(OBJ_STATUS)
+	$(CC) -Wall -o $(BIN_STATUS) $(OBJ_STATUS) $(LIB_CSPIPE)
+	
+$(BIN_CHECK_PRODUCT) : $(OBJ_CHECK_PRODUCT) 
+	$(CC) -Wall -o $(BIN_CHECK_PRODUCT) $(OBJ_CHECK_PRODUCT) $(LIB_DATABASE) 
+
+$(OBJ_UPDATE_FW) : $(SOURCE_UPDATE_FW)
+	 $(CC) -c $(CFLAGS) -o $(OBJ_UPDATE_FW) $(SOURCE_UPDATE_FW) -DFW
+	
+$(BIN_UPDATE_FW) : $(OBJ_UPDATE_FW)
+	$(CC) -Wall -DFW -o $(BIN_UPDATE_FW) $(OBJ_UPDATE_FW) $(LIB_DATABASE) $(LIB_CSPIPE) $(LIB_UTILS)
+
+$(OBJ_UPDATE_CONF) : $(SOURCE_UPDATE_CONF)
+		$(CC) -c $(CFLAGS) -o $(OBJ_UPDATE_CONF) $(SOURCE_UPDATE_CONF) -DCONF
+	 
+$(BIN_UPDATE_CONF) : $(OBJ_UPDATE_CONF) 
+	$(CC) -Wall -DFW -o $(BIN_UPDATE_CONF) $(OBJ_UPDATE_CONF) $(LIB_DATABASE) $(LIB_CSPIPE) $(LIB_UTILS)
+
+clean:
+	rm -rf $(BIN_REMOTE) $(OBJ_REMOTE)
+	rm -rf $(BIN_REMOTE_CHANGE) $(OBJ_REMOTE_CHANGE)
+	rm -rf $(BIN_REMOTE_INFO) $(OBJ_REMOTE_INFO) 
+	rm -rf $(BIN_STATUS) $(OBJ_STATUS)
+	rm -rf $(BIN_CHECK_PRODUCT) $(OBJ_CHECK_PRODUCT) 
+	rm -rf $(BIN_UPDATE_FW) $(OBJ_UPDATE_FW)
+	rm -rf $(BIN_UPDATE_CONF) $(OBJ_UPDATE_CONF) 
+
+install: all
+	sudo cp $(BIN_REMOTE) /usr/bin/$(BIN_REMOTE)
+	sudo cp $(BIN_REMOTE_CHANGE) /usr/bin/$(BIN_REMOTE_CHANGE)
+	sudo cp $(BIN_REMOTE_INFO) /usr/bin/$(BIN_REMOTE_INFO)
+	sudo cp $(BIN_STATUS) /usr/bin/$(BIN_STATUS)
+	sudo cp $(BIN_CHECK_PRODUCT) /usr/bin/$(BIN_CHECK_PRODUCT)
+	sudo cp $(BIN_UPDATE_FW) /usr/bin/$(BIN_UPDATE_FW)
+	sudo cp $(BIN_UPDATE_CONF) /usr/bin/$(BIN_UPDATE_CONF)
+
+uinstall:
+	sudo rm -rf /usr/bin/$(BIN_REMOTE)
+	sudo rm -rf /usr/bin/$(BIN_REMOTE_CHANGE)
+	sudo rm -rf /usr/bin/$(BIN_REMOTE_INFO)
+	sudo rm -rf /usr/bin/$(BIN_STATUS)
+	sudo rm -rf /usr/bin/$(BIN_CHECK_PRODUCT)
+	sudo rm -rf /usr/bin/$(BIN_UPDATE_FW)
+	sudo rm -rf /usr/bin/$(BIN_UPDATE_CONF)
