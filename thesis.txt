@@ -1,9 +1,0 @@
-Metody automatizace testů síťových prvků
-Methods for automated testing of network elements
-
-S využitím postupů testování podle modelů navrhněte metodiku automatizovaného testování prvků síťové infrastruktury. Navrženou metodiku prakticky implementujte a ověřte její funkčnost. Vaše výsledky porovnejte s dosud používanými postupy.
-
-- Používané metody testování
-- Dostupné testovací nástroje
-- Návrh testovací laboratoře
-
