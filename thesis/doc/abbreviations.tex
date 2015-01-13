@@ -1,0 +1,46 @@
+\font\mflogo=logo10
+\def\METAFONT{{\mflogo META}\-{\mflogo FONT}}
+\def\METAPOST{{\mflogo META}\-{\mflogo POST}}
+\hyphenation{Post-Script}
+
+\startAbbreviations{%
+  As an example of an abbreviation description serve some terms from
+  TeX{} world. This introductory paragraph is optional and can stay empty.}
+\label{abbrv}%
+\abbrv[\TeX{}]  Typesetting program and macro language by Donald Knuth.
+\abbrv[\METAFONT{}] Program and macro language for font creation by
+  Donald Knuth.
+\abbrv[\METAPOST{}] Vector drawing program based on \METAFONT{} with
+  Encapsulated PostScript output by John Hobby.
+\abbrv[plain \TeX{}]  Original \TeX{} format (macro extension) by
+Donald Knuth. User customization is done by programing in \TeX{} macro language.
+\abbrv[\LaTeX{}]  Most known and used \TeX{} format originally by
+  Leslie Lamport. There is a huge number of packages that extends
+  standard functionality or bypass programing in \TeX{}. User
+  customization is primarily done by loading predefined class or
+  package and rewriting their definitions.
+\abbrv[Con\TeX{}t]  Complex typesetting and vector drawing system based
+  on \TeX{}, \METAPOST{} and Lua script language by Hans Hagen. Customization is
+  done by key-value parametrization with conjunction to \TeX{},
+  \METAPOST{} and Lua programing.
+\stopAbbreviations
+
+\setlength{\AbbrvIndent}{2em}
+
+\startAbbreviations*[Symbols]{%
+  The abbreviation environment starts a new page. If we want to avoid
+  page break like in this second short list use starred version {\tt\Backslash
+  startAbbreviations*}. Indentation might be adjusted by the command
+  {\tt\Backslash setlength\{\Backslash AbbrvIndent\}\{5em\}} to be
+  appropriate to the symbols width.}
+\abbrv[$\pi$] Final version number of \TeX{}.
+\abbrv[e] Final version number of \METAFONT{}.
+\abbrv[$2\varepsilon$] Version of today's \LaTeX{} valid since 1994. It
+  was intended as a temporary intermediate version between original
+  Leslie Lamports's last version \LaTeX{} 2.09 and \LaTeX{}3 that is
+  developed as its successor.
+\stopAbbreviations
+
+\endinput
+%%
+%% End of file `abbreviation.tex'.

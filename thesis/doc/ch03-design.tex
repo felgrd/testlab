@@ -1,0 +1,58 @@
+% FELthesis: LaTeX class for bachelor, master and phd thesis in CTU FEL
+% (c) 2012 Vit Zyka
+%
+% 2012-12-13 v0.1 first version
+
+\chapter{Design}
+Since this template intent is to serve for a wide variety of
+technical students we chose a conservative design with a stress on
+the structure.
+
+\section{Return to classical book design}
+We support new offical conditions for thesis preparation on
+CTU~\cite{CVUT_FEL:zaverecne_prace}. They mimic the fact that the
+technology of high quality typesetting and printing is now generally 
+available for students. It anables to bring back the classical book
+design which has developed during centuries according to human ergonomy
+needs. That is why we do not follow the typewriter restrictions
+any more.
+
+Let us list these classical book design principles:
+\begin{description}
+\item[Duplex printing:] Text on both even and odd pages has several
+  advantages. The reader can view bigger amount of text, figures, and
+  tables together; it reduces flipping pages; it saves paper, expenses, and
+  library storage.
+\item[Interline space `single':] Well designed font has its optimal
+  interline space. Increasing this space makes reading more
+  tiring. Even for proof reading there is no need for
+  `double' interlines when using proofing marks and big
+  binding margin.
+\item[Suppress underline emphasizing:] Underling breaks letter
+  baselines. It again makes reading more difficult. Use
+  \verb+\emph{...}+ (\emph{italics}) or \verb+\Emph{...}+ (\Emph{bold
+    sans}) instead.
+\end{description}
+
+\section{Fonts}
+For the class we chose a Latin Modern~\cite{LatinModern} font family. Its
+classicist `didon' origin suits well to the technical content.
+We see the following technical advantages of the font:
+\begin{itemize}
+\item Good legibility.
+\item Richness of the family (italic, bold, mono, math).
+\item Excelent math design.
+\item Good design of Czech/Slovak accents and other national specifics.
+\item OTF format for simple Unicode and non-\TeX{} (MS Word) usage.
+\item Free usage licence.
+\end{itemize}
+The size of base text is 11\,pt.
+
+\section{Geometry}
+Theses are typically bind together with wide and cheep
+bindings. That is why the inner border is setup to 37\,mm. The rest
+dimensions are adjusted to the A4 paper size and the font size.
+
+\endinput
+
+% end of ch03-design.tex

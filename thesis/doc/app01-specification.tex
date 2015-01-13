@@ -1,0 +1,52 @@
+% FELthesis: LaTeX class for bachelor, master and phd thesis in CTU FEL
+% (c) 2012 Vit Zyka
+%
+% 2012-11-25 v0.1 first version
+% 2013-01-05 v0.2 otherlanguage* not to change \bibname
+
+\chapter{Specification/Specifikace}
+\label{app:specif}
+\begin{otherlanguage*}{czech}
+
+Tento dokument specifikuje šablony pro \LaTeX{} a MS Word, které jsou
+doporučeny pro psaní bakalářských, diplomových nebo disertačních prácí
+na ČVUT FEL. Specifikace se opírá
+o~dokumenty~\cite{CVUT_FEL:zaverecne_prace, CVUT_FEL:smernice, CSN:016910}.
+
+\hbox{}
+
+\noindent
+Šablony mají splňovat následující požadavky:
+\begin{itemize}
+\item Písmo Latin Modern (v~\LaTeX{} instalacích je standardně
+  obsaženo, pro MS Word bude OTF verze s~podporou matematiky přiložená
+  k~šabloně). Velikost základního písma 11 bodů.
+\item Implicitní kódování šablon UTF-8.
+\item Formátování na papír A4, vnitřní okraj 30\,mm pro pevnou
+  vazbu, délka řádky přizpůsobena velikosti písma.
+\item Implicitně se předpokládá oboustranná sazba.
+\item Strukturní elementy: titulní list, poděkování, prohlášení,
+  abstrakt + klíčová slova (cz/en), obsah, seznam symbolů/zkratek,
+  přílohy, bibliografie, tabulky a obrázky s popisky.
+\item Číslování stránek od 1. strany textu (úvodu); úvodní stránky
+  číslovány římsky. Důvodem je snadno rozpoznatelný rozsah práce.
+\item V~záhlaví stránky číslo a název hlavní kapitoly. V~patičce
+  u~vnějšího okraje číslo stránky.
+\item Součástí šablony bude styl pro bibliografie s~číselnými odkazy;
+  v~seznamu literatury řazení dle pořadí citování.
+\item Šablona umožní následující varianty výsledného dokumentu:
+  \begin{itemize}
+    \item bakalářská/diplomová/disertační práce (předpokládá se stejná
+      základní struktura, jen změna podtitulků),
+    \item anglický nebo český jazyk textu (vzory dělení, nadpisy,
+      číslování kapitol),
+    \item pracovní verze (draft) s~textem ,,Draft +
+      datum'' v~patičce.
+  \end{itemize}
+\end{itemize}
+
+\end{otherlanguage*}
+
+\endinput
+
+% end of app01-specification.tex

@@ -1,0 +1,200 @@
+% CMPthesis: LaTeX class for both master and phd thesis
+% (c) 2012 Vit Zyka
+%
+% 2012-12-15 v0.1 first version
+% 2013-01-04 v0.2 fix typo
+
+\chapter{Introduction}
+This document briefly describes \LaTeX{} class \FelThesis{}. It is
+an officially recommended \LaTeX{} style and structure
+template to prepare bachelor's, master's, or ph.d. thesis.
+It also serves as an example of the class usage and it gives some
+typesetting advice for thesis authors.
+
+\FelThesis{} defines all needed thesis structure elements and it designs
+its style. It saves students' and their advisors' time enabling them to
+focus on the thesis content. The main goals of the package are as follows:
+\begin{itemize}
+\item setup page, text, and border size;
+\item setup fonts and their sizes;
+\item setup titlepage;
+\item setup front elements like acknowledgement, declaration,
+  abstracts, keyword lists, table of contents and list of abbreviations/symbols;
+\item setup running heads and foots;
+\item setup headings and captions; 
+\item make easier using a bibliography.
+\end{itemize}
+
+Since the thesis which utilizes \FelThesis{} class is still a \LaTeX{}
+document at least some \LaTeX{} knowlewdge is needed. This user manual
+covers only additional specialities for thesis but does not include a
+description of the \LaTeX{} structural language or \TeX{}
+macrolanguage basis. That is why it can not replace \LaTeX{}
+textbooks among them we recommend:
+\foreignlanguage{czech}{\textit{\LaTeX{} pro začátečníky}}~\cite{Rybicka02},
+\textit{The not so short introduction to \LaTeXe{}}~\cite{Oetiker11},
+\textit{Guide to LaTeX}~\cite{Kopka04},
+\textit{The LaTeX Companion}~\cite{latexcompanion2nd},
+\textit{The LaTeX Graphics Companion}~\cite{latexgraphicscompanion2nd}.
+For description of the \TeX{} macrolanguage see following books:
+\textit{The TeXbook}~\cite{TeXBook},
+\foreignlanguage{czech}{\textit{\TeX{}book naruby}}~\cite{Olsak01}.
+
+\section{First usage}
+\subsection{Minimal document}
+The minimal \FelThesis{} document looks as follows:
+
+\begin{lstlisting}[language=TeX]
+\documentclass[bcl,draft]{felthesis}% bcl|msc|phd czech|slovak
+
+\usepackage[utf8x]{inputenc}
+
+\startThesisInfo
+  \Title{thesis title}
+  \Author{author name}
+  \Date{November 2012}
+  \Department{Katedra kybernetiky}
+  \Advisor{advisor: name}
+  \KeywordsCz{Prvni klicove slovo; druhe; treti; \dots}
+  \KeywordsEn{First keyword; second; third; \dots}
+\stopThesisInfo
+
+\addbibresource{\jobname.bib} % bibliography file
+
+\begin{document}
+
+\MakeTitle
+
+\startFrontMatter
+  \startAcknowledgement ... \stopAcknowledgement
+  \startDeclaration ... \stopDeclaration
+  \startAbstractCz ... \stopAbstractCz
+  \startAbstractEn ... \stopAbstractEn
+  \TableOfContents
+\stopFrontMatter
+
+\startBodyMatter
+  \chapter{...}
+  \section{...}
+  \subsection{...}
+
+  \startAppendices
+    \chapter{...}
+  \stopAppendices
+\stopBodyMatter
+
+\startBackMatter
+  \PrintBibliography
+\stopBackMatter
+
+\end{document}
+\end{lstlisting}
+
+As writing the thesis in a single file makes its editing very
+difficult it is useful to split it into several files that mimics the
+document structure:
+\begin{lstlisting}[language=TeX]
+... % preamble is omitted
+\begin{document}
+
+\MakeTitle
+
+\startFrontMatter
+  \input{acknowledgement}
+  \input{declaration}
+  \input{abstract}
+  \TableOfContents
+  \input{abbreviations}
+\stopFrontMatter
+
+\startBodyMatter
+  %\includeonly{ch01}
+  \include{ch01}
+  \include{ch02}
+  ...
+
+  \startAppendices
+    \include{app01}
+  \stopAppendices
+\stopBodyMatter
+
+\startBackMatter
+  \PrintBibliography
+\stopBackMatter
+
+\end{document}
+\end{lstlisting}
+
+\subsection{Class options}
+The class \FelThesis{} can be customized by following
+\verb+\documentclass[...]{felthesis}+ options:
+\begin{description}
+\item[bcl | msc | phd] Thesis type: bachelor, master, or
+  ph.d. respectively. For now it does not influense thesis structure
+  or design, just the text of the thesis's subject. [default: bcl]
+\item[english | czech | slovak] Main thesis language. Set labels and
+  hyphenation patterns. [english]
+\item[draft] Print proof mark on every page footer with date
+  information for versioning of draft (not final) version. Remove this
+  option for the final thesis versions. []
+\end{description}
+
+\subsection{Compilation}
+\begin{enumerate}
+\item Install \TeX{} distribution (\TeX{}Live recommended).
+\item Unzip file felthesis.zip into some directory (e.g. thesis).
+\item Run `latex felthesis.ins'.
+\item Make your copy of the file template.tex (e.g. `your-surname-msc.tex').
+\item Test compilation
+  \begin{verbatim}
+  pdflatex your-surname-msc.tex
+  biber your-surname-msc
+  pdflatex your-surname-msc.tex
+  pdflatex your-surname-msc.tex\end{verbatim}
+\item If it runs without errors and \verb+your-surname-msc.pdf+ is
+  generated than your \TeX{} distribution contains all needed packages
+(see~\ref{sec:dependency}) and you are ready to use the template.
+\end{enumerate}
+See that we run \verb+(pdf)latex+ format. Do not use \verb+(pdf)cslatex+ for
+thesis in Czech or Slovak. Cs\LaTeX{} is obsolete and not
+maintained. With combination of standard \verb+pdflatex+ format,
+\verb+babel+ package, UTF-8 encoding, and Latin Modern
+fonts~\cite{LatinModern} we obtain the best \LaTeX{} standard
+environment for typesetting Czech or Slovak languages.
+
+\section{\LaTeX{} distribution}
+Among several free or commertial \TeX{} distributions we
+recommend to use the \TeX{}Live 2012~\cite{TeXLive} or newer. It is huge but
+fresh, complete and well maintained distribution. You will not miss
+any package or tool there. \TeX{}Live works on all main platforms
+(Unix, windows, Mac) so you can share the same \TeX{} environment
+on several working places.
+
+\subsection{Packages}
+\label{sec:dependency}
+\FelThesis{} class loads the following \LaTeX{} packages
+which must be present at your system:
+\begin{itemize}
+\item babel,
+\item lmodern, cmap,
+\item ifpdf,
+\item xcolor, graphicx,
+\item hyperrref, url,
+\item amsmath, amssymb,
+\item chngcntr, subfigure,
+\item biblatex,
+\item makeidx,
+\item pdfpages. 
+\end{itemize}
+
+\section{Encodings}
+For avoiding character confusions \FelThesis{} supports UTF-8 encoding
+for all input source files including bibliography. We recommend to
+stay with it. Most of today's text editors
+and \LaTeX{} writing environments are capable to save files in UTF-8,
+e.g. \TeX{}works~\cite{texworks}, \TeX{}nicCenter~\cite{texniccenter}, or 
+XEmacs~\cite{xemacs}.
+
+\endinput
+
+% end of ch01-minimal-.tex
