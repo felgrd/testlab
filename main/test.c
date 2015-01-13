@@ -113,7 +113,8 @@ int main(int argc, char *argv[]){
 			
 			// Sestaveni commandu
 			result = snprintf(command, sizeof(command), \
-			"%s/tests/%s/%s", DIRECTORY, functions[i][DB_FUNCTIONS_NAME], \
+			"%s/tests/%s/%s.tst", DIRECTORY, \
+			functions[i][DB_FUNCTIONS_NAME], \
 			procedures[j][DB_PRODUCTS_NAME]);
 			
 			// Kontrola sestaveni commandu

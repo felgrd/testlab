@@ -19,10 +19,10 @@
 /**
  * @file tl_update.c
  * 
- * @brief tl_updatefw [-i \<ip\>] [-f \<firmware\>] [-d \<dir\>] 
- * [-u \<user\>] [-p \<pass\>] -r \<release\> [-t \<protocol\>] [\<ID\>]
- * <br> tl_updateconf [-i \<ip\>] [-f \<firmware\>] [-d \<dir\>] 
- * [-u \<user\>] [-p \<pass\>] -r \<release\> [-t \<protocol\>] [\<ID\>]
+ * @brief usage tl_updatefw -r \<release\> [-d \<dir\>] [-u \<user\>]
+ * [-p \<pass\>] [-i \<ip\> -f \<firmware\> -t \<protocol\>] or [\<ID\>]  
+ * <br> tl_updateconf -r \<release\> [-d \<dir\>] [-u \<user\>]
+ * [-p \<pass\>] [-i \<ip\> -f \<firmware\> -t \<protocol\>] or [\<ID\>]    
  * 
  * @author David Felgr 
  * @version 1.0.0
@@ -44,16 +44,17 @@
  * @param \<id\> Router id of your tested router.
  * 
  * @returns The return value is the same as curl. http://curl.haxx.se/docs/manpage.html
+ * 
+ * @cond
  */
- 
- 
+
 void help(void){
 	#ifdef FW
-		printf("usage tl_updatefw [-i <ip>] [-f <firmware>] [-d <dir>] "\
-		"[-u <user>] [-p <pass>] [-t <protocol>] -r <release> [<ID>]\n");
+		printf("usage tl_updatefw -r <release> [-i <ip> -f <firmware>" \
+		" -t <protocol>] or  [<ID>] [-d <dir>] [-u <user>] [-p <pass>]\n");
 	#elif CONF
-		printf("usage tl_updateconf [-i <ip>] [-f <firmware>] [-d <dir>] "\
-		"[-u <user>] [-p <pass>] [-t <protocol>] -r <release> [<ID>]\n");		
+		printf("usage tl_updateconf -r <release> [-i <ip> -f <firmware>" \
+		" -t <protocol>] or [<ID>] [-d <dir>] [-u <user>] [-p <pass>]\n");		
 	#endif
 }
 

@@ -1,28 +1,28 @@
 BIN_CHECK_PRODUCT = tl_checkproduct
-OBJ_CHECK_PRODUCT = check_product.o
+OBJ_CHECK_PRODUCT = tl_checkproduct.o
 
 BIN_ROUTER_READY = tl_routerready
-OBJ_ROUTER_READY = ready.o
+OBJ_ROUTER_READY = tl_routerready.o
 
 BIN_REMOTE = tl_remote
-OBJ_REMOTE = remote.o
+OBJ_REMOTE = tl_remote.o
 
 BIN_REMOTE_CHANGE = tl_remotechange
-OBJ_REMOTE_CHANGE = remote_change.o
+OBJ_REMOTE_CHANGE = tl_remotechange.o
 
 BIN_REMOTE_INFO = tl_remoteinfo
-OBJ_REMOTE_INFO = remote_info.o
+OBJ_REMOTE_INFO = tl_remoteinfo.o
 
 BIN_STATUS = tl_status
-OBJ_STATUS = status.o
+OBJ_STATUS = tl_status.o
 
 BIN_UPDATE_FW = tl_updatefw
 OBJ_UPDATE_FW = updatefw.o
-SOURCE_UPDATE_FW = updatefw.c
+SOURCE_UPDATE_FW = tl_update.c
 
 BIN_UPDATE_CONF = tl_updateconf
 OBJ_UPDATE_CONF = updateconf.o
-SOURCE_UPDATE_CONF = updatefw.c
+SOURCE_UPDATE_CONF = tl_update.c
 
 CFLAGS = -Wall -I/usr/include/testlab -I/usr/include/mysql
 LIB_UTILS = -ltl_utils 
@@ -71,13 +71,13 @@ clean:
 	rm -rf $(BIN_UPDATE_CONF) $(OBJ_UPDATE_CONF) 
 
 install: all
-	sudo cp $(BIN_REMOTE) /usr/bin/$(BIN_REMOTE)
-	sudo cp $(BIN_REMOTE_CHANGE) /usr/bin/$(BIN_REMOTE_CHANGE)
-	sudo cp $(BIN_REMOTE_INFO) /usr/bin/$(BIN_REMOTE_INFO)
-	sudo cp $(BIN_STATUS) /usr/bin/$(BIN_STATUS)
-	sudo cp $(BIN_CHECK_PRODUCT) /usr/bin/$(BIN_CHECK_PRODUCT)
-	sudo cp $(BIN_UPDATE_FW) /usr/bin/$(BIN_UPDATE_FW)
-	sudo cp $(BIN_UPDATE_CONF) /usr/bin/$(BIN_UPDATE_CONF)
+	sudo cp -u $(BIN_REMOTE) /usr/bin/$(BIN_REMOTE)
+	sudo cp -u $(BIN_REMOTE_CHANGE) /usr/bin/$(BIN_REMOTE_CHANGE)
+	sudo cp -u $(BIN_REMOTE_INFO) /usr/bin/$(BIN_REMOTE_INFO)
+	sudo cp -u $(BIN_STATUS) /usr/bin/$(BIN_STATUS)
+	sudo cp -u $(BIN_CHECK_PRODUCT) /usr/bin/$(BIN_CHECK_PRODUCT)
+	sudo cp -u $(BIN_UPDATE_FW) /usr/bin/$(BIN_UPDATE_FW)
+	sudo cp -u $(BIN_UPDATE_CONF) /usr/bin/$(BIN_UPDATE_CONF)
 
 uinstall:
 	sudo rm -rf /usr/bin/$(BIN_REMOTE)

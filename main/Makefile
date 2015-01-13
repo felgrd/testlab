@@ -58,13 +58,13 @@ clean:
 	rm -rf $(BIN_REMOTE_SERVER) $(OBJ_REMOTE_SERVER)
 	
 install: all
-	sudo cp $(BIN_TESTLAB) /usr/bin/$(BIN_TESTLAB)
-	sudo cp $(BIN_CHECKOUT) /usr/bin/$(BIN_CHECKOUT)
-	sudo cp $(BIN_COMPILE) /usr/bin/$(BIN_COMPILE)
-	sudo cp $(BIN_TEST) /usr/bin/$(BIN_TEST)
-	sudo cp $(BIN_CLEAR) /usr/bin/$(BIN_CLEAR)
-	sudo cp $(BIN_REMOTE_EXIT) /usr/bin/$(BIN_REMOTE_EXIT)
-	sudo cp $(BIN_REMOTE_SERVER) /usr/bin/$(BIN_REMOTE_SERVER)
+	sudo cp -u $(BIN_TESTLAB) /usr/bin/$(BIN_TESTLAB)
+	sudo cp -u $(BIN_CHECKOUT) /usr/bin/$(BIN_CHECKOUT)
+	sudo cp -u $(BIN_COMPILE) /usr/bin/$(BIN_COMPILE)
+	sudo cp -u $(BIN_TEST) /usr/bin/$(BIN_TEST)
+	sudo cp -u $(BIN_CLEAR) /usr/bin/$(BIN_CLEAR)
+	sudo cp -u $(BIN_REMOTE_EXIT) /usr/bin/$(BIN_REMOTE_EXIT)
+	sudo cp -u $(BIN_REMOTE_SERVER) /usr/bin/$(BIN_REMOTE_SERVER)
 
 uinstall:
 	sudo rm -rf /usr/bin/$(BIN_TESTLAB)
