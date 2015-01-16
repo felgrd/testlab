@@ -1,0 +1,9 @@
+#C program
+*.o
+
+#Latex
+*.aux
+*.bcf
+*.idx
+*.log
+*.toc

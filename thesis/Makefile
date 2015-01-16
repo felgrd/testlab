@@ -4,17 +4,17 @@ all:
 	evince felgr_david.pdf
 
 purge:
-	-rm *.log
-	-rm *.aux
-	-rm *.toc
-	-rm *.bbl
-	-rm *.blg
-	-rm *.bcf
-	-rm *.idx
-	-rm *.ilg
-	-rm *.ind
-	-rm *.out
-	-rm *.run.xml
+	-rm -f *.log
+	-rm -f *.aux
+	-rm -f *.toc
+	-rm -f *.bbl
+	-rm -f *.blg
+	-rm -f *.bcf
+	-rm -f *.idx
+	-rm -f *.ilg
+	-rm -f *.ind
+	-rm -f *.out
+	-rm -f *.run.xml
 
 clean: purge
 	-rm -f felgr_david.pdf
