@@ -1,5 +1,7 @@
 #C program
 *.o
+*.so
+*.a
 
 #Latex
 *.aux
@@ -7,3 +9,6 @@
 *.idx
 *.log
 *.toc
+felgr_david.out
+felgr_david.pdf
+felgr_david.run.xml
