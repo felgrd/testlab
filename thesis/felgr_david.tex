@@ -32,7 +32,7 @@
 
 %% =========================================================== settings
 \addbibresource{\jobname.bib} % bibliography file
-\graphicspath{{logo}} % subdirectories where TeX finds pictures
+\graphicspath{{logo/}{images/}} % subdirectories where TeX finds pictures
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 %% ========================================================== text body
 \begin{document}
@@ -43,7 +43,7 @@
   \input{acknowledgement}
   \input{declaration}
   \input{abstract}
-  \cd
+  \TableOfContents
   \input{abbreviations}
 \stopFrontMatter
 
