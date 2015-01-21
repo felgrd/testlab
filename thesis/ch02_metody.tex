@@ -6,9 +6,9 @@ Testování výrobků prochází několika stupněmi testování. Některé stup
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=.6\LW]{leveltest}
+  \includegraphics[width=.6\LW]{test_phase}
   \caption{Schéma testovacího modelu}
-  \label{fig:leveltest}
+  \label{fig:test_phase}
 \end{figure}
 
 \subsection{Testování programátorem (Developer testing)}
@@ -26,8 +26,6 @@ Jelikož zdrojový kód pro výrobky testované navrhovaným testovacím sytéme
 \subsection{Integrační testování (Integration testing)}
 Po předchozích dvou úrovních testování, které provádí programátoři přichází fáze kdy se hotový výrobek dostává do ruky testerům. Testeři většinou provádí dvě úrovně testování integrační testování a systémové testování. Někdy jsou tyto dvě fáze spojovány do jedné fáze nazývající se systémově integrační testování. Obě úrovně budou dále detailněji popsány.
 
-Integračním testováním testujeme integraci jednotlivých komponent mezi ostatní komponenty ale také integraci jednotlivých komponent do operačního systému a na konkrétní hardware. Napříkald testování odesíláni sms zpráv na operačním systému Linux běžícím na hardweru konkrétního routeru. Zde je vidět že netestujeme pouze odesílání sms zpráv, ale tuto komponentu v závislosti na operačním systému a hardweru. Jednotlivé komponenty mohou být například subsystémy, databázové implementace, infrastruktura, rozhraní a systémové konfigurace. Integrační testování lze z testování vypustit, jelikož chyby nalezené v této fázi by byly odhaleny ve fázi systémového testování.
-
 \begin{figure}[h]
   \centering
   \includegraphics[width=.4\LW]{test_integration}
@@ -35,12 +33,21 @@ Integračním testováním testujeme integraci jednotlivých komponent mezi osta
   \label{fig:test_integration}
 \end{figure}
 
+Integračním testováním testujeme integraci jednotlivých komponent mezi ostatní komponenty ale také integraci jednotlivých komponent do operačního systému a na konkrétní hardware. Napříkald testování odesíláni sms zpráv na operačním systému Linux běžícím na hardweru konkrétního routeru. Zde je vidět že netestujeme pouze odesílání sms zpráv, ale tuto komponentu v závislosti na operačním systému a hardweru. Jednotlivé komponenty mohou být například subsystémy, databázové implementace, infrastruktura, rozhraní a systémové konfigurace. Integrační testování lze z testování vypustit, jelikož chyby nalezené v této fázi by byly odhaleny ve fázi systémového testování.
+
 Integrační testy již navrhují testerři na základě čtyř základních skutečností. Softwérový a systémový design výrobku, architekturu firmwaru, pracovního postupu s danou komponentou a možnými případy použití. Na základě těchto skutčností tester navrhne testovací příady a postupy. Podle těchto postupů jsou jednotlivé komponenty dále testovány ať již testery či automaticky automatem.
 
 Testovací automat by měl v prvním kroku testovat integračnímy testy všechny základní komponenty routeru jako například posílání sms zpráv, či smnpt klient vůči operačnímu systému Linux či uCLinux, běžícím na každém z 50 různých výrobků podporujících testovanou funkcionalitu. Zde je nejlépe vidět přínos testovacího automatu. Ve skutečnosti by tester měl provést test všech funkcionalit na všech padesáti odlišných výrobcích což je časově nemožné. Zatímco automat tento test může provést každý den na všech výrobcích paralérně během chvilky a tím je ověřena integrace daného programu na všech výrobcích a neunikne žádná chyba ať již je způsobena chybou v firmwaru či chybou některé ze součástí routeru jako například bezdrátového modulu.
 
 \subsection{SIT - Systémové testování (System testing)}
 Poslední fází testování probíhající ve společnosti vyvýjecí daný produkt je systémové testování. V této fázi se testuje výrobej jako celek z pohledu zákazníka. Jsou navrhnuty jednotlive testovací případy, které mohou či nastavájí v praxi a dle těchto případů jsou výrobky testovány. Jako příklad může být uveden router ke kterému je přes ethernet připojena IP kamera a přes sériové rozhranní senzor. Data z těchto zařízení jsou přes OpenVPN tunel sestavený přes mobilní spojení posílána na vzdálený server.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.8\LW]{system_test_example}
+  \caption{Příklad systémového testování}
+  \label{fig:system_test_example}
+\end{figure}
 
 Systémové testy mohou obsahovat funkční i nefunkční testy. Tyto testy jsou dále popsáné v sekci věnované typech testování. Dále je možné testovat kvalitu a rychlost přenosu dat. Tyto testy jsou prováděny na výrobcích ve stadartním, ale i v stíženém prostředí, například v klimatické komoře nebo v okolí emc vyzařovaní. Dále je možné na systémové testování pohlížet jako na testování bílé či černé skříňky. Oba tyto způsoby jsou také dále popsány v kapitole věnující se této problematice.
 
@@ -51,13 +58,36 @@ Poslední úrovní testování je akceptační testování. Akceptační testov�
 
 
 \section{Testovací procesy}
-Jednotlivé fáze testování lze provádět třemi různými způsoby. Všechny tři způsoby se liší hlavně v délce a složitosti návrhu a provádění testů a v neposlední řadě v pokrytí testovacích případů. Podle složitosti návrhu testů by bylo možné popisované způsoby testování seřadit jako testování založené na modelech, automatizované testování a nakonec manuální testování. Rychlostí a efektivitou provádění testů jsou tyto způsoby seřazeny přesně obráceně. Cílem této práce je automatizovat a tím zkrátit provádění testů a zároveň rozšířit možností testování, takže bude pokoušeno o přechod z nynějšího manuálního testování na automatizované testování a v některých částech na testování založené na modelech.
+Jednotlivé fáze testování lze provádět třemi různými způsoby. Všechny tři způsoby se liší hlavně v délce a složitosti návrhu a provádění testů a v neposlední řadě v pokrytí testovacích případů. Podle složitosti návrhu testů by bylo možné popisované způsoby testování seřadit následovně na testování založené na modelech, automatizované testování a nakonec manuální testování. Rychlostí a efektivitou provádění testů jsou tyto způsoby seřazeny přesně obráceně. Cílem této práce je automatizovat a tím zkrátit provádění testů a zároveň rozšířit možností testování, z toho vyplívá že se budu snažit pokusit o přechod z nynějšího manuálního testování na automatizované testování a v některých částech na testování založené na modelech.
 
 \subsection{Manuální testování}
-Prvním 
+Prvním způsobem provádění testů je manuální testování. Manuální testování lze rozdělit do dvou nezávislých kroků. Prvním krokem každého manuálního testování je vytvoření testovacího plánu, který obsahuje informace o tom co by mělo být na výrobku testováno, jak by b měl být výrobek testován a nakonec jak často by měl být výrobek testován. Dle tohoto plnánu navrhuje testovací technik testovací scénaře a jejich jednotlivé testovací procedury. Tento krok se provádí pokaždé při změně nebo přidání nějaké funkcionality výrobku a provádího ho testovací technik s požadovanými znalostmi o testovaném výrobku.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.3\LW]{test_manual}
+  \caption{Schéma manuálního testování}
+  \label{fig:test_manual}
+\end{figure}
+
+Druhou fází manuálního testování je samotné provádění testů. Testy se provádějí manuálně přímo na testovaném objektu podle jednotlivých předepsaných testovacích procedur. Tento krok je opakován velice často a to při každé změně ve firmwaru výrobku a dle jeho komplexnosti bývá i velice časově náročný. Z toho důvodu bývají některé testy vypoušetěny, ale na úkor otestovanosti celého výrobku. Samotné testování je práce manuální dle předepsaných pokynů a také velmi často se opakující, z toho plyne že ji může vykonávat tester bez znalostí návrhu testování, samotných výrobků a jejich technologií. Dále se tento proces přímo nabýzí k nějakému zlepšení tohoto procesu jakoukoliv automatizací.
+
+V společnosti kde bude daný testovací systém nasazován se nyní všechny testy provádějí manuálně dle předepsaných testovacích procedur. Jak už bylo v úvodu zmíněno při rychle rostoucím počtu výrobků a jejich funcionalit je nadále tento systmé neudržitelný. Integrační a systémové testy se budu snažit přesunout do jedné z vyšších způsobů testování. Pro specifické testy jako například EMC testy a klimatické testy v teplotní komoře nebude z kapacitních důvodů možné plně automatizovat a bude možné navrhnout moduly pro zjednodušené manuální testování.
+
+Dále jsem byl svědkem kdy nebyl tvořen testovací plán a testovací procedury  ale v těchto případech nebylo možné později doložit výsledky testování a spousta testovacích případů byla dále opomíjena. Jedná se spíše o provádění náhodných testů a tento postup není určitě doporučován.
 
 \subsection{Automatizované testování}
+
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.6\LW]{test_automat}
+  \caption{Schéma automatického testování}
+  \label{fig:test_automat}
+\end{figure}
+
+
 \subsection{Testování založené na modelech}
 
 
