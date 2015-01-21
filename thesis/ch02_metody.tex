@@ -95,7 +95,7 @@ Naopak tento přístup přináší větší režii při změnách testů. Pokud 
 V projektu testovací laboratoře výrobků firmy Conel je předpokládánou že jednodušší funkcionality funkčního testování budou testovány tímto způsobem. Jedná se hlavně o funkcionality jejichž nastavování je strohé a funkcionalita se téměř či vůbec nemění. Tím dosáhneme vyvážení mezi náročností zavedení a pozdějších úprav testů.
 
 \subsection{Testování založené na modelech}
-V dnešní době je asi nejsofistikovanější ze zbůsobů řešení testování teststování založené na modelech známé jako MTB (Model Base Testing). Zjednodušeně lze tento systém popsat následovně. Tester vytvoří model testovaného zařízení a z tohoto modelu se automaticky vygenerují testovací skripty, které jsou spouštěny nad testovaným výrobkem. U tohoto testování odpadá spoustu času při návrhu a úpravách spousty testovacích skriptů. Naproti tomu je velmi časově náročné navrhnutí samotného testovacího systému a modelu testovaného systému. Samozřejmně že všech není tak jednoduché jakok se na první pohled zdá a tak je dále detailně popsány všechny fáze tohoto testování.
+V dnešní době je asi nejsofistikovanější ze zbůsobů řešení testování teststování založené na modelech známé jako MTB (Model Base Testing). Zjednodušeně lze tento systém popsat následovně. Tester vytvoří model testovaného zařízení a z tohoto modelu se automaticky vygenerují testovací skripty, které jsou spouštěny nad testovaným výrobkem. U tohoto testování odpadá spoustu času při návrhu a úpravách spousty testovacích skriptů. Naproti tomu je velmi časově náročné navrhnutí samotného testovacího systému a modelu testovaného systému. Samozřejmně že všech není tak jednoduché jakok se na první pohled zdá a tak je dále detailně popsány všechny fáze tohoto testování. Jednotlivé fáze jsou vývoj modeulu testovaného zařízení, generování abstraktních testů z modelu, převedení abstraktních testů na spustitelné testy, spuštění testů nad testovaným zařízením a analýza výsledků testů.
 
 \begin{figure}[h]
   \centering
@@ -104,18 +104,39 @@ V dnešní době je asi nejsofistikovanější ze zbůsobů řešení testován�
   \label{fig:test_model}
 \end{figure}
 
+Prvním krokem testování založeném na modelech je tedy vytvoření abstraktního modelu testovaného zařízení. Model by měl být jednodušší nežli samotné zařízení a měl by se zaměřit na jeho klíčové vlastnosti.
 
+Druhým krokem testování založené na modelech je generování abstraktních testů z hotového modelu. Jelikož by ve většině případů bylo vygenerováno nekonečné množství testovacích případůů, tak je potřeba určit nějaké testovací kritéria aby bylo možné vygenerovat konečné množství testů. Tyto testy jsou sekvencí operací nad modelem. Používají zjednodušený pohled na testoavné zařízení a nejsou přímo spustitelné.
+
+Třetí částí testování založeném na modelech je transformace abstraktních testů na spustitelné konkrétní testy. Transformace může být prováděna dvěma způsoby. Prvním způsobem je transformační nástroj, která používá šoblony a mapuje každý abstraktní testovací případ do spustitelného skriptu. Nebo je možné napsat takzavaný adaptér kódu který implementuje každou abstraktní operaci jako operaci nad testovaným zařízením a doplní jí detaily které nejsou navrženy v abstraktním modelu.
+
+Ve čtvrtém kroku jsou spouštěny konkrétní testy na testovaném systému. Tato fáze je schodná s třetí fází automatizovaného testování. Tedy může používat stejný systém a ve zjednodušené variantě lze říci že jde pouze o jiný generování testů. Dále jde tento kro rozdělit na online a offline testování. Kdy při online testování se generují testy při každém testu, namísto při offline testování jsou testy předgenerovány a pokud nenastane změna jsou používány stejné vygenerované testy.
+
+V posledním pátém kroku se analyzují výsledky spuštěných testů a jejich korektní chování. V případě neúspěšného kroku se analizuje příčina a místo vzniku chyby. Nejčastější místa vzniku chyby je chybný model, chybný adaptér kódu a v neposlední řadě může chyba vzniknout chybnou funkcí testovaného výrobku.
+
+Z popisu tohoto způsobu testování je vidět  že v případě správné implementace tohoto systému na testovaný produkt by mohlo výrazně usnadnit práci při samotném testování. Samotná implementace je velmi složitá a ne všechny testované objekty lze efektivně popsat tímto systémem. Mnoho velkých společností jako například IBM snažící se tento systém nasadit i po několika letech ztroskotala. V testovacím systému pro výrobky společnosti Conel bude snaha tento systém použít na některé části routeru, kde je velký počet různého často měnícího nastavení. Například bude snaha systém použít na testování sestavování mobilního spojení.
 
 \section{Typy testování}
+V poslední podkapitole typy testů budou probrány pojmy z testování které nebyly obsaženy v žádném z předchozích modelů a v testování se občas používají či naopak je některý z předchozí modelů používá a nebyly detailně popsány.
 
-\subsection{Instalační testy}
 \subsection{Testy splněním a selháním}
-\subsection{Progresní a regresní testy}
-\subsection{Smoke testy}
-\subsection{Funkční a nefunkční testy}
-\subsection{Testování bílé a černé skříňky}
-\subsection{Statické a dynamické testy}
+Testy splnění používají jako vstupní data pouze množinu dat které testovací systém musí správně vyhodnotit a chováme se k systému korektním způsobem, při tom kontrolujeme jestli odpověď od testovacího systému se schoduje s očekávanou odpovědí. Naopak při testech selháním zacházíme s testovacím systémem nekorektně a na vstup mu přivádíme ndata které neumí vyhodnotit a kontrolujeme jestli systém nespadl či systém nevrací odpověď schodné s očekávaným výstupem.
 
-\section{Modely vývoje a testování}
+\subsection{Progresní a regresní testy}
+Progresními testy nazýváme testy kontrolující nové funkce testovaného výrobku. K sestavení progresních testů je nutná znalost nových funkcí daného výrobku. Regresními testy se nazývají opětovné testování již testovaných vlastností výrobků. Regresivní testy jsou často prováděny při dokončení části vývoje pro ujištění že dodělané úpravy neovlivňují jiné části či před vydáním nového firmwaru.
+
+\subsection{Smoke testy}
+Smoke testy je označení testů  obshující pouze jednoduché testování spustitelnosti produktu a jeho základních funkcionalit. Většinou se toto testování provádí před systémovými testy. Největší význam těchto testů přichází ve výrobě nových produktů s již ověřeným firmwarem.
+
+\subsection{Funkční a nefunkční testy}
+Pomocí funkčních testů je testovány všechny funkce implementované v testovaném výrobku a jejich správne fungování. Tyto testy jsou známy popisovány v v předchozích kapitolách. Další metodou jsou často opomíjené nefunkční testy testující funkce výrobku přímo nesouvísející s jeho funkcionalitou. Jedná se například o testování výkonu celého výrobku nebo jejo částí. Kontroluje se zde jestli výrobek dosahuje požadovaného výkonu a zároveň jestli je při zvýšené zátěži stále dobře funkční.
+
+\subsection{Testování bílé a černé skříňky}
+Testování bílé skříňky je prováděno pokud při navrhování testů tester má přístup a využívá zdrojových kódu testovaného výrobku. Naopak testování při testování černé skříňky tester zdrojové kódy k dispozici nemá a k návrhu testů využíva pouze dokumentace k danému výrobku.
+
+
+\subsection{Statické a dynamické testy}
+Statické testy nepotřebují ke svému spouštění spuštěný softwer. Naopak dynamické testy ke svému fungování potřebují spuštěný funkční softwer.
+
 
 \endinput
