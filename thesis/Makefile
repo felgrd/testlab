@@ -1,7 +1,7 @@
 all:
 	pdflatex felgr_david.tex
 	pdflatex felgr_david.tex
-	evince felgr_david.pdf
+	cp felgr_david.pdf /var/www/html/felgr_david.pdf
 
 purge:
 	-rm -f *.log
@@ -18,5 +18,3 @@ purge:
 
 clean: purge
 	-rm -f felgr_david.pdf
-
-
