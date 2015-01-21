@@ -77,8 +77,7 @@ V společnosti kde bude daný testovací systém nasazován se nyní všechny te
 Dále jsem byl svědkem kdy nebyl tvořen testovací plán a testovací procedury  ale v těchto případech nebylo možné později doložit výsledky testování a spousta testovacích případů byla dále opomíjena. Jedná se spíše o provádění náhodných testů a tento postup není určitě doporučován.
 
 \subsection{Automatizované testování}
-
-
+Druhým a sofistiokovanějším způsobem provádění testů je automatizované testování, někdy také nazývané testování založené na skriptech. Automatizované testování lze rozdělit do třech základních fází. První fáze vytvoření testovacího plánu je schodná s manuálním testováním.
 
 \begin{figure}[h]
   \centering
@@ -87,8 +86,24 @@ Dále jsem byl svědkem kdy nebyl tvořen testovací plán a testovací procedur
   \label{fig:test_automat}
 \end{figure}
 
+Druhou fází testování je implementace testovacích procedur do spustitelných skriptů. Skriptovací testy mohou být napsány v nějakém stadrtním programovacím či skriptovacím jazyku nebo v nějakém jazyku přímo určenému k psání testovacích skriptů. V našem systému bude k psaní testovacích skriptů použit skriptovací jazyk Bash a jazyk C. V tomto modelu nám tedy přibyla další role programátora potřebného k implementaci testů. Samotný testovací skript je spustitelný skript nebo program který provede jednu testovací proceduru. Testovací skript obvykle obsahuje inicializaci testovacího zařízení, uvedení testovacího zařízení do požadovaného kontextu, vytvoření vstupních testovacích hodnot, předání vstupních hodnot do testovaného zařízení, nahrání odpovědi od testovaného zařízení, nakonec porovnání odpovědi a očekávaného výstupu a vyhodnocení výsledku.
+
+Třetí fází automatického testování je samotné spouštění testů. Testy jsou spouštěny automaticky pomocí nástroje pro spouštění testů. Nástroj provádí spouštění automaticky bez interakce s obsluhou a navíc je zde možnost paralelizace testů. Zde je vidět veliká časová a tedy i finanční úspora oproti manuálnímu testování a to pokud chceme znovu otestovat firmware pouze znovu spustíme testovací proces.
+
+Naopak tento přístup přináší větší režii při změnách testů. Pokud je změněna testovací procedura či přímo funkcionalita výrobku musí být předělány a přidány testovací skripty. Tato údržba může být v některých případech stejně časově nákladná jako tvorba všech testovacích procedur pro danou funkcionalitu.
+
+V projektu testovací laboratoře výrobků firmy Conel je předpokládánou že jednodušší funkcionality funkčního testování budou testovány tímto způsobem. Jedná se hlavně o funkcionality jejichž nastavování je strohé a funkcionalita se téměř či vůbec nemění. Tím dosáhneme vyvážení mezi náročností zavedení a pozdějších úprav testů.
 
 \subsection{Testování založené na modelech}
+V dnešní době je asi nejsofistikovanější ze zbůsobů řešení testování teststování založené na modelech známé jako MTB (Model Base Testing). Zjednodušeně lze tento systém popsat následovně. Tester vytvoří model testovaného zařízení a z tohoto modelu se automaticky vygenerují testovací skripty, které jsou spouštěny nad testovaným výrobkem. U tohoto testování odpadá spoustu času při návrhu a úpravách spousty testovacích skriptů. Naproti tomu je velmi časově náročné navrhnutí samotného testovacího systému a modelu testovaného systému. Samozřejmně že všech není tak jednoduché jakok se na první pohled zdá a tak je dále detailně popsány všechny fáze tohoto testování.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.5\LW]{test_model}
+  \caption{Schéma testování založeného na modelech}
+  \label{fig:test_model}
+\end{figure}
+
 
 
 \section{Typy testování}
