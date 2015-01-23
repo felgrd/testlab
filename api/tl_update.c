@@ -8,13 +8,13 @@
 #include "database.h"
 
 /// The default location of the firmware
-#define	DEFAULT_IMAGEDIR	"/var/testlab/firmware"
+#define	DEFAULT_IMAGEDIR "/var/testlab/firmware"
 /// The default location of the configuration
-#define DEFAULT_CONFDIR		"/var/testlab/conf"
+#define DEFAULT_CONFDIR "/var/testlab/conf"
 /// The default login username
-#define DEFAULT_USER		"root"
+#define DEFAULT_USER "root"
 /// The default login passwordmake
-#define	DEFAULT_PASS		"root"
+#define	DEFAULT_PASS "root"
 
 /**
  * @file tl_update.c
@@ -59,23 +59,23 @@ void help(void){
 }
 
 int main(int argc, char *argv[]){
-	int 			router;
-	char			ip[20];
-	char			firmware[PATH_MAX];
-	char			imagedir[PATH_MAX];
-	char			user[20];
-	char			pass[20];
-	char			release[20];
-	char			protocol[20];
-	char			parameter;
-	int 			selIP;
-	int 			selFW;
-	int 			selPR;
-	char			*product;
-	int 			result;
-	int 			fifo_fd;
-	char			command[255];
-	char			file[255];
+	int       router;
+	char      ip[20];
+	char      firmware[PATH_MAX];
+	char      imagedir[PATH_MAX];
+	char      user[20];
+	char      pass[20];
+	char      release[20];
+	char      protocol[20];
+	char      parameter;
+	int       selIP;
+	int       selFW;
+	int       selPR;
+	char      *product;
+	int       result;
+	int       fifo_fd;
+	char      command[255];
+	char      file[255];
 	message_remote	remote_request;		// Format posilanych dat
 	message_remote	remote_response;	// Format posilanych dat
 
@@ -236,7 +236,6 @@ int main(int argc, char *argv[]){
 		// Sestaveni adresy
 		snprintf(command, sizeof(command), \
 		"http%s://%s:%s@%s/update_exec.cgi", protocol, user, pass, ip);
-
 	#elif CONF
 		// Sestaveni umisteni nahravaneho souboru
 		snprintf(file, sizeof(file), "-F file=@%s/%s.cfg", imagedir, \
@@ -245,7 +244,6 @@ int main(int argc, char *argv[]){
 		// Sestaveni adresy
 		snprintf(command, sizeof(command), \
 		"http%s://%s:%s@%s/restore_exec.cgi", protocol, user, pass, ip);
-
 	#endif
 
 	// Potlaceni vsech vystupu
