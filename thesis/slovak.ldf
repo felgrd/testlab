@@ -1,0 +1,125 @@
+%% 
+%% This is file `slovak.ldf',
+%% generated with the docstrip utility.
+%% 
+%% The original source files were:
+%% 
+%% slovak.dtx  (with options: `code')
+%% Copyright 1989-1997 Johannes L. Braams and any individual authors 
+%% listed elsewhere in this file. All rights reserved. 
+%% 
+%% For further copyright information see any other copyright notices in 
+%% this file. 
+%% 
+%% This file is part of the Babel system release 3.6. 
+%% -------------------------------------------------- 
+%% This system is distributed in the hope that it will be useful, 
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of 
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+%% 
+%% For error reports concerning UNCHANGED versions of this file no 
+%% more than one year old, see bugs.txt. 
+%% 
+%% Please do not request updates from me directly. Primary 
+%% distribution is through the CTAN archives. 
+%% 
+%% 
+%% IMPORTANT COPYRIGHT NOTICE: 
+%% 
+%% You are NOT ALLOWED to distribute this file alone. 
+%% 
+%% You are allowed to distribute this file under the condition that it 
+%% is distributed together with all the files listed in manifest.txt. 
+%% 
+%% If you receive only some of these files from someone, complain! 
+%% 
+%% Permission is granted to copy this file to another file with a 
+%% clearly different name and to customize the declarations in that 
+%% copy to serve the needs of your installation, provided that you 
+%% comply with the conditions in the file legal.txt from the LaTeX2e 
+%% distribution. 
+%% 
+%% However, NO PERMISSION is granted to generate or to distribute a 
+%% modified version of this file under its original name. 
+%% 
+%% You are NOT ALLOWED to change this file. 
+%% 
+%% 
+%% MODIFICATION ADVICE: 
+%% 
+%% If you want to customize this file, it is best to make a copy of 
+%% the source file(s) from which it was produced. Use a different 
+%% name for your copy(ies) and modify the copy(ies); this will ensure 
+%% that your modifications do not get overwritten when you install a 
+%% new release of the standard system. You should also ensure that 
+%% your modified source file does not generate any modified file with 
+%% the same name as a standard file. 
+%% 
+%% You can then easily distribute your modifications by distributing 
+%% the modified and renamed copy of the source file, taking care to 
+%% observe the conditions in legal.txt; this will ensure that other 
+%% users can safely use your modifications. 
+%% 
+%% You will also need to produce your own, suitably named, .ins file to 
+%% control the generation of files from your source file; this file 
+%% should contain your own preambles for the files it generates, not 
+%% those in the standard .ins files. 
+%% 
+%% The names of the source files used are shown above. 
+\ProvidesFile{slovak.ldf}
+        [1996/12/23 v1.2i Slovak support from the babel system]
+\LdfInit{slovak}\captionsslovak
+\ifx\l@slovak\@undefined
+    \@nopatterns{Slovak}
+    \adddialect\l@slovak0\fi
+\addto\captionsslovak{%
+  \def\prefacename{\'Uvod}%
+  \def\refname{Referencia}%
+  \def\abstractname{Abstrakt}%
+  \def\bibname{Literat\'ura}%
+  \def\chaptername{Kapitola}%
+  \def\appendixname{Dodatok}%
+  \def\contentsname{Obsah}%
+  \def\listfigurename{Zoznam obr\'azkov}%
+  \def\listtablename{Zoznam tabuliek}%
+  \def\indexname{Index}%
+  \def\figurename{Obr\'azok}%
+  \def\tablename{Tabu\q lka}%%% special letter l with hook
+  \def\partname{\v{C}as\q t}%%% special letter t with hook
+  \def\enclname{Pr\'{\i}loha}%
+  \def\ccname{CC}%
+  \def\headtoname{Komu}%
+  \def\pagename{Strana}%
+  \def\seename{vi\q d}%%%  Special letter d with hook
+  \def\alsoname{vi\q d tie\v z}%%%  Special letter d with hook
+  \def\proofname{Proof}%  <-- needs translation
+  }
+\def\dateslovak{%
+\def\today{\number\day.~\ifcase\month\or
+janu\'ara\or febru\'ara\or marca\or apr\'{\i}la\or m\'aja\or j\'una\or
+  j\'ula\or augusat\or septembra\or okt\'obra\or
+  novembra\or decembra\fi
+    \space \number\year}}
+\addto\extrasslovak{\babel@save\q\let\q\v}
+\def\slovakhyphenmins{\tw@\tw@}
+\ldf@finish{slovak}
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\endinput
+%% 
+%% End of file `slovak.ldf'.
