@@ -1,8 +1,8 @@
 BIN_TESTLAB = testlab
-OBJ_TESTLAB = testlab.o 
+OBJ_TESTLAB = testlab.o
 
 BIN_CHECKOUT = tl_checkout
-OBJ_CHECKOUT = checkout.o 
+OBJ_CHECKOUT = checkout.o
 
 BIN_COMPILE = tl_compile
 OBJ_COMPILE = compile.o
@@ -20,31 +20,31 @@ BIN_REMOTE_SERVER = tl_remote_server
 OBJ_REMOTE_SERVER = telnet.o ssh.o remote_server.o
 
 CFLAGS = -Wall -I/usr/include/testlab -I/usr/include/mysql
-LIB_UTILS = -ltl_utils 
+LIB_UTILS = -ltl_utils
 LIB_DATABASE = -ltl_database
 LIB_CSPIPE = -ltl_cspipe
 
 all: $(BIN_TESTLAB) $(BIN_CHECKOUT) $(BIN_COMPILE) $(BIN_TEST) \
      $(BIN_CLEAR) $(BIN_REMOTE_EXIT) $(BIN_REMOTE_SERVER)
-     
+
 $(BIN_TESTLAB) : $(OBJ_TESTLAB)
 	$(CC) -Wall -o $(BIN_TESTLAB) $(OBJ_TESTLAB) $(LIB_UTILS) $(LIB_DATABASE)
-	
+
 $(BIN_CHECKOUT) : $(OBJ_CHECKOUT)
 	$(CC) -Wall -o $(BIN_CHECKOUT) $(OBJ_CHECKOUT) $(LIB_UTILS) $(LIB_DATABASE)
-	
+
 $(BIN_COMPILE) : $(OBJ_COMPILE)
 	$(CC) -Wall -o $(BIN_COMPILE) $(OBJ_COMPILE) $(LIB_UTILS) $(LIB_DATABASE)
-	
+
 $(BIN_TEST) : $(OBJ_TEST)
 	$(CC) -Wall -o $(BIN_TEST) $(OBJ_TEST) $(LIB_UTILS) $(LIB_DATABASE)
-	
+
 $(BIN_CLEAR) : $(OBJ_CLEAR)
 	$(CC) -Wall -o $(BIN_CLEAR) $(OBJ_CLEAR) $(LIB_UTILS) $(LIB_DATABASE)
-	
+
 $(BIN_REMOTE_EXIT) : $(OBJ_REMOTE_EXIT)
 	$(CC) -Wall -o $(BIN_REMOTE_EXIT) $(OBJ_REMOTE_EXIT) $(LIB_CSPIPE)
-	
+
 $(BIN_REMOTE_SERVER) : $(OBJ_REMOTE_SERVER)
 	$(CC) -Wall -o $(BIN_REMOTE_SERVER) $(OBJ_REMOTE_SERVER) $(LIB_CSPIPE)
 
@@ -56,7 +56,7 @@ clean:
 	rm -rf $(BIN_CLEAR) $(OBJ_CLEAR)
 	rm -rf $(BIN_REMOTE_EXIT) $(OBJ_REMOTE_EXIT)
 	rm -rf $(BIN_REMOTE_SERVER) $(OBJ_REMOTE_SERVER)
-	
+
 install: all
 	sudo cp -u $(BIN_TESTLAB) /usr/bin/$(BIN_TESTLAB)
 	sudo cp -u $(BIN_CHECKOUT) /usr/bin/$(BIN_CHECKOUT)

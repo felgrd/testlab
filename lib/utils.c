@@ -19,8 +19,8 @@ void close_all_fds(int keep)
 	for (fd = keep + 1; fd < max; fd++) {
 		close(fd);
 	}
-	
-	closelog();  
+
+	closelog();
 	open("/dev/null", O_RDWR | O_NOCTTY);
 	dup(0);
 	dup(0);
@@ -29,22 +29,22 @@ void close_all_fds(int keep)
 int project_delete(long long int release){
 	char		command[PATH_MAX];
 	int 		result;
-	
+
 	// Sestaveni adresare s docasnym souboru
 	result = snprintf(command, sizeof(command), "%s/project/%lld", \
 	DIRECTORY, release);
 	if(result < 3){
 		return 0;
 	}
-	
+
 	// Smazani daneho adresare
 	result = nftw(command, delete_item, 200, FTW_DEPTH);
-	
+
 	return result == 0;
 }
 
 int delete_item(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf){
-	int			result;	
+	int			result;
 
 	// Smazani prazdneho adresare nebo smazani souboru
 	if(tflag == FTW_DP){
@@ -52,6 +52,6 @@ int delete_item(const char *fpath, const struct stat *sb, int tflag, struct FTW 
 	}else if(tflag == FTW_F){
 		result = unlink(fpath);
 	}
-	
+
 	return result == -1;
 }

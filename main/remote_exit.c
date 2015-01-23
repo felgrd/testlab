@@ -10,23 +10,23 @@ int main(int argc, char *argv[]){
 	int		result;
 	message_remote remote_request;			// Format posilanych dat
 	message_remote remote_response;			// Format posilanych dat
-	
+
 	// Kontrola parametru command
 	if(argc != 2){
 		fprintf(stderr, "Bad number of parameters\n");
 		return 1;
-	}	
-	
+	}
+
 	// Nazev serverove roury
 	router = atoi(argv[1]);
 	if(router <= 0){
 		fprintf(stderr, "Bad number of router\n");
 		return 1;
 	}
-	
+
 	// Vytvoreni zpravy
 	remote_request.request = remote_close_conn;
-	
+
 	// Navazani spojeni
 	fifo_fd = client_starting(router);
 	if(fifo_fd){
@@ -38,9 +38,9 @@ int main(int argc, char *argv[]){
 			read_response_from_server(&remote_response);
 		}
 	}
-		
+
 	// Ukonceni komunikace
 	client_ending(router, fifo_fd);
 	
-	return remote_response.request != remote_response_ok;		
+	return remote_response.request != remote_response_ok;
 }

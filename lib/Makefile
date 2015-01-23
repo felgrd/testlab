@@ -20,7 +20,7 @@ $(LIB_DATABASE): $(OBJ_LIB_DATABASE)
 
 $(LIB_UTILS): $(OBJ_LIB_UTILS)
 	$(CC) -shared -o $(LIB_UTILS) $(OBJ_LIB_UTILS)
-	
+
 $(LIB_CSPIPE): $(OBJ_LIB_CSPIPE)
 	$(CC) -shared -o $(LIB_CSPIPE) $(OBJ_LIB_CSPIPE)
 
