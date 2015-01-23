@@ -60,13 +60,16 @@ Selenium je dobrý nástroj pro testování webových aplikací. Určitě využi
 \section{VectorCAST}
 Nejlepším zkoumaným nástrojem byl komerční produkt VectorCAST od společnosti VECTOR Software. VectorCAST je platforma přímo určená k testování embedded zařízení podporující velkou škálu zařízení a testů.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.4\LW]{vector_logo}
+  \caption{Logo produktu http://www.vectorcast.com/}
+  \label{fig:vector_logo}
+\end{figure}
+
 Samotná produkt je rozdělen do několika částí které jsou dodávány zvlášť podle potřeb zákazníku a typu cílové aplikace testování. První dva programy se zabývají testováním jednotek a integračním testováním. První program je VevtorCAST/Ada, který je určen pro testování softwaru napsaném v jazyce Ada. Ada je robustní staticky typovaný programovací jazyk, který je určen pro programování krityckých aplikací. Tento jazyk v testovaných zařízeních nebyl použit a tak se dále tímto programem nebudu zabývat. Druhým programem určeným pro testování jednotek a integrační testování je Vector/CAST/C++ určeným pro aplikace psané v jazycích C a C++.
 
-VectorCAST/C++
-
-
-Podporuje celou škálu testování.
-Nemožnost úpravy, komerční licence.
+VectorCAST/C++ je řešení pro automatizované pro testování zdrojového kódu a integrační testování. Tento nástroj přímo automatizuje vytváření unit testů pro samotný zdrojový kód.Nástroj je možné spusti nativně nebo na konkrétní cílové platformě. Pro spouštění na cílové platformě je potřeba nástroj VectorCAST/RSP, který bude popsán později. Další vlastností tohoto systému je jednoduché regresní testování softwaru, kdy je možné automaticky spouště již vytvořené testy. Nástroj může pracovat ve dvou módech a to Source a Agile mód. První source mód tvoří testy z modulů které jsou již implementovány. Druhý agile mód nepotřebuje pro tvorbu testů zdrojové kódy daného modulu, ale stačí mu pouze jeho hlavičkové soubory.
 
 
 
