@@ -1,8 +1,8 @@
 \chapter{Používané metody testování}
-V této kapitole se pokusím popsat co nejvíce známích pohledů a způsobů na testování, aby bylo dále možné vybírat, aplikovat a navrhovat testovací systém s ohledem na dnešní metody a trendy v testování. Nejdříve budou popsány úrovně testování, kterými by měl daný výrobek projít, dále popíši způsoby jak testování může probíhat. V poslední kapitole jsou popsány další možné pohledy a přístupy k testování.
+V této kapitole se pokusím popsat co nejvíce známých pohledů a způsobů na testování, aby bylo dále možné vybírat, aplikovat a navrhovat testovací systém s ohledem na dnešní metody a trendy v testování. Nejdříve popíšu úrovně testování, kterými by měl daný výrobek projít. Dále popíši způsoby, jakými testování může probíhat. V poslední kapitole jsou popsány další možné pohledy a přístupy k testování.
 
 \section{Úrovně testování}
-Testování výrobků prochází několika stupněmi testování. Některé stupně jsou při vývoji používány bez toho aby jsi to vývojáři uvědomily a některé zase stupně testování zase často opomíjeny. Mnou rozebíráný model má celkem 5 stupňů testování.  Jednotlivé stupně dále popíši a rozeberu jejich přínos a možnosti použití v testovací systému.
+Testování výrobků prochází několika stupněmi testování. Některé stupně jsou při vývoji používány bez toho aby si to vývojáři uvědomili a některé stupně testování jsou zase často opomíjeny. Mnou rozebíraný model má celkem 5 stupňů testování. Jednotlivé stupně dále popíši a rozeberu jejich přínos a možnosti použití v testovacím systému.
 
 \begin{figure}[h]
   \centering
@@ -12,12 +12,12 @@ Testování výrobků prochází několika stupněmi testování. Některé stup
 \end{figure}
 
 \subsection{Testování programátorem (Developer testing)}
-První a úplně nezbytnou částí testování by měl provádět programátoři. Programátor by si měl zkontrolovat jestli je možné firmware přeložit a dále jestli jeho nová či opravená funkcionalita funguje správně. V další fázi tohoto testování by měl otestovat kód jiný programátor, který kód nepsal. Tuto fázi většinou provádí správce projektu při zařazování nové či upravené funkce do hlavní větve repozitáře. Všechny chyby odchycené v této fázi testování ušetří spoustu času stráveném v dalších fázích testování.
+První a úplně nezbytnou částí testování by měli provádět programátoři. Programátor by si měl zkontrolovat jestli je možné firmware přeložit a dále jestli jeho nová či opravená funkcionalita funguje správně. V další fázi testování by měl otestovat kód jiný programátor, který kód nenapsal. Tuto fázi většinou provádí správce projektu při zařazování nové či upravené funkce do hlavní větve repozitáře. Všechny chyby odchycené v této fázi testování ušetří spoustu času stráveném v dalších fázích testování.
 
-Testováním programátorem může vypadat jako samozřejmná věc o která by nemusela být ani uváděna. Bohužel opak je pravdou a i tato situace nástává. Sám jsem byl svědkem situace, kdy lehkovážným přístupem kontroli svých úprav bylo ztraceno spousta času tráveným hledáním spousty lehce vygenerováných chyb.
+Testování programátorem může vypadat jako samozřejmá věc, která by nemusela být ani uváděna. Bohužel opak je pravdou a i tato situace nástává. Sám jsem byl svědkem situace, kdy lehkovážným přístupem kontroly svých úprav bylo ztraceno spousta času stráveným hledáním lehce vygenerováných chyb.
 
 \subsection{Testování jednotek (Unit testing)}
-Úroveň testování jednotek obsahuje testování jednotlvých jednotek software. Jako jednotku lze uvažovat objekt s jednou jedinou funkcionalitou například třídu, objekt, program či softwarový modul. Touto úroveňí testování testujeme správnost zdrojového kódu a ne funkci celého programu. Velmi známým příkladem jsou JUnit testy v javě, kde ke každé třídě a metodě je psán i její test.
+Úroveň testování jednotek obsahuje testování jednotlvých částí software. Za jednotku neboli část lze považovat objekt s jednou jedinou funkcionalitou, například třídu, objekt, program či softwarový modul. Touto úrovňí testování testujeme správnost zdrojového kódu a ne funkci celého programu. Velmi známým příkladem jsou JUnit testy v javě, kde ke každé třídě a metodě je psán i její test.
 
 Tyto testy je výhodné použít při tvorbě nového projektu, jelikož s unit testy je potřeba počítat již při návrhu zdrojového kódu a při tomto návrhu zároveň tyto testy psát. Dopisování testů do již existujícího projektu by stálo příliš velkou námahu a mnoho úprav kódu pro přizpůsobevání samotného programu pro unit testování.
 
@@ -120,13 +120,13 @@ Z popisu tohoto způsobu testování je vidět  že v případě správné imple
 V poslední podkapitole typy testů budou probrány pojmy z testování které nebyly obsaženy v žádném z předchozích modelů a v testování se občas používají či naopak je některý z předchozí modelů používá a nebyly detailně popsány.
 
 \subsection{Testy splněním a selháním}
-Testy splnění používají jako vstupní data pouze množinu dat které testovací systém musí správně vyhodnotit a chováme se k systému korektním způsobem, při tom kontrolujeme jestli odpověď od testovacího systému se schoduje s očekávanou odpovědí. Naopak při testech selháním zacházíme s testovacím systémem nekorektně a na vstup mu přivádíme ndata které neumí vyhodnotit a kontrolujeme jestli systém nespadl či systém nevrací odpověď schodné s očekávaným výstupem.
+Testy splněním používají jako vstupní data pouze množinu dat, které testovací systém musí správně vyhodnotit, taktéž se chováme k systému korektním způsobem, při tom kontrolujeme jestli odpověď od testovacího systému se schoduje s očekávanou odpovědí. Naopak při testech selháním zacházíme s testovacím systémem nekorektně a na vstup mu přivádíme ndata které neumí vyhodnotit a kontrolujeme jestli systém nespadl či systém nevrací odpověď schodné s očekávaným výstupem.
 
 \subsection{Progresní a regresní testy}
-Progresními testy nazýváme testy kontrolující nové funkce testovaného výrobku. K sestavení progresních testů je nutná znalost nových funkcí daného výrobku. Regresními testy se nazývají opětovné testování již testovaných vlastností výrobků. Regresivní testy jsou často prováděny při dokončení části vývoje pro ujištění že dodělané úpravy neovlivňují jiné části či před vydáním nového firmwaru.
+Progresními testy nazýváme testy kontrolující nové funkce testovaného výrobku. K sestavení progresních testů je nutná znalost nových funkcí daného výrobku. Regresními testy se nazývá opětovné testování již testovaných vlastností výrobků. Regresní testy jsou často prováděny při dokončení části vývoje pro ujištění že dodělané úpravy neovlivňují jiné části či před vydáním nového firmwaru.
 
 \subsection{Smoke testy}
-Smoke testy je označení testů  obshující pouze jednoduché testování spustitelnosti produktu a jeho základních funkcionalit. Většinou se toto testování provádí před systémovými testy. Největší význam těchto testů přichází ve výrobě nových produktů s již ověřeným firmwarem.
+Smoke testy je označení testů obshující pouze jednoduché testování spustitelnosti produktu a jeho základních funkcionalit. Většinou se toto testování provádí před systémovými testy. Největší význam těchto testů přichází ve výrobě nových produktů pro ověření funkčnosti výrobku.
 
 \subsection{Funkční a nefunkční testy}
 Pomocí funkčních testů je testovány všechny funkce implementované v testovaném výrobku a jejich správne fungování. Tyto testy jsou známy popisovány v v předchozích kapitolách. Další metodou jsou často opomíjené nefunkční testy testující funkce výrobku přímo nesouvísející s jeho funkcionalitou. Jedná se například o testování výkonu celého výrobku nebo jejo částí. Kontroluje se zde jestli výrobek dosahuje požadovaného výkonu a zároveň jestli je při zvýšené zátěži stále dobře funkční.
