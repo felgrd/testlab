@@ -3,7 +3,11 @@
 #include <stdlib.h>     // atoi
 #include <unistd.h>		// chdir
 #include <syslog.h>		// syslog
+#include <errno.h>    // errno
+#include <unistd.h>   // chdir
+#include <sys/wait.h> // waitpid
 #include "utils.h"
+#include "database.h"
 
  /**
     * Program for clean project
@@ -14,14 +18,22 @@
 	*/
 
 int main(int argc, char *argv[]){
-	int		release_id;
-	int		platform_id;
-	char	*platform_name;
-	int		result;				// Navratovy kod
-	char	command[50];		// Buffer pro prikaz
+	int     release_id;
+	int     platform_id;
+	char    *platform_name;
+	pid_t   pid;
+	pid_t   wpid;
+	int     result;              // Navratovy kod
+	int     status;
+	char    command[50];         // Buffer pro prikaz
+	int     timeout;             // Timeout pro dokonceni skriptu
+	int     waittime;            // Doba behu skriptu
 
 	// Otevreni logu
 	openlog("TestLabCLear", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+
+	// Inicializace promenych
+	waittime = 0;
 
 	// Kontrola poctu parametru
 	if(argc != 4){
@@ -73,13 +85,55 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-	// Potlaceni vsech vystupu
-	close_all_fds(-1);
+	// Zjisteni timeoutu pro checkout script
+	timeout = database_sel_timeout(STATE_CLEAN);
+	if(timeout <= 0){
+		syslog(LOG_ERR, "Timeout for checkou script does not read.");
+		return 1;
+	}
 
-	// Spusteni skriptu
-	execlp("bash", "bash", command, NULL);
+	switch(pid = vfork()){
+		case -1:
+			syslog(LOG_ERR, "Create new process for checkout error (%d).", errno);
+			return 0;
 
-	syslog(LOG_ERR, "Script no running.");
+		case 0:
+			// Potlaceni vsech vystupu
+			close_all_fds(-1);
 
-	return 1;
+			// Spusteni skriptu
+			execlp("bash", "bash", command, NULL);
+
+			// Ukonceni programu v pripade chyby
+			return 1;
+
+		default:
+			// Timeout ukonceni uzivatelskeho scriptu
+			do{
+				// Kontrola stavu skriptu
+				wpid = waitpid(pid, &status, WNOHANG);
+
+				// Kontrola ukonceni skriptu
+				if(wpid == 0){
+					if(waittime < timeout){
+						waittime++;
+						sleep(1);
+					}else{
+						kill(pid, SIGKILL);
+					}
+				}
+
+			}while(wpid == 0 && waittime <= timeout);
+
+			// Kontrola spravne ukonceneho procesu
+			if(wpid == -1){
+				return 1;
+			}
+
+			break;
+	}
+
+	closelog();
+
+	return 0;
 }

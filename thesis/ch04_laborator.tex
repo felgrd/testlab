@@ -5,20 +5,26 @@ Pro testování všech výrobků společnosti Conel nejdříve navrhnu strukturu
 \section{Testovací server}
 Jádrem testovací laboratoře bude server na kterém poběží všechny testovací aplikace. Testovaci server bude výkonější počítač s parametry procesor Intel core i7, 16GB RAM a 512GB SSD disk. Pro účely testování bude server osazen dvěma ethernetovými rozhranímy pro komunikaci s testovanými výrobky a jedním ethernetovým rozhraním pro konektivitu serveru do firemní sítě. Server dále má osazeno jedno WiFi rozhraní pro testování WiFi výrobků.  Operační systém tohoto serveru jsem zvolil Ubuntu server, jelikož operační systém Ubuntu je používán k vývoji většiny výrobků.
 
+Na serveru bude umístěna databáze uchovávající všechny informace o teststování a webová aplikace zobrazující výsledky z testování. Samotná testovací aplikace, včetně testovacích skriptu a příslušného API budou taktéž umístěny na tomto serveru. Dále zde bude kopie vzdáleného repozitáře pro rychlejší stahování zdrojových kódu. V dalších fázích vývoje testovacího zařízení by na temto serveru mohl být testován systém pro monitoring routerů RSeeNet a systém pro jednoduchou tvorbu VPN tunelů SmartCluster.
+
 \section{Konfigurovatelné switche}
 Pro propojení všech výrobků s testovacím serverem budou použity dva konfigurovatelné 48 portové switche od firmy CISCO. Dva switche byly zvoleny kvůli velké ceně switchů nad 48 portů. Konfigurovatelné switch budou potřeba pro změnu síťové infrastruktury v průběhu testu. Každý switch bude připojen k jednomu ethernetovému rozhraní serveru, dále budou switche navzájem propojeny. Nejen všechny výrobky, ale každé fyzické ethernetové rozhraní bude připojeno do switche a pomocí VLAN bude vytvořena požadovaná testovací síť.
 
-\section{Výrobky společnosti Conel}
+\section{Testovaná zařízení}
 Zařízení které tvoří přes devadesát procent prodeje firmy Conel jsou bezdrátové routery a i tato zařízení budou testovány v testovací laboratoři. Bezdrátové routery tvoří celkem čtyři modelové řady, které dále obsahují jednotlivé výrobky podle technologie bezdrátového připojení a počtu rozhraní.
 
 \subsection{Řada routerů v0}
-Takzvaná nultá řada routerů obsahuje pouze dvá výrobky. Prvním ER75i disponující EDGE technologií, jedním ethernet rozhraním možností a osazením jednoho volitelného portu.  Druhým výrobkem této řady je UR5, který se liší pouze bezdrátovou technologií. Místo EDGE technologie disponuje rychlejší UMTS technologií. Oba tyto výrobky jsou postaveny na uClinuxu a i přes jejich stáří se firmware stále udržuje.
+Takzvaná nultá řada routerů obsahuje pouze dvá výrobky. Prvním ER75i disponující EDGE technologií, jedním ethernet rozhraním možností a osazením jednoho volitelného portu.  Druhým výrobkem této řady je UR5, který se liší pouze bezdrátovou technologií. Místo EDGE technologie disponuje rychlejší UMTS technologií. Oba tyto výrobky jsou postaveny na uClinuxu a i přes jejich stáří se firmware stále udržuje. U těchto modelů bude testován pouze Lan, který bude připojeni do konfigurovatelného switche. Testování volitelného portu bude popsáno v samostanté kapitole věnující se tomuto problému. Jiné interface tato základní řada nevlastní.
 
 \subsection{Řada routerů v1}
-
+Ŕada routeru v1 není od nulté řady marketingově ani koncepčně oddělena. Řada je z hlediska vývoje je oddělena jelikož je založena na plnohodnotném Linuxu místo uCLinuxu použitém u předchoích výrobků. Řada obsahuje výrobky UR5i disponující HSPA+ technologií a XR5i, který nedisponuje žádnou bezdrátovou technologií.
 
 \subsection{Řada routerů v2}
+Řada routerů v2 sebou přináší rozsáhlý modulární koncept a tím i velký počet různých typů routerů. Pro pokrytí všech možných kombinací routerů této řady bude muset v testovací laboratoři běžet přibližně třicet routerů. Každý router bude připojen ethernet kabel do konfigurovatelného switche. Vybrané routery budou mít zapojen binární vstup a výstup pro testování vstupů a výstupů. Dále tyto routery budou mít zapojeny různá zařízení do USB konektoru, například flash disk a USB/RS232 převodník. Modelová řada v2 obsahuje taktéž až dva volitelné porty, popis zapojení testování těchto portů bude popsáno v samostné kapitole věnující se volitelným portům.
+
 \subsection{Řada routerů v3}
+Modelová řada v3 je poslední vyvinutou řadou routerů. Koncepčně se příliš nelíší od předchozí řady. Různé kombinace routerů lze tvořit pomocí dvou volitelných portů. Oba porty lze osadit jakýmkoliv volitelným portem, nebo deskou s bezdrátovým modulem. Aby bylo možné obsáhnout testování alespoň nabízených kombinací routerů, bude v testovací laboratoři muset běžet dvacet routerů této řady. V základní konfiguraci bude muset být navíc oproti v2 řadě testován jeden binární vstup a jedno ethernetové rozhraní.
+
 
 \section{Volitelné porty}
 \subsection{Port LAN}

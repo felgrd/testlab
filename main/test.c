@@ -8,42 +8,45 @@
 #include <sys/select.h>  // select
 #include <string.h>      // memcpy
 #include <limits.h>
+#include <time.h>        // time
 #include "database.h"
 #include "utils.h"
 
 /**
-    * Program for test router
-    *
-    * @param release_id		is id of acual release in database
-    * @param router_id		is name of checkout project
-    * @param router_name	is name of checkout project
+  * Program for test router
+  *
+  * @param release_id		is id of acual release in database
+  * @param router_id		is name of checkout project
+  * @param router_name	is name of checkout project
 */
 
 int main(int argc, char *argv[]){
-	int		release_id;			// ID testovaneho releasu v databazi
-	char	*release;			// ID testovaneho releasu v databazi
-	int		router_id;			// ID testovaneho routeru v databazi
-	char	*router;			// ID testovaneho routeru v databazi
-	int		function_id;		// ID testovane funkce v databazi
-	int		procedure_id;		// ID testovane procedury v databazi
-	int		test_router;		// Vysledek testu testovaneho routeru
-	int		test_function;		// Vysledek testu testovane funkce
-	int		result;				// Navratovy kod funkce
-	char	***functions;		// Funkce testovaneho routeru
-	char	***procedures;		// Procedury testovane funkce
-	char	command[PATH_MAX];	// Buffer pro sestaveni commandu
-	char	buffer_std[256];	// Buffer na data z std vystupu
-	char	buffer_err[256];	// Buffer na data z err vystupu
-	char	test_value[512];	// Hodnota testu
-	int		size_std;			// Velikost dat z std vystupu
-	int		size_err;			// Velikost dat z err vystupu
-	int		file_pipes_std[2];	// Roura pro std vystup scriptu
-	int		file_pipes_err[2];	// Roura pro err vystup scriptu
-	fd_set	read_fd_set;		// Cekani na prichod dat
-	pid_t	pid;				// PID vytvoreneho procesu
-	pid_t	wpid;				// PID ukonceneho procesu
-	int		status;				// Status ukonceneho procesu
-	int		i, j;				// Promene pro prochazeni poli
+	int     release_id;          // ID testovaneho releasu v databazi
+	char    *release;            // ID testovaneho releasu v databazi
+	int     router_id;           // ID testovaneho routeru v databazi
+	char    *router;             // ID testovaneho routeru v databazi
+	int     function_id;         // ID testovane funkce v databazi
+	int     procedure_id;        // ID testovane procedury v databazi
+	int     test_router;         // Vysledek testu testovaneho routeru
+	int     test_function;       // Vysledek testu testovane funkce
+	int     result;              // Navratovy kod funkce
+	char    ***functions;        // Funkce testovaneho routeru
+	char    ***procedures;       // Procedury testovane funkce
+	char    command[PATH_MAX];   // Buffer pro sestaveni commandu
+	char    buffer_std[256];     // Buffer na data z std vystupu
+	char    buffer_err[256];     // Buffer na data z err vystupu
+	char    test_value[512];     // Hodnota testu
+	int     size_std;            // Velikost dat z std vystupu
+	int     size_err;            // Velikost dat z err vystupu
+	int     file_pipes_std[2];   // Roura pro std vystup scriptu
+	int     file_pipes_err[2];   // Roura pro err vystup scriptu
+	fd_set  read_fd_set;         // Cekani na prichod dat
+	pid_t   pid;                 // PID vytvoreneho procesu
+	pid_t   wpid;                // PID ukonceneho procesu
+	int     status;              // Status ukonceneho procesu
+	int     i, j;                // Promene pro prochazeni poli
+	int     timeout;             // Timeout pro dokonceni skriptu
+	int     starttime;           // Cas startu skriptu
 
 	// Otevreni logu
 	openlog("TestLabTest", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
@@ -78,6 +81,13 @@ int main(int argc, char *argv[]){
 	functions = database_sel_functions(router_id);
 	if(functions == NULL){
 		syslog(LOG_ERR, "Database error: select functions.");
+		return 1;
+	}
+
+	// Zjisteni timeoutu pro test script
+	timeout = database_sel_timeout(STATE_TESTROUTER);
+	if(timeout <= 0){
+		syslog(LOG_ERR, "Timeout for checkou script does not read.");
 		return 1;
 	}
 
@@ -166,6 +176,10 @@ int main(int argc, char *argv[]){
 				return 1;
 
 			default:
+
+				// Nastavani casu startu skriptu
+				starttime = time(NULL);
+
 				// Nastaveni vstupu a vystupu
 				close(file_pipes_std[1]);
 				close(file_pipes_err[1]);
@@ -210,6 +224,11 @@ int main(int argc, char *argv[]){
 								release_id, buffer_err);
 							}
 						}
+					}
+
+					// Kontrola vyprseni timeoutu skriptu
+					if(time(NULL) - starttime > timeout){
+						kill(pid, SIGKILL);
 					}
 
 					// Cekani na dobehnuti scriptu

@@ -10,34 +10,37 @@
 #include "database.h"
 #include "utils.h"
 
- /**
-    * Program for compile project
-    *
-    * @param release_id		is id of acual release in database
-    * @param platform_id	is name of checkout project
-    * @param platform_name	is name of checkout project
-	*/
+/**
+  * Program for compile project
+  *
+  * @param release_id		is id of acual release in database
+  * @param platform_id	is name of checkout project
+  * @param platform_name	is name of checkout project
+*/
 
 int main(int argc, char *argv[]){
-	int		release_id;				// ID aktualniho releasu v databazi
-	int		platform_id;			// ID platformy
-	int		product_id;				// ID produktu
-	char	*platform_name;			// Nazev platformy
-	int		result;					// Navratovy kod funkci
-	char	command[50];			// Buffer pro sestaveni prikazu
-	char	directory[PATH_MAX];	// Adresar se zkompilovanym fw
-	char	***products;			// Pole pro ulozeni vsech produktu
-	int 	platform_build;			// Vysledek prekladu platformy
-	int 	status;					// Navratovy status ukonceneho procesu
-	pid_t	pid;					// PID vytvoreneho procesu
-	pid_t	wpid;					// PID ukonceneho procesu
-	int		i;						// Promena pro prochazeni pole
+	int     release_id;          // ID aktualniho releasu v databazi
+	int     platform_id;         // ID platformy
+	int     product_id;          // ID produktu
+	char    *platform_name;      // Nazev platformy
+	int     result;              // Navratovy kod funkci
+	char    command[50];         // Buffer pro sestaveni prikazu
+	char    directory[PATH_MAX]; // Adresar se zkompilovanym fw
+	char    ***products;         // Pole pro ulozeni vsech produktu
+	int     platform_build;      // Vysledek prekladu platformy
+	int     status;              // Navratovy status ukonceneho procesu
+	pid_t   pid;                 // PID vytvoreneho procesu
+	pid_t   wpid;                // PID ukonceneho procesu
+	int     i;                   // Promena pro prochazeni pole
+	int     timeout;             // Timeout pro dokonceni skriptu
+	int     waittime;            // Doba behu skriptu
 
 	// Otevreni logu
 	openlog("TestLabCompile", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
 
 	// Inicializace promenych
 	platform_build = 1;
+	waittime = 0;
 
 	// Kontrola poctu parametru
 	if(argc != 4){
@@ -95,6 +98,13 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
+	// Zjisteni timeoutu pro compile script
+	timeout = database_sel_timeout(STATE_COMPILE);
+	if(timeout <= 0){
+		syslog(LOG_ERR, "Timeout for checkou script does not read.");
+		return 1;
+	}
+
 	// Adresar se zkompilovanym fw
 	snprintf(directory, sizeof(directory), "%s/firmware/%d", DIRECTORY, \
 	release_id);
@@ -105,8 +115,6 @@ int main(int argc, char *argv[]){
 		syslog(LOG_ERR, "Create directory error (%d)", errno);
 		return 1;
 	}
-
-	// Kontrola existence scriptu
 
 
 	// Prochazeni vsemi produktami
@@ -124,6 +132,7 @@ int main(int argc, char *argv[]){
 				syslog(LOG_ERR, "Create new process for compile error" \
 				" (%d).", errno);
 				return 1;
+
 			case 0:
 				// Potlaceni vsech vystupu
 				close_all_fds(-1);
@@ -134,13 +143,23 @@ int main(int argc, char *argv[]){
 
 				// Ukonceni programu v pripade chyby
 				return 1;
+
 			default:
-
 				// Timeout ukonceni uzivatelskeho scriptu
+				do{
+					// Kontrala stavu skriptu
+					wpid = waitpid(pid, &status, WNOHANG);
 
-
-				// Cekani na dobehnuti scriptu
-				wpid = waitpid(pid, &status, 0);
+					// Kontrola ukonceni skriptu
+					if(wpid == 0){
+						if(waittime < timeout){
+							waittime++;
+							sleep(1);
+						}else{
+							kill(pid, SIGKILL);
+						}
+					}
+				}while(wpid == 0 && waittime <= timeout);
 
 				// Kontrola spravne ukonceneho procesu
 				if(wpid == -1){
