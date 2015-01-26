@@ -212,6 +212,8 @@ char*** database_sel_procedures(int function);
 
 char* database_sel_product(int router);
 
+int database_sel_timeout(int state);
+
 void database_result_free(char ***items);
 
 int database_result_size(char ***items);

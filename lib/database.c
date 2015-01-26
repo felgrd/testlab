@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h>    // atoi
 #include <string.h>    // strdup
 #include <syslog.h>    // syslog
 #include "database.h"
@@ -411,6 +411,32 @@ char* database_sel_product(int router){
 
 	// Vraceni vysledku
 	return products[0][0];
+}
+
+int database_sel_timeout(int state){
+	int   result;
+	char  ***timeout;
+	char  buffer_query[512];
+
+	// Sestaveni SQL
+	result = snprintf(buffer_query, sizeof(buffer_query), "SELECT timeout FROM \
+	states WHERE idstates = '%d'", state);
+
+	// Kontrola sestaveni dotazu
+	if(result < 3){
+		return 0;
+	}
+
+	// Provedeni SQL dotazu
+	timeout = database_select(buffer_query);
+
+	// Kontrola vysledku dotazu
+	if(timeout == NULL || timeout[0] == NULL){
+		return NULL;
+	}
+
+	// Vraceni timeoutu prevedeneho na cislo
+	return atoi(timeout[0][0]);
 }
 
 void database_result_free(char ***items){
