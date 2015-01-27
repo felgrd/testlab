@@ -3,9 +3,9 @@
 Pro testování všech výrobků společnosti Conel nejdříve navrhnu strukturu testovací laboratoře.  Testovací laboratoř bude síť obsahující všechny výrobky společnosti Conel, různá příslušenství připojené k jednotlivým výrobkům, testovací server a konfigurovatelné switche.
 
 \section{Testovací server}
-Jádrem testovací laboratoře bude server na kterém poběží všechny testovací aplikace. Testovaci server bude výkonější počítač s parametry procesor Intel core i7, 16GB RAM a 512GB SSD disk. Pro účely testování bude server osazen dvěma ethernetovými rozhranímy pro komunikaci s testovanými výrobky a jedním ethernetovým rozhraním pro konektivitu serveru do firemní sítě. Server dále má osazeno jedno WiFi rozhraní pro testování WiFi výrobků.  Operační systém tohoto serveru jsem zvolil Ubuntu server, jelikož operační systém Ubuntu je používán k vývoji většiny výrobků.
+Jádrem testovací laboratoře bude server na kterém poběží všechny testovací aplikace. Testovaci server bude výkonější počítač s parametry procesor Intel core i7, 16GB RAM a 512GB SSD disk. Pro účely testování bude server osazen dvěma ethernetovými karty pro komunikaci s testovanými výrobky a jednou ethernetou kartou pro konektivitu serveru do firemní sítě. Server dále má osazeno jedno WiFi rozhraní pro testování WiFi výrobků. Operační systém tohoto serveru jsem zvolil Ubuntu server, jelikož operační systém Ubuntu je používán k vývoji většiny výrobků.
 
-Na serveru bude umístěna databáze uchovávající všechny informace o teststování a webová aplikace zobrazující výsledky z testování. Samotná testovací aplikace, včetně testovacích skriptu a příslušného API budou taktéž umístěny na tomto serveru. Dále zde bude kopie vzdáleného repozitáře pro rychlejší stahování zdrojových kódu. V dalších fázích vývoje testovacího zařízení by na temto serveru mohl být testován systém pro monitoring routerů RSeeNet a systém pro jednoduchou tvorbu VPN tunelů SmartCluster.
+Na serveru bude umístěna databáze uchovávající všechny informace o teststování a webová aplikace zobrazující výsledky z testování. Samotná testovací aplikace, včetně testovacích skriptů a příslušného API bude taktéž umístěna na tomto serveru. Dále na serveru bude kopie vzdáleného repozitáře pro rychlejší stahování zdrojových kódu testovaných projektů. V dalších fázích vývoje testovacího zařízení by na temto serveru mohl být testován systém pro monitoring routerů RSeeNet a systém pro jednoduchou správu VPN tunelů SmartCluster.
 
 \begin{figure}[h]
   \centering
@@ -15,13 +15,13 @@ Na serveru bude umístěna databáze uchovávající všechny informace o testst
 \end{figure}
 
 \section{Konfigurovatelné switche}
-Pro propojení všech výrobků s testovacím serverem budou použity dva konfigurovatelné 48 portové switche od firmy CISCO. Dva switche byly zvoleny kvůli velké ceně switchů nad 48 portů. Konfigurovatelné switch budou potřeba pro změnu síťové infrastruktury v průběhu testu. Každý switch bude připojen k jednomu ethernetovému rozhraní serveru, dále budou switche navzájem propojeny. Nejen všechny výrobky, ale každé fyzické ethernetové rozhraní bude připojeno do switche a pomocí VLAN bude vytvořena požadovaná testovací síť.
+Pro připojení všech výrobků k testovacímu serveru budou použity dva konfigurovatelné 48 portové switche od firmy CISCO. Dva switche byly zvoleny kvůli velké ceně switchů nad 48 portů. Konfigurovatelné switch budou potřeba pro změnu síťové infrastruktury v průběhu testu. Každý switch bude připojen k jednomu ethernetovému rozhraní serveru, dále budou switche navzájem propojeny. Nejen všechny výrobky, ale každé fyzické ethernetové rozhraní bude připojeno do switche. Pomocí VLAN bude možné sítě oddělit a vytvořit požadovanou testovací síť.
 
 \section{Testovaná zařízení}
-Zařízení které tvoří přes devadesát procent prodeje firmy Conel jsou bezdrátové routery a i tato zařízení budou testovány v testovací laboratoři. Bezdrátové routery tvoří celkem čtyři modelové řady, které dále obsahují jednotlivé výrobky podle technologie bezdrátového připojení a počtu rozhraní.
+Bezdrátové routery jsou zařízení které tvoří přes devadesát procent prodeje firmy Conel a právě tato zařízení budou testovány v testovací laboratoři. Bezdrátové routery tvoří celkem čtyři modelové řady, které dále obsahují jednotlivé výrobky podle technologie bezdrátového připojení a počtu rozhraní.
 
 \subsection{Řada routerů v0}
-Takzvaná nultá řada routerů obsahuje pouze dvá výrobky. Prvním ER75i disponující EDGE technologií, jedním ethernet rozhraním možností a osazením jednoho volitelného portu.  Druhým výrobkem této řady je UR5, který se liší pouze bezdrátovou technologií. Místo EDGE technologie disponuje rychlejší UMTS technologií. Oba tyto výrobky jsou postaveny na uClinuxu a i přes jejich stáří se firmware stále udržuje. U těchto modelů bude testován pouze Lan, který bude připojeni do konfigurovatelného switche. Testování volitelného portu bude popsáno v samostanté kapitole věnující se tomuto problému. Jiné interface tato základní řada nevlastní.
+Takzvaná nultá řada routerů obsahuje pouze dvá výrobky. Prvním výrobke je ER75i, disponující EDGE technologií, jedním ethernet rozhraním a možností osazením jednoho volitelného portu. Druhým výrobkem této řady je UR5, který se liší pouze bezdrátovou technologií. Místo EDGE technologie disponuje rychlejší UMTS technologií. Oba tyto výrobky jsou postaveny na uClinuxu a i přes jejich stáří se firmware stále udržuje. U těchto modelů bude připojeno pouze ethernet rozhraní, které bude připojeno do konfigurovatelného switche. Testování volitelného portu bude popsáno v samostanté kapitole věnující se testování volitelných portů. Jiné interface tato základní řada nevlastní.
 
 \subsection{Řada routerů v1}
 Řada routeru v1 není od nulté řady marketingově ani koncepčně oddělena. Řada je z hlediska vývoje je oddělena jelikož je založena na plnohodnotném Linuxu místo uCLinuxu použitém u předchoích výrobků. Řada obsahuje výrobky UR5i disponující HSPA+ technologií a XR5i, který nedisponuje žádnou bezdrátovou technologií.
@@ -44,7 +44,7 @@ Takzvaná nultá řada routerů obsahuje pouze dvá výrobky. Prvním ER75i disp
 \end{figure}
 
 \subsection{Řada routerů v2}
-Řada routerů v2 sebou přináší rozsáhlý modulární koncept a tím i velký počet různých typů routerů. Pro pokrytí všech možných kombinací routerů této řady bude muset v testovací laboratoři běžet přibližně třicet routerů. Každý router bude připojen ethernet kabel do konfigurovatelného switche. Vybrané routery budou mít zapojen binární vstup a výstup pro testování vstupů a výstupů. Dále tyto routery budou mít zapojeny různá zařízení do USB konektoru, například flash disk a USB/RS232 převodník. Modelová řada v2 obsahuje taktéž až dva volitelné porty, popis zapojení testování těchto portů bude popsáno v samostné kapitole věnující se volitelným portům.
+Řada routerů v2 sebou přináší rozsáhlý modulární koncept a tím i velký počet různých typů routerů. Pro pokrytí všech možných kombinací routerů této řady bude muset v testovací laboratoři běžet přibližně třicet routerů. Každý router bude připojen ethernet kabelem do konfigurovatelného switche. Vybrané routery budou mít zapojen binární vstup a výstup pro testování vstupů a výstupů. Dále tyto routery budou mít zapojeny různá zařízení do USB konektoru, například flash disk nebo USB/RS232 převodník. Modelová řada v2 obsahuje taktéž až dva volitelné porty, popis zapojení testování těchto portů bude popsáno v samostné kapitole věnující se volitelným portům.
 
 \begin{figure}[h]
   \begin{subfigure}[h]{0.5\LW}
@@ -84,13 +84,13 @@ Modelová řada v3 je poslední vyvinutou řadou routerů. Koncepčně se příl
 \end{figure}
 
 \section{Volitelné porty}
-Každý router lze osadit alespoň jedním volitelným portem. Jednotlivé volitelné porty rozšiřují router o další interface. Testován musí být všechny volitelné porty alespoň v každé modelové řadě routerů. Popis volitelných portů a způsob zapojení je popsán v kapitolech týkajících se jednotlivým volitelným portům.
+Každý router lze osadit alespoň jedním volitelným portem. Jednotlivé volitelné porty rozšiřují router o další interface. Testovány musí být všechny volitelné porty alespoň v každé modelové řadě routerů. Popis volitelných portů a způsob zapojení je popsán v kapitolech týkajících se jednotlivým volitelným portům.
 
 \subsection{Ethernet 10/100}
 Volitelný port Ethernet 10/100 rozšiřuje router o další fyzický ethernet. Tento port bude testován stejný způsobem jako základní ethernet na router. Všechny tyto porty budou připojeny do konfigurovatelného switche a pomocí VLAN budou odděleny v jiné síti.
 
 \subsection{RS232}
-Volitelný port RS232 rozšiřuje router o standartní sériové rozhraní. Sériová rozhraní budou testována trojím způsobem. Nejdříve budou propojeny dva routery sériovým rozraním a mezi nima budou přenášena data. Drůhým způsobem testů bude připojení loopback desky, která odpovídá na pár jednotlivých komandů. Popis těchto destiček pro všechny rozhraní bude v dalších kapitolách. Poslední testovací případ sériového rozhraní bude připojení libovolného zařízení jiného výrobce se sériovým rozhraním.
+Volitelný port RS232 rozšiřuje router o standartní sériové rozhraní. Sériová rozhraní budou testována trojím způsobem. Nejdříve budou propojeny dva routery sériovým rozraním a mezi nima budou přenášena data. Drůhým způsobem testů bude připojení loopback desky, která odpovídá na pár jednotlivých komandů. Popis těchto destiček pro všechny rozhraní bude v dalších kapitolách. Poslední testovací případ sériového rozhraní bude připojení a komunikace s libovolným zařízením jiného výrobce se sériovým rozhraním.
 
 \subsection{RS485/RS422}
 Volitelný port RS485/RS422 rozšiřuje router o přepínatelné sériové rozhraní RS485 a RS422. Testování těchto portů je identické s rozhraním RS232. Testovat bude potřeba obě tyto rozhraní.
@@ -102,16 +102,16 @@ Volitelný port M-BUS master rozšiřuje router o další typ sériového rozhra
 Volitelný port I/O module CNT rozšiřuje router o další binární vstupy, binární výstupy, čítačové vstupy a analogové vstupy. Testování tohoto portu bude prováděno pouze jedním způsobem. Volitelný port CNT se bude testovat pomocí loopback desky CNT.
 
 \subsection{WiFi}
-Volitelný port WiFi rozšiřuje router o možnost připojení se do WiFi sítě. Tento rozšiřuící port lze osadit pouze do modelové řady v2. Ŕada routerů v1 nepodporuje WiFi rozhraní. Ŕada routerů v3 má možnost osadit WiFi rozhraní již na zkladní desce. WiFi rozhraní se bude testovat vůči WiFi připojení testovacího routeru, WiFi připojení CISCO routeru a naposledy vůči jinemů Conel routeru s podporou WiFi.
+Volitelný port WiFi rozšiřuje router o možnost připojení se do WiFi sítě. Tento rozšiřuící port lze osadit pouze do modelové řady v2. Řada routerů v1 nepodporuje WiFi rozhraní. Ŕada routerů v3 má možnost osadit WiFi rozhraní již na základní desce. WiFi rozhraní se bude testovat vůči WiFi připojení testovacího serveru, WiFi připojení CISCO routeru a v neposlední řadě vůči jinemů Conel routeru s podporou WiFi.
 
 \subsection{SDH}
-Volitelný port SDH rozšiřuje možnost routeru o připojení SD karty. Kompatibilita portu SDH je stejná jakou u portu WiFi. Testování portu SDH bude pomocí zápisu a přečtení dat z karty umístěné v držáku SDH portu.
+Volitelný port SDH rozšiřuje možnost routeru o připojení SD karty. Kompatibilita portu SDH je stejná jakou u portu WiFi. Testování portu SDH bude pomocí zápisu a přečtení dat z karty umístěné v držáku SDH portu. Źádná konektivita v případě tohoto portu nebude potřeba.
 
 \subsection{Switch}
-Volitelný port Switch rozšiřuje možnost připojení až na tři switchované ethernety. Po připojení portu Switch do routeru je první ethernet rozswitchován do všech tří portů. Kompatibilita tohoto volitelného portu je stejná jako u předchozích dvou portů.
+Volitelný port Switch rozšiřuje možnost připojení se až na tři switchované ethernet porty. Po připojení portu Switch do routeru je první ethernet switchován do všech tří portů routeru. Kompatibilita tohoto volitelného portu je stejná jako u předchozích dvou portů.
 
 \section{Cisco router}
-Další důležito součástí testovací sítě je bezdrátový Cisco router. Router je zapojen do testovací sítě pomocí ethernetu. Router dále využívá mobilní a WiFi připojení. Cisco router je součástí testovací sítě z důvodu testování nějakých protokolů oproti jinému referenčnímu routeru. Příklad testovaného protokolu může být IPsec.
+Další důležito součástí testovací sítě je bezdrátový Cisco router. Router je zapojen do testovací sítě pomocí ethernetu. Router dále využívá mobilní a WiFi připojení. Cisco router je součástí testovací sítě z důvodu testování vybraných protokolů oproti jinému referenčnímu routeru. Příklad testovaného protokolu může být například IPsec tunel.
 
 \begin{figure}[h]
   \centering
