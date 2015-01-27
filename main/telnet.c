@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>		// inet_pton
-#include <unistd.h>			// close
-#include <string.h>			// memset, strcat, strcpy
+#include <arpa/inet.h>   // inet_pton
+#include <unistd.h>      // close
+#include <string.h>      // memset, strcat, strcpy
 #include "telnet.h"
 
 int telnetInit(char *ip, int port, const char *username, const char *password){

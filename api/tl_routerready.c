@@ -1,7 +1,7 @@
 #define _XOPEN_SOURCE 500
 #include <stdio.h>
 #include <stdlib.h>    // atoi
-#include <errno.h>
+#include <errno.h>     // errno
 #include <unistd.h>    // getopt
 #include <string.h>    // strdup
 #include <time.h>      // time
@@ -14,16 +14,10 @@
 // Defaultni cas zkouseni stavu routeru
 #define DEFUALT_TIMEOUT		120
 
-#define STATE_OFF      0
-#define STATE_PING     1
-#define STATE_CONNECT  2
-#define STATE_TIMEOUT  3
-#define STATE_ERROR    4
-
 /**
  * @file tl_routerready.c
  *
- * @brief usage tl_routerready
+ * @brief usage tl_routerready [-t <timeout>] [-i <ip> || <id>]
  *
  * @author David Felgr
  * @version 1.0.0
@@ -31,11 +25,21 @@
  *
  * Program tl_ready wait for router run.
  *
- * @param ID of tested router.
+ * @param -t <timeout> Maximal time for try ping to the router.
+ * @param -i <ip> IP address of router.
+ * @param <id> ID of router.
  *
  * @return 0 - <br>
  *         1
+ *
+ * @cond
  */
+
+#define STATE_OFF      0
+#define STATE_PING     1
+#define STATE_CONNECT  2
+#define STATE_TIMEOUT  3
+#define STATE_ERROR    4
 
 void help(void){
 	printf("usage tl_routerready [-t <timeout>] [-i <ip> || <id>]\n");

@@ -14,13 +14,13 @@
 #include "ssh.h"
 #include "cspipe.h"
 
-#define	PROTOCOL_TELNET			0
-#define PROTOCOL_SSH			1
+#define	PROTOCOL_TELNET   0
+#define PROTOCOL_SSH      1
 
-#define REMOTE_USER_LENGTH		20	// Velikost bufferu pro uzivatele
-#define REMOTE_PASS_LENGTH		20	// Velikost bufferu pro heslo
-#define REMOTE_IP_LENGTH		20	// Velikost bufferu pro IP adresu
-#define REMOTE_PROT_LENGTH		20	// Velikost bufferu pro protokol
+#define REMOTE_USER_LENGTH    20	// Velikost bufferu pro uzivatele
+#define REMOTE_PASS_LENGTH    20	// Velikost bufferu pro heslo
+#define REMOTE_IP_LENGTH      20	// Velikost bufferu pro IP adresu
+#define REMOTE_PROT_LENGTH    20	// Velikost bufferu pro protokol
 
 // Prijate cislo signalu
 volatile int got_signal = 0;

@@ -13,7 +13,7 @@ int client_starting(int pid){
 	// Cesta k servrove roure
 	snprintf(server_pipe_name, sizeof(server_pipe_name), \
 	SERVER_FIFO_NAME, pid);
-	
+
 	// Otevreni roury
 	server_fd = open(server_pipe_name, O_WRONLY);
 	if(server_fd == -1){
@@ -113,4 +113,45 @@ int read_response_from_server(message_remote *message){
 
 	return read_bytes == sizeof(*message);
 
+}
+
+int pipe_request(client_request type, char *request, char *response){
+	int             router;           // Identifikator spojeni do routeru
+	int             result;           // Navratova hodnota funkce
+	int	          	fifo_fd;          // Roura pro prijem dat
+	message_remote	remote_request;		// Format posilanych dat
+	message_remote	remote_response;	// Format posilanych dat
+
+	// Nastaveni pozadavku
+	remote_request.request = type;
+
+	// Kopirovani zadosti
+	if(request != NULL){
+		strncpy(remote_request.data, request, sizeof(remote_request.data));
+	}
+
+	// Navazani spojeni
+	fifo_fd = client_starting(router);
+	if(fifo_fd){
+		// Odelani zadosti
+		result = send_mess_to_server(fifo_fd, remote_request);
+
+		// Prijem odpovedi
+		if(result){
+			read_response_from_server(&remote_response);
+		}
+	}
+
+	// Ukonceni komunikace
+	client_ending(router, fifo_fd);
+
+	// Ziskani vysledku
+	if(remote_response.request == remote_response_ok){
+		strcpy(response, remote_response.data);
+	}else{
+		fprintf(stderr, "No response from router.\n");
+		return 0;
+	}
+
+	return 1;
 }

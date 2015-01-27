@@ -50,16 +50,15 @@
 
 void help(void){
 	#ifdef FW
-		printf("usage tl_updatefw -r <release> [-i <ip> -f <firmware>" \
+		printf("usage tl_updatefw -r <release> -f <firmware> [-i <ip> " \
 		" -t <protocol>] or  [<ID>] [-d <dir>] [-u <user>] [-p <pass>]\n");
 	#elif CONF
-		printf("usage tl_updateconf -r <release> [-i <ip> -f <firmware>" \
+		printf("usage tl_updateconf -r <test> -f <configuration> [-i <ip> " \
 		" -t <protocol>] or [<ID>] [-d <dir>] [-u <user>] [-p <pass>]\n");
 	#endif
 }
 
 int main(int argc, char *argv[]){
-	int       router;
 	char      ip[20];
 	char      firmware[PATH_MAX];
 	char      imagedir[PATH_MAX];
@@ -68,22 +67,12 @@ int main(int argc, char *argv[]){
 	char      release[20];
 	char      protocol[20];
 	char      parameter;
-	int       selIP;
-	int       selFW;
-	int       selPR;
-	char      *product;
-	int       result;
-	int       fifo_fd;
 	char      command[255];
 	char      file[255];
-	message_remote	remote_request;		// Format posilanych dat
-	message_remote	remote_response;	// Format posilanych dat
+	int       result;
+	int       router;
 
 	// Inicializace promenych
-	selIP = 0;
-	selFW = 0;
-	selPR = 0;
-
 	#ifdef FW
 		strncpy(imagedir, DEFAULT_IMAGEDIR, sizeof(imagedir));
 	#elif CONF
@@ -93,17 +82,18 @@ int main(int argc, char *argv[]){
 	strncpy(user, DEFAULT_USER, sizeof(user));
 	strncpy(pass, DEFAULT_PASS, sizeof(pass));
 	release[0] = '\0';
+	firmware[0] = '\0';
+	ip[0] = '\0';
+	protocol[0] = '\0';
 
 	// Rozbor parametru na prikazove radce
 	while ((parameter = getopt(argc, argv, "i:f:d:u:p:r:t:")) != -1) {
 		switch (parameter) {
 			case 'i':
 				strncpy(ip, optarg, sizeof(ip));
-				selIP++;
 				break;
 			case 'f':
 				strncpy(firmware, optarg, sizeof(firmware));
-				selFW++;
 				break;
 			case 'd':
 				strncpy(imagedir, optarg, sizeof(imagedir));
@@ -119,7 +109,6 @@ int main(int argc, char *argv[]){
 				break;
 			case 't':
 				strncpy(protocol, optarg, sizeof(protocol));
-				selPR++;
 				break;
 			case '\?':
 				help();
@@ -131,7 +120,7 @@ int main(int argc, char *argv[]){
 	}
 
 	// Pokud nebyla specifikovana IP adresa nebo FW
-	if(!selIP || !selFW || selPR){
+	if(!strlen(ip) || !strlen(protocol)){
 
 		// Kontrola parametru id routeru
 		if(optind >= argc){
@@ -148,81 +137,20 @@ int main(int argc, char *argv[]){
 	}
 
 	// Ziskani IP adresy pokud nebyla zadana
-	if(!selIP){
+	if(!strlen(ip)){
 
-		// Nastaveni pozadavku
-		remote_request.request = remote_status_address;
-
-		// Navazani spojeni
-		fifo_fd = client_starting(router);
-		if(fifo_fd){
-			// Odelani zadosti
-			result = send_mess_to_server(fifo_fd, remote_request);
-
-			// Prijem odpovedi
-			if(result){
-				read_response_from_server(&remote_response);
-			}
-		}
-
-		// Ukonceni komunikace
-		client_ending(router, fifo_fd);
-
-		// Ziskani vysledku
-		if(remote_response.request == remote_response_ok){
-			strncpy(ip, remote_response.data, sizeof(ip));
-		}else{
+		result = pipe_request(remote_status_address, NULL, ip);
+		if(!result){
 			fprintf(stderr, "No response from router.\n");
 			return 1;
 		}
 	}
 
-	// Ziskani nazvu fw pokud nebyl zadan
-	if(!selFW){
-
-		// Provedeni SQL dotazu
-		product = database_sel_product(router);
-
-		// Kontrola vysledku dotazu
-		if(product == NULL){
-			return 1;
-		}
-
-		strncpy(firmware, product, sizeof(firmware));
-
-		free(product);
-	}
-
 	// Ziskani komunikacniho protokolu pokud nebyl zadan
-	if(!selPR){
+	if(!strlen(protocol)){
 
-		// Nastaveni pozadavku
-		remote_request.request = remote_status_protocol;
-
-		// Navazani spojeni
-		fifo_fd = client_starting(router);
-		if(fifo_fd){
-			// Odelani zadosti
-			result = send_mess_to_server(fifo_fd, remote_request);
-
-			// Prijem odpovedi
-			if(result){
-				read_response_from_server(&remote_response);
-			}
-		}
-
-		// Ukonceni komunikace
-		client_ending(router, fifo_fd);
-
-		// Ziskani vysledku
-		if(remote_response.request == remote_response_ok){
-
-			if(strcmp(remote_response.data, "ssh") == 0){
-				strcpy(protocol, "s");
-			}else{
-				strcpy(protocol, "");
-			}
-		}else{
+		result = pipe_request(remote_status_protocol, NULL, protocol);
+		if(!result){
 			fprintf(stderr, "No response from router.\n");
 			return 1;
 		}
@@ -250,7 +178,7 @@ int main(int argc, char *argv[]){
 	close_all_fds(-1);
 
 	// Spusteni update fw nebo conf
-	if(strcmp(protocol, "s") == 0){
+	if(strcmp(protocol, "ssh") == 0){
 		execlp("curl", "curl", "--ssl", "-k", file, command, NULL);
 	}else{
 		execlp("curl", "curl", file, command, NULL);

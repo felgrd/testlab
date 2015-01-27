@@ -76,4 +76,14 @@ int send_mess_to_server(int pipe_id, message_remote message);
  */
 int read_response_from_server(message_remote *message);
 
+/**
+ * @brief Send request to remote server and return answer
+ *
+ * @param type Enum with type of request.
+ * @param request Buffer with request data.
+ * @param response Buffer for response data
+ * @return Exit code is exit code from remote server.
+ */
+int pipe_request(client_request type, char *request, char *response);
+
 #endif
