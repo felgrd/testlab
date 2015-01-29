@@ -23,7 +23,7 @@
  */
 
 void help(void){
-	fprintf(stderr, "usage tl_checkproduct <id>");
+	fprintf(stderr, "usage tl_checkproduct <id>\n");
 }
 
 int main(int argc, char *argv[]){

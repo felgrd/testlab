@@ -31,7 +31,7 @@
 
 void help(void){
 	fprintf(stderr, "usage tl_remoteinfo [-p] or [-i] or [-u] or [-s]"\
-	" or [-t] <id>");
+	" or [-t] <id>\n");
 }
 
 int main(int argc, char *argv[]){

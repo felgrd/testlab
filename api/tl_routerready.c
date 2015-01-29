@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
 		}
 
 		// Zjisteni IP adresy routeru podle identifikatoru
-		result = pipe_request(remote_status_address, NULL, ip);
+		result = pipe_request(router, remote_status_address, NULL, ip);
 		if(!result){
 			return 1;
 		}

@@ -26,7 +26,7 @@
  */
 
 void help(void){
-	fprintf(stderr, "usage tl_remote <id> <command>");
+	fprintf(stderr, "usage tl_remote <id> <command>\n");
 }
 
 int main(int argc, char *argv[]){
@@ -38,14 +38,14 @@ int main(int argc, char *argv[]){
 
 	// Kontrola parametru command
 	if(argc != 3){
-		fprintf(stderr, "Bad number of parameters\n");
+		help();
 		return 1;
 	}
 
 	// Nazev serverove roury
 	router = atoi(argv[1]);
 	if(router <= 0){
-		fprintf(stderr, "Bad number of router\n");
+		help();
 		return 1;
 	}
 

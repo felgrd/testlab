@@ -28,7 +28,7 @@
  */
 
 void help(void){
-	fprintf(stderr, "usage tl_status <id> <category> [<subcategory>]");
+	fprintf(stderr, "usage tl_status <id> <category> [<subcategory>]\n");
 }
 
 int main(int argc, char *argv[]){

@@ -30,7 +30,7 @@
 
 void help(void){
 	fprintf(stderr, "usage tl_remotechange [-p <port>] [-i <ip>]" \
-	" [-u <user>] [-s <pass>] [-t <protocol>] <id>");
+	" [-u <user>] [-s <pass>] [-t <protocol>] <id>\n");
 }
 
 int main(int argc, char *argv[]){
