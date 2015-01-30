@@ -12,12 +12,15 @@
  *
  * @author David Felgr
  * @version 1.0.0
- * @date 6.1.2015
+ * @date 29.1.2015
  *
- * Program tl_remotechange change connection parameters and again
- * connects to the router.
+ * Program tl_remotechange change connection parameters and reconnect
+ * conection to the router.<br>
+ * Example command: tl_remotechange -i 10.40.28.33 1 Change IP address of
+ * connection to the router with ID 1 to 10.40.28.33. This command has not
+ * a response.
  *
- * @param -p Port of connection to he router.
+ * @param -p Port of connection to the router.
  * @param -i IP addres of connection to the router.
  * @param -u Username login of connection to the router.
  * @param -s Password of connection to the router.
@@ -25,7 +28,7 @@
  * @param <id> Router id of your tested router.
  *
  * @return 0 - Parameters change successfull.<br>
- *         1 - Parameters do not change.
+ *         1 - Parameters does not change.
  */
 
 void help(void){
@@ -34,25 +37,23 @@ void help(void){
 }
 
 int main(int argc, char *argv[]){
-	int				i;							        // Iteracni promena
-	char			c;								      // Rozebirani parametru
-	int				router;						      // Identifikace routeru
-	int				fifo_fd;					      // Roura pro prijem dat
-	int				response_result;        // Vysledek odpovedi od remote serveru
-	int				result;						      // Vysledek funkce
-	int				num_parameters;		      // Pocet zpracovanych promenych
-	char			*commands[20];		      // Pole pozadovanych zmen
-  client_request	request[20];			// Prikaz k provedeni
-	message_remote	remote_request;		// Format posilanych dat
-	message_remote	remote_response;	// Format posilanych dat
+	int             i;                         // Iteracni promena
+	char            parameter;                 // Rozebirani parametru
+	int             router;                    // Identifikace routeru
+	int             response_result;           // Vysledek odpovedi od remote serveru
+	int             result;                    // Vysledek funkce
+	int             num_parameters;            // Pocet zpracovanych promenych
+	char            answer[PIPE_BUFFER_SIZE];  // Buffer pro opoved z routeru
+	char            *commands[20];             // Pole pozadovanych zmen
+  client_request  request[20];               // Prikaz k provedeni
 
 	// Inicializace promenych
 	response_result = 0;
 	num_parameters = 0;
 
 	// Rozbor parametru na prikazove radce
-	while ((c = getopt(argc, argv, "p:i:u:s:t:")) != -1){
-		switch (c){
+	while ((parameter = getopt(argc, argv, "p:i:u:s:t:")) != -1){
+		switch (parameter){
 			case 'i':
 				request[num_parameters] = remote_change_address;
 				commands[num_parameters++] = strdup(optarg);
@@ -95,52 +96,21 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-	// Navazani spojeni
-	fifo_fd = client_starting(router);
+	// Provedeni zmeny prikazu
+	for(i = 0; i < num_parameters; i++){
 
-	if(fifo_fd){
-
-		// Provedeni zmeny prikazu
-		for(i = 0; i < num_parameters; i++){
-
-			// Sestaveni zpravy
-			remote_request.request = request[i];
-			strncpy(remote_request.data, commands[i],
-			sizeof(remote_request.data));
-
-			// Odeslani zpravy
-			result = send_mess_to_server(fifo_fd, remote_request);
-
-			// Prijem odpovedi
-			if(result){
-				read_response_from_server(&remote_response);
-			}
-
-			// Kontrola odpovedi
-			if(remote_response.request == remote_response_error){
-				response_result |= 1;
-			}
-		}
-
-		// Znovu pripojeni k routeru
-		remote_request.request = remote_reconnect;
-
-		// Odeslani zpravy
-		result = send_mess_to_server(fifo_fd, remote_request);
-
-		// Prijem odpovedi
-		if(result){
-			read_response_from_server(&remote_response);
-		}
+		// Odeslani zadosti remote serveru
+		result = pipe_request(router, request[i], commands[i], answer);
 
 		// Kontrola odpovedi
-		if(remote_response.request == remote_response_error){
-			response_result |= 1;
-		}
+		response_result |= !result;
 	}
 
-	// Ukonceni komunikace
-	client_ending(router, fifo_fd);
+	// Odeslani zadosti remote serveru
+	result = pipe_request(router, remote_reconnect, NULL, answer);
+
+	// Kontrola odpovedi
+	response_result |= !result;
 
 	return response_result;
 }

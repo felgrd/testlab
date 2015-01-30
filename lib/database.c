@@ -432,7 +432,7 @@ int database_sel_timeout(int state){
 
 	// Kontrola vysledku dotazu
 	if(timeout == NULL || timeout[0] == NULL){
-		return NULL;
+		return 0;
 	}
 
 	// Vraceni timeoutu prevedeneho na cislo

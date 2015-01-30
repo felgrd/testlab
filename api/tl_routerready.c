@@ -7,7 +7,6 @@
 #include <time.h>      // time
 #include <sys/types.h> // waitpid
 #include <sys/wait.h>  // waitpid
-
 #include "utils.h"
 #include "cspipe.h"
 
@@ -21,16 +20,18 @@
  *
  * @author David Felgr
  * @version 1.0.0
- * @date 6.1.2015
+ * @date 29.1.2015
  *
- * Program tl_ready wait for router run.
+ * Program tl_ready wait for router run and answer seconds of wait. <br>
+ * Example command: tl_ready 1. Answer: 20. Router wait 20 seconds.
  *
  * @param -t <timeout> Maximal time for try ping to the router.
  * @param -i <ip> IP address of router.
  * @param <id> ID of router.
  *
- * @return 0 - <br>
- *         1
+ * @return 0 - Answer is valid.<br>
+ *         1 - Parameter is not valid.<br>
+ *         2 - Timeout is expired.
  *
  * @cond
  */
@@ -106,7 +107,6 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-
 	// Zacatek kontroly stavu routeru
 	starttime = time(NULL);
 
@@ -153,5 +153,5 @@ int main(int argc, char *argv[]){
 
 	printf("%d\n", (int)(time(NULL) - starttime));
 
-	return state != STATE_PING;
+	return state == STATE_PING ? 0 : 2;
 }

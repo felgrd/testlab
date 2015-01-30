@@ -15,7 +15,7 @@
 #define PIPE_BUFFER_SIZE	8192
 
 typedef enum{
-	remote_process = 0,       ///< Vykonani prikazys
+	remote_process = 0,       ///< Vykonani prikazu
 	remote_change_address,    ///< Zmena adresy pripojeni
 	remote_change_port,       ///< Zmena portu pripojeni
 	remote_change_user,       ///< Zmena prihlasovaciho jmena
@@ -84,6 +84,6 @@ int read_response_from_server(message_remote *message);
  * @param response Buffer for response data
  * @return Exit code is exit code from remote server.
  */
-int pipe_request(client_request type, char *request, char *response);
+int pipe_request(int pid, client_request type, char *request, char *response);
 
 #endif

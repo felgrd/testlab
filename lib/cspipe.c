@@ -2,6 +2,7 @@
 #include <fcntl.h>			// open
 #include <unistd.h>			// getpid
 #include <sys/stat.h>		// mkfifo
+#include <string.h>
 #include "cspipe.h"
 
 int client_starting(int pid){
@@ -115,8 +116,7 @@ int read_response_from_server(message_remote *message){
 
 }
 
-int pipe_request(client_request type, char *request, char *response){
-	int             router;           // Identifikator spojeni do routeru
+int pipe_request(int pid, client_request type, char *request, char *response){
 	int             result;           // Navratova hodnota funkce
 	int	          	fifo_fd;          // Roura pro prijem dat
 	message_remote	remote_request;		// Format posilanych dat
@@ -131,7 +131,7 @@ int pipe_request(client_request type, char *request, char *response){
 	}
 
 	// Navazani spojeni
-	fifo_fd = client_starting(router);
+	fifo_fd = client_starting(pid);
 	if(fifo_fd){
 		// Odelani zadosti
 		result = send_mess_to_server(fifo_fd, remote_request);
@@ -143,7 +143,7 @@ int pipe_request(client_request type, char *request, char *response){
 	}
 
 	// Ukonceni komunikace
-	client_ending(router, fifo_fd);
+	client_ending(pid, fifo_fd);
 
 	// Ziskani vysledku
 	if(remote_response.request == remote_response_ok){

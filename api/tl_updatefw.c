@@ -10,6 +10,30 @@
 /// The default location of the firmware
 #define	DEFAULT_IMAGEDIR "/var/testlab/firmware"
 
+/**
+ * @file tl_updatefw.c
+ *
+ * @brief usage tl_updatefw -r \<release\> -f \<firmware\> [-d \<dir\>] \<id\>
+ *
+ * @author David Felgr
+ * @version 1.0.0
+ * @date 29.1.2015
+ *
+ * Program tl_updateconf update new firmware to the router. <br>
+ * Example command: tl_updateconf -r 4 -f LR77-v2 1. Router update firmware
+ * /var/testlab/firmware/4/LR77-v2.bin to the router with ID 1.
+ *
+ * @param -r \<release\> Release of tested firmware.
+ * @param -f \<firmware\> Name of firmware.
+ * @param -d \<dir\> Directory of new firmware.
+ * @param \<id\> Router id of your tested router.
+ *
+ * @returns The return value is the same as curl.
+ * http://curl.haxx.se/docs/manpage.html
+ *
+ * @cond
+ */
+
 void help(void){
   printf("usage tl_updatefw -r <release> -f <firmware> [-d <dir>] <router>\n");
 }
@@ -28,7 +52,6 @@ int main(int argc, char *argv[]){
   char    command[250];
   int     parameter;
   int     result;
-
 
   // Inicializace promenych
   strncpy(imagedir, DEFAULT_IMAGEDIR, sizeof(imagedir));
@@ -123,8 +146,6 @@ int main(int argc, char *argv[]){
   snprintf(command, sizeof(command), \
   "http%s://%s:%s@%s/update_exec.cgi", protocol, user, pass, ip);
 
-
-
   // Potlaceni vsech vystupu
   close_all_fds(-1);
 
@@ -134,6 +155,9 @@ int main(int argc, char *argv[]){
   }else{
     execlp("curl", "curl", file, command, NULL);
   }
+
+  // V pripade nespusteni programu curl
+  fpritnf(stderr, "Program curl is not running.\n");
 
   return 1;
 }

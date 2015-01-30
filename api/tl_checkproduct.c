@@ -9,12 +9,12 @@
  *
  * @author David Felgr
  * @version 1.0.0
- * @date 6.1.2015
+ * @date 29.1.2015
  *
- * Preogram returns firmware name of tested router.
+ * Program returns firmware name of tested router. <br>
  * Example command: tl_checkproduct 4. Answer: LR77-v2.
  *
- * @param <id> Router id of your tested router.
+ * @param <id> Router ID of your tested router.
  *
  * @return 0 - Name of router firmware is valid<br>
  *         1 - Name of router firmware is not valid
@@ -27,8 +27,8 @@ void help(void){
 }
 
 int main(int argc, char *argv[]){
-	int		router;
-	char	*product;
+	int		  router;             //
+	char	  *product;           //
 
 	// Kontrola poctu parametru
 	if(argc != 2){
@@ -51,6 +51,9 @@ int main(int argc, char *argv[]){
 
 	// Tisk vysledku
 	printf("%s", product);
+
+	// Uvolneni pameti
+	free(product);
 
 	return 0;
 }

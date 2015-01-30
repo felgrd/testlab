@@ -10,10 +10,10 @@
  *
  * @author David Felgr
  * @version 1.0.0
- * @date 6.1.2015
+ * @date 29.1.2015
  *
- * Program answer parameter of connection specific router.<br>
- * Example command: tl_remoteinfo -p 4. Answer: 22.
+ * Program return connection parameter of specific router. <br>
+ * Example command: tl_remoteinfo -i 4. Answer: 10.40.28.32.
  *
  * @param -p Port of connection to he router.
  * @param -i IP addres of connection to the router.
@@ -35,30 +35,32 @@ void help(void){
 }
 
 int main(int argc, char *argv[]){
-	char  c;                          // Rozebirani parametru
-	int   fifo_fd;                    // Deskriptor roury
-	int   result;                     // Navratova hodnota funkce
-	int   router;                     // Identifikator routeru
-	message_remote  remote_request;   // Format posilanych dat
-	message_remote  remote_response;  // Format posilanych dat
+	char    parameter;                  // Rozebirani parametru
+	int     result;                     // Navratova hodnota funkce
+	int     router;                     // Identifikator routeru
+	client_request  request;               // Prikaz k provedeni
+	char    answer[PIPE_BUFFER_SIZE];   // Buffer pro opoved z routeru
+
+	// Inicializace promenych
+	request = remote_process;
 
 	// Rozbor parametru na prikazove radce
-	while ((c = getopt(argc, argv, "piust")) != -1) {
-		switch (c) {
+	while ((parameter = getopt(argc, argv, "piust")) != -1) {
+		switch (parameter) {
 			case 'i':
-				remote_request.request = remote_status_address;
+				request = remote_status_address;
 				break;
 			case 'p':
-				remote_request.request = remote_status_port;
+				request = remote_status_port;
 				break;
 			case 'u':
-				remote_request.request = remote_status_user;
+				request = remote_status_user;
 				break;
 			case 's':
-				remote_request.request = remote_status_pass;
+				request = remote_status_pass;
 				break;
 			case 't':
-				remote_request.request = remote_status_protocol;
+				request = remote_status_protocol;
 				break;
 			case '\?':
 				help();
@@ -67,6 +69,12 @@ int main(int argc, char *argv[]){
 				help();
 				return 1;
 		}
+	}
+
+	// Kontrola pritomnosti parametru
+	if(request == remote_process){
+		help();
+		return 1;
 	}
 
 	// Kontrola parametru router
@@ -82,24 +90,12 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-	// Navazani spojeni
-	fifo_fd = client_starting(router);
-	if(fifo_fd){
-		// Odelani zadosti
-		result = send_mess_to_server(fifo_fd, remote_request);
+	// Odeslani zadosti remote serveru
+	result = pipe_request(router, request, NULL, answer);
 
-		// Prijem odpovedi
-		if(result){
-			read_response_from_server(&remote_response);
-		}
-	}
-
-	// Ukonceni komunikace
-	client_ending(router, fifo_fd);
-
-	// Tisk vysledku
-	if(remote_response.request == remote_response_ok){
-		printf("%s", remote_response.data);
+	// Kontrola odpovedi
+	if(result){
+		printf("%s", answer);
 		return 0;
 	}
 

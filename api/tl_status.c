@@ -10,14 +10,14 @@
  *
  * @author David Felgr
  * @version 1.0.0
- * @date 6.1.2015
+ * @date 29.1.2015
  *
  * Program send status command to the router and return answer.<br>
  * Example command: tl_status Mobile Technology. Answer: UMTS.
  *
  * @param <id> Router id of your tested router.
  * @param <category> Category of router status.
- * @param <subcategory> Subcategory of router status.
+ * @param <subcategory> Item of router status.
  *
  * @return 0 -> Answer is valid.<br>
  *         1 -> Parameter is not valid.<br>
@@ -32,16 +32,15 @@ void help(void){
 }
 
 int main(int argc, char *argv[]){
-	int		fifo_fd;                  // Roura pro prijem dat
-	int		router;
-	int		result;
-	char	*category;
-	char	*subcategory;
-	char	*find_start;
-	char	*find_stop;
-	char	value[512];
-	message_remote remote_request;   // Format posilanych dat
-	message_remote remote_response;  // Format posilanych dat
+	int     router;                       // Identifikator routeru
+	int     result;                       // Navratovy kod funkce
+	char    *category;                    // Dotazovana kategorie statusu
+	char    *subcategory;                 // Dotazovana polozaka statusu
+	char    *find_start;                  // Ukazatel pro vyhledavani
+	char    *find_stop;                   // Ukazatel pro vyhledavani
+	char    value[512];                  // Buffer pro ulozeni hledaneho vysledku
+	char    request[PIPE_BUFFER_SIZE];   // Buffer pro opoved z routeru
+	char    response[PIPE_BUFFER_SIZE];  // Buffer pro opoved z routeru
 
 	// Kontrola poctu parametru
 	if(argc < 3){
@@ -67,34 +66,13 @@ int main(int argc, char *argv[]){
 	}
 
 	// Vytvoreni zpravy
-	snprintf(remote_request.data, sizeof(remote_request.data), \
-	"status -v %s", category);
-	remote_request.request = remote_process;
+	snprintf(request, sizeof(request), "status -v %s", category);
 
-	// Navazani spojeni
-	fifo_fd = client_starting(router);
-	if(!fifo_fd){
-		return 2;
-	}
-
-	// Odelani zadosti
-	result = send_mess_to_server(fifo_fd, remote_request);
-	if(!result){
-		client_ending(router, fifo_fd);
-		return 2;
-	}
-
-	// Prijem odpovedi
-	result = read_response_from_server(&remote_response);
-	if(!result){
-		client_ending(router, fifo_fd);
-		return 2;
-	}
+	// Odeslani zadosti remote serveru
+	result = pipe_request(router, remote_process, request, response);
 
 	// Kontrola odpovedi
-	if(remote_response.request != remote_response_ok){
-		client_ending(router, fifo_fd);
-		printf("%s\n", remote_response.data);
+	if(!result){
 		return 2;
 	}
 
@@ -104,13 +82,13 @@ int main(int argc, char *argv[]){
 	// Ziskani vysledku
 	if(subcategory == NULL){
 		// Tisk kategorie
-		printf("%s", remote_response.data);
+		printf("%s", response);
 
 		// Uprava vysledku
 		result = 0;
 	}else{
 		// Zjisteni subkategorie
-		find_start = strstr(remote_response.data, subcategory);
+		find_start = strstr(response, subcategory);
 
 		if(find_start != NULL){
 			// Hledani zacatku hodnoty
@@ -131,9 +109,6 @@ int main(int argc, char *argv[]){
 			}
 		}
 	}
-
-	// Ukonceni komunikace
-	client_ending(router, fifo_fd);
 
 	return result;
 }

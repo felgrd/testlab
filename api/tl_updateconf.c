@@ -10,6 +10,31 @@
 /// The default location of the configuration
 #define DEFAULT_CONFDIR "/var/testlab/conf"
 
+/**
+ * @file tl_updateconf.c
+ *
+ * @brief usage tl_updateconf -f \<config\> -t \<function\> [-d \<confdir\>]
+ * \<id\>
+ *
+ * @author David Felgr
+ * @version 1.0.0
+ * @date 29.1.2015
+ *
+ * Program tl_updateconf update new configuration to the router. <br>
+ * Example command: tl_updateconf -f test1 -f dyndns 1. Router upload
+ * configuration in /var/testlab/conf/dyndns/1/test1.cfg to the router.
+ *
+ * @param -f \<config\> Name of configuration.
+ * @param -t \<function\> Name of tested function.
+ * @param -d \<dir\> Directory of new configuration.
+ * @param \<id\> Router id of your tested router.
+ *
+ * @returns The return value is the same as curl.
+ * http://curl.haxx.se/docs/manpage.html
+ *
+ * @cond
+ */
+
 void help(void){
   printf("usage tl_updateconf -f <config> -t <function> [-d <confdir>] <router>\n");
 }
@@ -123,7 +148,7 @@ int main(int argc, char *argv[]){
   protocol, user, pass, ip);
 
   // Potlaceni vsech vystupu
-  //close_all_fds(-1);
+  close_all_fds(-1);
 
   // Spusteni update fw nebo conf
   if(strcmp(protocol, "s") == 0){
@@ -132,6 +157,8 @@ int main(int argc, char *argv[]){
     execlp("curl", "curl", file, command, NULL);
   }
 
-  return 1;
+  // V pripade nespusteni programu curl
+  fpritnf(stderr, "Program curl is not running.\n");
 
+  return 1;
 }

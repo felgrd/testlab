@@ -112,7 +112,7 @@ int main(int argc, char *argv[]){
 			close_all_fds(-1);
 
 			// Spusteni skriptu
-			execl("/usr/bin/expect", "expect", "-f", command, NULL);
+			execlp("bash", "bash", "-f", command, NULL);
 
 			// Ukonceni programu v pripade chyby
 			return 1;

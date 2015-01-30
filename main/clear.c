@@ -9,13 +9,13 @@
 #include "utils.h"
 #include "database.h"
 
- /**
-    * Program for clean project
-    *
-    * @param release_id		is id of acual release in database
-    * @param platform_id	is name of checkout project
-    * @param platform_name	is name of checkout project
-	*/
+/**
+  * Program for clean project
+  *
+  * @param release_id		is id of acual release in database
+  * @param platform_id	is name of checkout project
+  * @param platform_name	is name of checkout project
+*/
 
 int main(int argc, char *argv[]){
 	int     release_id;
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
 
 		case 0:
 			// Potlaceni vsech vystupu
-			close_all_fds(-1);
+			//close_all_fds(-1);
 
 			// Spusteni skriptu
 			execlp("bash", "bash", command, NULL);

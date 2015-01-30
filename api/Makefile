@@ -84,3 +84,12 @@ uinstall:
 	sudo rm -rf /usr/bin/$(BIN_UPDATE_FW)
 	sudo rm -rf /usr/bin/$(BIN_UPDATE_CONF)
 	sudo rm -rf /usr/bin/$(BIN_ROUTER_READY)
+
+web:
+	sudo cp -u $(BIN_REMOTE) /var/www/html/api/bin/$(BIN_REMOTE)
+	sudo cp -u $(BIN_REMOTE_CHANGE) /var/www/html/api/bin/$(BIN_REMOTE_CHANGE)
+	sudo cp -u $(BIN_REMOTE_INFO) /var/www/html/api/bin/$(BIN_REMOTE_INFO)
+	sudo cp -u $(BIN_STATUS) /var/www/html/api/bin/$(BIN_STATUS)
+	sudo cp -u $(BIN_UPDATE_FW) /var/www/html/api/bin/$(BIN_UPDATE_FW)
+	sudo cp -u $(BIN_UPDATE_CONF) /var/www/html/api/bin/$(BIN_UPDATE_CONF)
+	sudo cp -u $(BIN_ROUTER_READY) /var/www/html/api/bin/$(BIN_ROUTER_READY)
