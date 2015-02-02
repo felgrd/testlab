@@ -158,7 +158,7 @@ int main(int argc, char *argv[]){
   }
 
   // V pripade nespusteni programu curl
-  fpritnf(stderr, "Program curl is not running.\n");
+  fprintf(stderr, "Program curl is not running.\n");
 
   return 1;
 }

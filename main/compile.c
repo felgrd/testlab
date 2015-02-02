@@ -7,6 +7,10 @@
 #include <sys/wait.h>	// waitpid
 #include <limits.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "database.h"
 #include "utils.h"
 
@@ -34,6 +38,9 @@ int main(int argc, char *argv[]){
 	int     i;                   // Promena pro prochazeni pole
 	int     timeout;             // Timeout pro dokonceni skriptu
 	int     waittime;            // Doba behu skriptu
+
+	int     log_fd;              // File descriptor pro soubor s logem
+	char    log_name[PATH_MAX];  // Nazev souboru s logem
 
 	// Otevreni logu
 	openlog("TestLabCompile", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
@@ -105,6 +112,17 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
+	// Adresar pro logy kompilace
+	snprintf(directory, sizeof(directory), "%s/logs/compile/%d", DIRECTORY, \
+	release_id);
+
+	// Vytvoreni adresare pro logy kompilace fw
+	mkdir(directory, S_IRWXU);
+	if(result < 0){
+		syslog(LOG_ERR, "Create logs directory error (%d)", errno);
+		return 1;
+	}
+
 	// Adresar se zkompilovanym fw
 	snprintf(directory, sizeof(directory), "%s/firmware/%d", DIRECTORY, \
 	release_id);
@@ -112,10 +130,9 @@ int main(int argc, char *argv[]){
 	// Vytvoreni adresare pro zkompilovany fw
 	mkdir(directory, S_IRWXU);
 	if(result < 0){
-		syslog(LOG_ERR, "Create directory error (%d)", errno);
+		syslog(LOG_ERR, "Create fw directory error (%d)", errno);
 		return 1;
 	}
-
 
 	// Prochazeni vsemi produktami
 	for(i = 0; products[i] != NULL; i++){
@@ -123,6 +140,17 @@ int main(int argc, char *argv[]){
 		// Prevod id produktu na cislo
 		product_id = atoi(products[i][DB_PRODUCTS_ID]);
 		if(product_id <= 0){
+			return 1;
+		}
+
+		// Sestaveni cesty k souboru s logem
+		snprintf(log_name, sizeof(log_name), "%s/logs/compile/%d/%d.log", DIRECTORY, \
+		release_id, product_id);
+
+		// Otevreni souboru s logem
+		log_fd = open(log_name, O_CREAT|O_RDWR, 0666);
+		if(log_fd < 0){
+			syslog(LOG_ERR, "Open log file error (%d)", errno);
 			return 1;
 		}
 
@@ -135,7 +163,14 @@ int main(int argc, char *argv[]){
 
 			case 0:
 				// Potlaceni vsech vystupu
-				close_all_fds(-1);
+				//close_all_fds(-1);
+
+				// Presmerovani stdout a stderr do /var/testlab/compile/<release>/<product>
+				closelog();
+				close(1);
+				dup(log_fd);
+				close(2);
+				dup(log_fd);
 
 				// Spusteni skriptu
 				execlp("bash", "bash", command, directory, \

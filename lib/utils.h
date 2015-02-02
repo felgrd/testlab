@@ -12,12 +12,8 @@
 #define STATE_COMPILE      2
 /// In this state test invidiual function of the router
 #define STATE_TESTROUTER   3
-/// In this state test two router, example testing tunel
-#define STATE_TESTTUNEL    4
-/// In this state test complete network, example testing 40 WiFi clients
-#define STATE_TESTSITE     5
 /// In this state delete binnary of firmware
-#define STATE_CLEAN        6
+#define STATE_CLEAN        4
 
 void close_all_fds(int keep);
 

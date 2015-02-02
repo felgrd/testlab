@@ -150,14 +150,14 @@ int main(int argc, char *argv[]){
   close_all_fds(-1);
 
   // Spusteni update fw nebo conf
-  if(strcmp(protocol, "ssh") == 0){
+  if(strcmp(protocol, "s") == 0){
     execlp("curl", "curl", "--ssl", "-k", file, command, NULL);
   }else{
     execlp("curl", "curl", file, command, NULL);
   }
 
   // V pripade nespusteni programu curl
-  fpritnf(stderr, "Program curl is not running.\n");
+  fprintf(stderr, "Program curl is not running.\n");
 
   return 1;
 }

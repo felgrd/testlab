@@ -38,9 +38,9 @@ int main(int argc, char *argv[]){
 	char    *subcategory;                 // Dotazovana polozaka statusu
 	char    *find_start;                  // Ukazatel pro vyhledavani
 	char    *find_stop;                   // Ukazatel pro vyhledavani
-	char    value[512];                  // Buffer pro ulozeni hledaneho vysledku
-	char    request[PIPE_BUFFER_SIZE];   // Buffer pro opoved z routeru
-	char    response[PIPE_BUFFER_SIZE];  // Buffer pro opoved z routeru
+	char    value[512];                   // Buffer pro ulozeni hledaneho vysledku
+	char    request[PIPE_BUFFER_SIZE];    // Buffer pro opoved z routeru
+	char    response[PIPE_BUFFER_SIZE];   // Buffer pro opoved z routeru
 
 	// Kontrola poctu parametru
 	if(argc < 3){

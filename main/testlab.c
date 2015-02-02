@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 				return 0;
 			case 0:
 				// Potlaceni vsech vystupu
-				//close_all_fds(-1);
+				close_all_fds(-1);
 
 				// Spusteni skriptu
 				execlp("tl_checkout", "tl_checkout", release, \
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
 				return 0;
 			case 0:
 				// Potlaceni vsech vystupu
-				close_all_fds(-1);
+				//close_all_fds(-1);
 
 				// Spusteni skriptu
 				execlp("tl_clear", "tl_clear", release, \

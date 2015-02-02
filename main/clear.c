@@ -88,13 +88,13 @@ int main(int argc, char *argv[]){
 	// Zjisteni timeoutu pro checkout script
 	timeout = database_sel_timeout(STATE_CLEAN);
 	if(timeout <= 0){
-		syslog(LOG_ERR, "Timeout for checkou script does not read.");
+		syslog(LOG_ERR, "Timeout for clear script does not read %d.", timeout);
 		return 1;
 	}
 
 	switch(pid = vfork()){
 		case -1:
-			syslog(LOG_ERR, "Create new process for checkout error (%d).", errno);
+			syslog(LOG_ERR, "Create new process for clean error (%d).", errno);
 			return 0;
 
 		case 0:
