@@ -5,6 +5,7 @@
 #include <errno.h>    // errno
 #include <unistd.h>   // chdir
 #include <sys/wait.h> // waitpid
+#include <limits.h>
 #include "database.h"
 #include "utils.h"
 
@@ -17,16 +18,16 @@
 	*/
 
 int main(int argc, char *argv[]){
-	int    result;           // Navratovy kod funkci
-	char   command[50];      // Buffer pro prikazy
-	pid_t  pid;              // Pid vytvoreneho procesu
-	pid_t  wpid;             // Pid cekaneho procesu
-	int    status;           // Navratovy status ukonceneho procesu
-	int    release_id;       // ID aktualniho releasu v databazi
-	int    platform_id;      // ID platformy
-	char   *platform_name;   // Nazev platformy
-	int    timeout;          // Timeout pro dokonceni skriptu
-	int    waittime;         // Doba behu skriptu
+	int    result;              // Navratovy kod funkci
+	char   command[PATH_MAX];   // Buffer pro prikazy
+	pid_t  pid;                 // Pid vytvoreneho procesu
+	pid_t  wpid;                // Pid cekaneho procesu
+	int    status;              // Navratovy status ukonceneho procesu
+	int    release_id;          // ID aktualniho releasu v databazi
+	int    platform_id;         // ID platformy
+	char   *platform_name;      // Nazev platformy
+	int    timeout;             // Timeout pro dokonceni skriptu
+	int    waittime;            // Doba behu skriptu
 
 	// Otevreni logu
 	openlog("TestLabCheckout", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
@@ -59,8 +60,8 @@ int main(int argc, char *argv[]){
 	platform_name = argv[3];
 
 	// Adresar pro stazeni projektu
-	result = snprintf(command, sizeof(command), "%s/project/%d" \
-	"/%s", DIRECTORY, release_id, platform_name);
+	result = snprintf(command, sizeof(command), "%s/project/%d/%s", DIRECTORY, \
+	release_id, platform_name);
 	if(result < 3){
 		return 1;
 	}
