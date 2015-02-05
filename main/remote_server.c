@@ -4,11 +4,11 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <signal.h>
-#include <syslog.h>			// syslog
-#include <fcntl.h>			// open
-#include <sys/types.h>		// pipe
-#include <sys/stat.h>		// pipe
-#include <sys/select.h>		// select
+#include <syslog.h>      // syslog
+#include <fcntl.h>       // open
+#include <sys/types.h>   // pipe
+#include <sys/stat.h>    // pipe
+#include <sys/select.h>  // select
 #include <errno.h>
 #include "telnet.h"
 #include "ssh.h"
@@ -17,10 +17,10 @@
 #define	PROTOCOL_TELNET   0
 #define PROTOCOL_SSH      1
 
-#define REMOTE_USER_LENGTH    20	// Velikost bufferu pro uzivatele
-#define REMOTE_PASS_LENGTH    20	// Velikost bufferu pro heslo
-#define REMOTE_IP_LENGTH      20	// Velikost bufferu pro IP adresu
-#define REMOTE_PROT_LENGTH    20	// Velikost bufferu pro protokol
+#define REMOTE_USER_LENGTH    20   // Velikost bufferu pro uzivatele
+#define REMOTE_PASS_LENGTH    20   // Velikost bufferu pro heslo
+#define REMOTE_IP_LENGTH      20   // Velikost bufferu pro IP adresu
+#define REMOTE_PROT_LENGTH    20   // Velikost bufferu pro protokol
 
 // Prijate cislo signalu
 volatile int got_signal = 0;
@@ -37,23 +37,23 @@ void help(void){
 }
 
 int main(int argc, char **argv ){
-	int		telnet_fd;						// Deskriptor otevreneho telnet spojeni
-	pid_t	ssh_fd;							// Deskriptor otevreneho ssh spojeni
-	int		result;							// Navratovy kod funkce
-	char	parameter;						// Predany parametr
-	int		port;							// Port na kterem je spojeni otevreno
-	char	user[REMOTE_USER_LENGTH];		// Retezec pro zadani uzivatele
-	char	pass[REMOTE_PASS_LENGTH];		// Reteze pro zadani hesla
-	char	ip[REMOTE_IP_LENGTH];			// Retezec pro zadani ip adresy
-	char	ip_arg[REMOTE_IP_LENGTH];		// Vychozi IP adresa
-	int		router;							// Identifikator routeru
-	int 	protocol;						// Retezec pro zadani protokolu
-	int		server_fifo_fd;					// Roura pro prijem dat
-	int		client_fifo_fd;					// Roura pro odesilani dat
-	int		fifo_read;						// Velikost prijatych dat
-	int		fifo_write;						// Velikost odeslanych dat
-	message_remote remote_request;			// Format posilanych dat
-	message_remote remote_response;			// Format posilanych dat
+	int		telnet_fd;                     // Deskriptor otevreneho telnet spojeni
+	pid_t	ssh_fd;                        // Deskriptor otevreneho ssh spojeni
+	int		result;                        // Navratovy kod funkce
+	char	parameter;                     // Predany parametr
+	int		port;                          // Port na kterem je spojeni otevreno
+	char	user[REMOTE_USER_LENGTH];      // Retezec pro zadani uzivatele
+	char	pass[REMOTE_PASS_LENGTH];      // Reteze pro zadani hesla
+	char	ip[REMOTE_IP_LENGTH];          // Retezec pro zadani ip adresy
+	char	ip_arg[REMOTE_IP_LENGTH];      // Vychozi IP adresa
+	int		router;                        // Identifikator routeru
+	int 	protocol;                      // Retezec pro zadani protokolu
+	int		server_fifo_fd;                // Roura pro prijem dat
+	int		client_fifo_fd;                // Roura pro odesilani dat
+	int		fifo_read;                     // Velikost prijatych dat
+	int		fifo_write;                    // Velikost odeslanych dat
+	message_remote remote_request;       // Format posilanych dat
+	message_remote remote_response;      // Format posilanych dat
 	char server_pipe_name[PATH_MAX + 1];
 	char client_pipe_name[PATH_MAX + 1];
 
@@ -71,7 +71,7 @@ int main(int argc, char **argv ){
 	signal(SIGTERM, sig_handler);
 
 	// Otevreni syslogu
-	openlog ("TL_REMOTE", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+	openlog ("TL_REMOTE_SERVER", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
 
 	// Rozbor parametru na prikazove radce
 	while ((parameter = getopt(argc, argv, "u:p:t:")) != -1) {

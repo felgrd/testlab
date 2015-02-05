@@ -1,9 +1,15 @@
 \chapter{Návrh testovací laboratoře}
 
-Pro testování všech výrobků společnosti Conel nejdříve navrhnu strukturu testovací laboratoře.  Testovací laboratoř bude síť obsahující všechny výrobky společnosti Conel, různá příslušenství připojené k jednotlivým výrobkům, testovací server a konfigurovatelné switche.
+Pro testování všech výrobků společnosti Conel nejdříve navrhnu strukturu testovací laboratoře. Testovací laboratoř bude ethernetová síť obsahující všechny testované výrobky společnosti Conel, různá příslušenství připojené k jednotlivým výrobkům, testovací server a dva konfigurovatelné switche. Fyzicky bude pro testovací síť vyroben rack s půdorysem asi 60cm na 80cm a výškou jeden a půl metru. Konfigurovatelné switche budou umístěny ve spodní části racku. Na dvouch protilehlých částech budou v patrech namontovány DIN lišty na které se budou přidělávat testované routery, či různá další zařízení potřebná k samotnému testování.
 
 \section{Testovací server}
-Jádrem testovací laboratoře bude server na kterém poběží všechny testovací aplikace. Testovaci server bude výkonější počítač s parametry procesor Intel core i7, 16GB RAM a 512GB SSD disk. Pro účely testování bude server osazen dvěma ethernetovými karty pro komunikaci s testovanými výrobky a jednou ethernetou kartou pro konektivitu serveru do firemní sítě. Server dále má osazeno jedno WiFi rozhraní pro testování WiFi výrobků. Operační systém tohoto serveru jsem zvolil Ubuntu server, jelikož operační systém Ubuntu je používán k vývoji většiny výrobků.
+Jádrem testovací laboratoře bude server na kterém poběží všechny testovací aplikace.
+
+\subsection{Hardwerová výbava testovacího serveru}
+
+Testovaci server bude výkonější počítač s parametry procesor Intel core i7, 16GB RAM a 512GB SSD disk. Pro účely testování bude server osazen dvěma ethernetovými karty pro komunikaci s testovanými výrobky a jednou ethernetou kartou pro konektivitu serveru do firemní sítě. Server dále má osazeno jedno WiFi rozhraní pro testování WiFi výrobků. Operační systém tohoto serveru jsem zvolil Ubuntu server, jelikož operační systém Ubuntu je používán k vývoji většiny výrobků.
+
+\subsection{Softwarová výbava testovacího serveru}
 
 Na serveru bude umístěna databáze uchovávající všechny informace o teststování a webová aplikace zobrazující výsledky z testování. Samotná testovací aplikace, včetně testovacích skriptů a příslušného API bude taktéž umístěna na tomto serveru. Dále na serveru bude kopie vzdáleného repozitáře pro rychlejší stahování zdrojových kódu testovaných projektů. V dalších fázích vývoje testovacího zařízení by na temto serveru mohl být testován systém pro monitoring routerů RSeeNet a systém pro jednoduchou správu VPN tunelů SmartCluster.
 
@@ -112,6 +118,8 @@ Volitelný port Switch rozšiřuje možnost připojení se až na tři switchova
 
 \section{Cisco router}
 Další důležito součástí testovací sítě je bezdrátový Cisco router. Router je zapojen do testovací sítě pomocí ethernetu. Router dále využívá mobilní a WiFi připojení. Cisco router je součástí testovací sítě z důvodu testování vybraných protokolů oproti jinému referenčnímu routeru. Příklad testovaného protokolu může být například IPsec tunel.
+
+\section{Další pomocné přístroje}
 
 \begin{figure}[h]
   \centering

@@ -9,12 +9,12 @@
 
 
 int sshInit(char *ip, int port, const char *username, const char *password){
-	int				result;			// Vysledek provadene funkce
-	pid_t			pid;			// PID procesu PLINK
-	fd_set			read_fd_set;	// Mnozina deskriptoru pro SELECT
-	ssize_t			length;			// Velikost prectenych dat
-	char			command[255];	// Prikaz spusteni programu plink
-	struct timeval	tv;				// Timeout pro navazani spojeni
+	int             result;         // Vysledek provadene funkce
+	pid_t           pid;            // PID procesu PLINK
+	fd_set          read_fd_set;    // Mnozina deskriptoru pro SELECT
+	ssize_t         length;         // Velikost prectenych dat
+	char            command[255];   // Prikaz spusteni programu plink
+	struct timeval  tv;             // Timeout pro navazani spojeni
 
 	// Vytvoreni roury pro predavani hodnot
 	if(pipe(pipes_stdin) == -1){
@@ -91,9 +91,9 @@ int sshInit(char *ip, int port, const char *username, const char *password){
 }
 
 int sshCheck(pid_t pid){
-	int		result;		// Navratova hodnato funkce
-	int		status;		// Status ukonceneho procesu
-	pid_t	wpid;		// PID ukonceneho procesu
+	int   result;   // Navratova hodnato funkce
+	int   status;   // Status ukonceneho procesu
+	pid_t wpid;     // PID ukonceneho procesu
 
 	// Kontrola platnosti pid
 	if(pid <= 0){
@@ -113,9 +113,9 @@ int sshCheck(pid_t pid){
 }
 
 int sshDone(pid_t pid){
-	int		result;		// Navratova hodnato funkce
-	int		status;		// Status ukonceneho procesu
-	pid_t	wpid;		// PID ukonceneho procesu
+	int   result;   // Navratova hodnato funkce
+	int   status;   // Status ukonceneho procesu
+	pid_t wpid;     // PID ukonceneho procesu
 
 	// Ukonceni PLINK
 	result = kill(pid, SIGTERM);
@@ -130,15 +130,15 @@ int sshDone(pid_t pid){
 }
 
 int sshExec(pid_t pid, char *request, char *response, int length){
-	int				rcvLength;
-	int				rspLength;
-	char			*start;
-	char			*stop;
-	char			rcvBuffer[SSH_RCV_BUFFER];
-	char			strBuffer[SSH_TR_BUFFER];
-	fd_set			read_fd_set;
-	int				result;
-	struct timeval	tv;
+	int             rcvLength;
+	int             rspLength;
+	char            *start;
+	char            *stop;
+	char            rcvBuffer[SSH_RCV_BUFFER];
+	char            strBuffer[SSH_TR_BUFFER];
+	fd_set          read_fd_set;
+	int             result;
+	struct timeval  tv;
 
 	// Kontrola sestaveneho spojeni
 	if(!sshCheck(pid)){
@@ -171,8 +171,13 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 			// Cteni dat
 			if(FD_ISSET(pipes_stdout[0], &read_fd_set)){
 
-				rcvLength = read(pipes_stdout[0], rcvBuffer, \
-				sizeof(rcvBuffer));
+				rcvLength = read(pipes_stdout[0], rcvBuffer, sizeof(rcvBuffer));
+
+				// Kontrola dat
+				printf("Data size: %d\n", rcvLength);
+				rcvBuffer[rcvLength] = '\0';
+				printf("%s\n", rcvBuffer);
+
 
 				// Prijem platnych dat
 				if(rcvLength > 0){
@@ -183,39 +188,40 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 		// Data nebyla prijata do vyprseni timeoutu
 		}else{
-			strcpy(response, "SSH error: Read timeout expired.");
+			strcpy(response, "SSH error: Read timeout expired.\n");
 			return 0;
 		}
 
 		// Kontrola velikosti prijmaciho bufferu
 		if(strlen(strBuffer) + rcvLength > sizeof(strBuffer)){
-			strcpy(response, "SSH error: Output si too large.");
+			strcpy(response, "SSH error: Output si too large.\n");
 			return 0;
 		}
 
-	}while(strstr(rcvBuffer, "#") == NULL);
+	}while(strstr(rcvBuffer, "\r\n# ") == NULL);
 
 	// Zpracovani odpovedi
 	start = strstr(strBuffer, request);
-	stop = strstr(strBuffer, "#");
+	stop = strstr(strBuffer, "\r\n# ");
 
 	// Kontrola validni odpovedi
 	if(start == NULL || stop == NULL) {
-		strcpy(response, "SHS error: Answer is not valid.");
+		strcpy(response, "SHS error: Answer is not valid.\n");
 		return 0;
 	}
 
 	start += strlen(request);
+	stop += 2;
 
 	// Kontrola existence odpovedi
 	if(start == stop) {
-		strcpy(response, "SHS error: No answer.");
+		strcpy(response, "SHS error: No answer.\n");
 		return 0;
 	}
 
 	// Kontrola validni odpovedi
 	if(start > stop) {
-		strcpy(response, "SHS error: Answer is not valid.");
+		strcpy(response, "SHS error: Answer is not valid.\n");
 		return 0;
 	}
 
