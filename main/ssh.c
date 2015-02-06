@@ -174,9 +174,9 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 				rcvLength = read(pipes_stdout[0], rcvBuffer, sizeof(rcvBuffer));
 
 				// Kontrola dat
-				printf("Data size: %d\n", rcvLength);
-				rcvBuffer[rcvLength] = '\0';
-				printf("%s\n", rcvBuffer);
+				//printf("Data size: %d\n", rcvLength);
+				//rcvBuffer[rcvLength] = '\0';
+				//printf("%s\n", rcvBuffer);
 
 
 				// Prijem platnych dat
