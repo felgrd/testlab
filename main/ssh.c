@@ -135,13 +135,14 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 	char            *start;
 	char            *stop;
 	char            rcvBuffer[SSH_RCV_BUFFER];
-	char            strBuffer[SSH_TR_BUFFER];
+	char            strBuffer[SSH_STR_BUFFER];
 	fd_set          read_fd_set;
 	int             result;
 	struct timeval  tv;
 
 	// Kontrola sestaveneho spojeni
 	if(!sshCheck(pid)){
+		strcpy(response, "SSH error: Program PLINK is not running.\n");
 		return 0;
 	}
 
@@ -151,7 +152,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 	// Pripojeni konce radku k zadosti
 	strcat(request, "\r\n");
 
-	// Odeslani zadosti PLINK
+	// Odeslani zadosti programu PLINK
 	rcvLength = write(pipes_stdin[1], request, strlen(request));
 
 	// Nastaveni timeoutu prijmu dat
@@ -171,20 +172,24 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 			// Cteni dat
 			if(FD_ISSET(pipes_stdout[0], &read_fd_set)){
 
-				rcvLength = read(pipes_stdout[0], rcvBuffer, sizeof(rcvBuffer));
+				rcvLength = read(pipes_stdout[0], rcvBuffer, sizeof(rcvBuffer) - 1);
 
-				// Kontrola dat
-				//printf("Data size: %d\n", rcvLength);
-				//rcvBuffer[rcvLength] = '\0';
-				//printf("%s\n", rcvBuffer);
-
-
-				// Prijem platnych dat
-				if(rcvLength > 0){
-					rcvBuffer[rcvLength] = '\0';
-					strncat(strBuffer, rcvBuffer, length);
+				// Kontrola platnosti dat
+				if(rcvLength < 0){
+					strcpy(response, "SSH error: Error while read data.\n");
+					return 0;
 				}
 			}
+
+			// Kontrola velikosti prijmaciho bufferu
+			if(strlen(strBuffer) + rcvLength > sizeof(strBuffer)){
+				strcpy(response, "SSH error: Output si too large.\n");
+				return 0;
+			}
+
+			// Pripojeni prijatych data do prijmaciho bufferu
+			rcvBuffer[rcvLength] = '\0';
+			strncat(strBuffer, rcvBuffer, sizeof(strBuffer));
 
 		// Data nebyla prijata do vyprseni timeoutu
 		}else{
@@ -192,13 +197,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 			return 0;
 		}
 
-		// Kontrola velikosti prijmaciho bufferu
-		if(strlen(strBuffer) + rcvLength > sizeof(strBuffer)){
-			strcpy(response, "SSH error: Output si too large.\n");
-			return 0;
-		}
-
-	}while(strstr(rcvBuffer, "\r\n# ") == NULL);
+	}while(strstr(strBuffer, "\r\n# ") == NULL);
 
 	// Zpracovani odpovedi
 	start = strstr(strBuffer, request);
@@ -206,7 +205,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 	// Kontrola validni odpovedi
 	if(start == NULL || stop == NULL) {
-		strcpy(response, "SHS error: Answer is not valid.\n");
+		strcpy(response, "SSH error: Answer is not valid.\n");
 		return 0;
 	}
 
@@ -215,13 +214,13 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 	// Kontrola existence odpovedi
 	if(start == stop) {
-		strcpy(response, "SHS error: No answer.\n");
+		strcpy(response, "SSH error: No answer.\n");
 		return 0;
 	}
 
 	// Kontrola validni odpovedi
 	if(start > stop) {
-		strcpy(response, "SHS error: Answer is not valid.\n");
+		strcpy(response, "SSH error: Answer is not valid.\n");
 		return 0;
 	}
 

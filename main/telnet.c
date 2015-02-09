@@ -180,7 +180,7 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 
 	// Prijem odpovedi
 	do {
-		rcvLength = recv(sockfd, rcvBuffer, sizeof(rcvBuffer), 0);
+		rcvLength = recv(sockfd, rcvBuffer, sizeof(rcvBuffer) - 1, 0);
 
 		if(rcvLength < 0){
 			strcpy(response, "Telnet error: No data is received.\n");
