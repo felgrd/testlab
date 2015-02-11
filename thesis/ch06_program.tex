@@ -1,11 +1,11 @@
 \chapter{Testovací program}
-Testovací systém běžící na serveru testovací laboratoře se skládá z několika samostaných částí. Základem celého systému je databáze uchovávající všechna informace struktuře testovací laboratoře data s výsledky jednotlivých testů. Program testlab se stará o celý průběh testování. Několika málo přepínači lze nastavit průběh testování. Další součástí je sada programů nazývající se testovací API. Tyto programu usnadňují psaní jednotlivých testů. Nedílnou součástí testovacího systému jsou testovací skripty, které lze rozdělit na skripty pro stáhnutí projektu, kompilaci projektu, testování výrobku a úklid projektu. Poslední součástí testovacího systému je webový interface pro sledování výsledků testování a nastavování chování testovacího systému.
+Testovací systém běžící na serveru testovací laboratoře se skládá z několika samostaných částí. Základem celého systému je databáze uchovávající všechna informace struktuře testovací laboratoře, informace o všech modelech testovaných zařízení, data s výsledky jednotlivých testů. Program testlab jenž se stará o celý průběh testování. Několika málo přepínači lze nastavit průběh testování. Další součástí je sada programů nazývající se testovací API. Tyto programu usnadňují psaní jednotlivých testů. Nedílnou součástí testovacího systému jsou testovací skripty, které lze rozdělit na skripty pro stáhnutí projektu, kompilaci projektu, testování výrobku a úklid projektu. Tyto testovací skripty odpovídají testovacím procedurám testování založeného na modelech. Poslední součástí testovacího systému je webový interface pro sledování výsledků testování a nastavování chování testovacího systému.
 
 \section{Adresářová struktura testovacího systému}
 
-Jednotlivé částí testovacího systému jsou rozloženy v adresářové struktuře serveru následovně. Testovací program a testovací API jsou umístěny v adresáři /usr/bin, aby byly odevšad jednoduše spustitelné. Sdílené knihovny, které využívá testovací program a mohou ho využívat nové programy testovacího API jsou umístěny v adresáři /usr/lib. Hlavičkové soubory pro tyto knihovny jsou k naleznutí v adresáři /usr/include/testlab. Tato část testovacího systému se za běhu nemění a zůstává stejná. Jednou vyjímkou je aktualizace testovacího systému, při které mohou být opraveny chyby či přidán nový program do testovacího API. Tuto aktualizaci může provádět pouze administrátor.
+Jednotlivé částí testovacího systému jsou rozloženy v adresářové struktuře serveru následovně. Všechny součásti testovacího programu testlab a testovací API jsou umístěny v adresáři /usr/bin, aby byly odevšad spustitelné. Sdílené knihovny, které využívá testovací program a mohou ho využívat nové programy testovacího API jsou umístěny v adresáři /usr/lib. Hlavičkové soubory pro tyto knihovny jsou k naleznutí v adresáři /usr/include/testlab. Tato část testovacího systému se za běhu nemění a zůstává stejná. Jednou vyjímkou je aktualizace testovacího systému, při které mohou být opraveny chyby testovacího systému, či přidán nový program do testovacího API. Tuto aktualizaci provádí pouze administrátor testovacího systému.
 
-Druhá část adresářové struktury testovacího systému obsahuje soubory a adresáře měnící se v průběhu běhu testovacího systému. Tato část se nechází v adresáři /var/testlab a je rozdělena na následující podadresáře. Adresář clean obsahuje skripty pro zajištění úklidu po překladu jednotlivých platforem. Adresář compile obsahuje skripty zajišťující kompilaci jednotlivých výrobků všech platforem. Pro každou platformu je v tomto adresáři jeden skript a výrobek sem mu zadává jako parametr. V adresáři checkout nalezneme skripty pro stáhnutí zdrojových kódu platformy. Pro stahování zdrojových kódů se budou často využívat repozitáře a v mém systému bude konkrétně využit verzovací systém git. Project je pracovním adresářem kam jsou stahované zdrojové kódy jednotlivých platforem a kde jsou následně překládány. Dále je tento adresář rozdělen do jednotlivých podadresářů podle jednotlivých releasů překládaného firmwaru. V každém adresářy releasu jsou adresáře pro každou testovanou platformu. Adresáře jednotlivých releasu se před ukončením programu testlab mažou, jelikož dále nejsou potřeba a zabírají velký prostor na disku. Přeložený firmware všech výrobků je ukládán do adresáře firmware a do podadresáře s názevem identifikačního čísla releasu, pro který byl firmware přeložen. Firmwary se zde uchovávají většinou do vydání další verze ostrého firmwaru. Předchozí firmwary jsou zálohovány na jiný server či jiný disk testovacího serveru, pro zachování místa na systémovém ssd disku testovacího serveru. Testovací skripty se nacházejí v adresáři tests. Adresář tests se dále dělí na podadresáře s názvy testovaných funkcí, ve kterých se nacházejí jednotlivé testovací skripty jejichž název je schodný s testovací procedurou. Konfigurace nahrávané do routeru během testování jsou uloženy v adresáři conf. Adresář conf je dále rozdělen podle testovaných funkcí. V každém adresáři dané funkce jsou adresáře pojmenované podle identifikačních čísel jednotlivých routerů ve kterých se již nacházejí jednotlivé konfigurace routerů. Posledním adresářem této části testovacího systému je adresář logs. V adresáři logs se ukládají logy z jednotlivých fází testování. Ukládájí se zde logy ze stáhování zdrojových kódů, ze samotné kompilace všech výrobků a z úklidu po překladu. Adresář je členěn podle typu logu a dále podle releasu testovaného firmwaru. Logy starších releasu se stejně jako firmware přesouvají na jiný disk nebo mažou. Logy ze samotných testů se jako jediný ukládají do databáze.
+Druhá část adresářové struktury testovacího systému obsahuje soubory a adresáře měnící se v průběhu běhu testovacího systému. Tato část se nechází v adresáři /var/testlab a je rozdělena na následující podadresáře. Adresář clean obsahuje skripty pro zajištění úklidu po překladu jednotlivých platforem. Adresář compile obsahuje skripty zajišťující kompilaci jednotlivých výrobků všech platforem. Pro každou platformu je v tomto adresáři jeden skript a výrobek se zadává jako parametr. V adresáři checkout nalezneme skripty pro stáhnutí zdrojových kódu každé platformy. Pro stahování zdrojových kódů se budou často využívat repozitáře a v systému bude konkrétně využit verzovací systém git. Project je pracovním adresářem kam jsou stahované zdrojové kódy jednotlivých platforem a kde jsou následně překládány. Dále je tento adresář rozdělen do jednotlivých podadresářů podle jednotlivých releasů překládaného firmwaru. V každém adresářy releasu jsou adresáře pro každou testovanou platformu. Adresáře jednotlivých releasu se před ukončením programu testlab mažou, jelikož dále nejsou potřeba a zabírají velký prostor na disku. Přeložený firmware všech výrobků je ukládán do adresáře firmware a do podadresáře s názevem identifikačního čísla releasu, pro který byl firmware přeložen. Firmwary se zde uchovávají většinou do vydání další verze ostrého firmwaru. Předchozí firmwary jsou zálohovány na jiný server či jiný disk testovacího serveru, pro zachování místa na systémovém ssd disku testovacího serveru. Testovací skripty se nacházejí v adresáři tests. Adresář tests se dále dělí na podadresáře s názvy testovaných funkcí, ve kterých se nacházejí jednotlivé testovací skripty jejichž název je schodný s testovací procedurou. Konfigurace nahrávané do routeru během testování jsou uloženy v adresáři conf. Adresář conf je dále rozdělen podle testovaných funkcí. V každém adresáři dané funkce jsou adresáře pojmenované podle identifikačních čísel jednotlivých routerů ve kterých se již nacházejí jednotlivé konfigurace routerů. Posledním adresářem této části testovacího systému je adresář logs. V adresáři logs se ukládají logy z jednotlivých fází testování. Ukládájí se zde logy ze stáhování zdrojových kódů, ze samotné kompilace všech výrobků a z úklidu po překladu. Adresář je členěn podle typu logu a dále podle releasu testovaného firmwaru. Logy starších releasu se stejně jako firmware přesouvají na jiný disk nebo jsou mazány. Logy ze samotných testů se jako jediné ukládají do databáze.
 
 \begin{figure}[h]
   \centering
@@ -14,9 +14,147 @@ Druhá část adresářové struktury testovacího systému obsahuje soubory a a
   \label{fig:adresar_struktura}
 \end{figure}
 
-Třetí část testovacího systému se nchází v adresáři /var/www/html. Tuto část testovacího systému tvoří samotné webové stránky testovacího systému
+Třetí část testovacího systému se nachází v adresáři /var/www/html. Tuto část testovacího systému tvoří samotné webové stránky testovacího systému
 
 \section{Struktura databáze}
+Jak již bylo dříve zmíněno všechny informace o testovaných zařízeních a výsldedcích testů jsou uloženy v databázi. K těmto účelům byla využita MySQL databáze. K databázi má přístup samotný testovací program testlab, všechny programy testovacího api a hlavně webová aplikace sloužící k adminitraci modelů testovaných zařízení a reportování výsledků testů. Pro organizované uchovávání všech dat byla navržena základní struktura databáze, která se časem s přibývající funkcionalitou testovacího zařízení může měnit. Jednotlivé tabulky této struktury jsou popsány v samostatných sekcích.
+
+\subsection{Tabulka fwrelease}
+První a základní tabulkou celého systému je fwreleases. V tabulce fwreleases jsou uloženy informace o testovaném releasu. Release je vytvořen a uložen do databáze při každém spuštění testování, aby bylo možné rozlišit různé testy. Všechny tabulky, které uchovávají informace o konkrétním testu odkazují právě na tuto tabulku. Tabulka fwreleases obsahuje pouze 3 údaje. Položka idfwreleases je primárním klíčem tabulky, položka date uchovává datum a čas vzniknu releasu a položka type určije o jaký typ vydání firmwaru se jedná.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_fwreleases}
+  \caption{Tabulka fwreleases}
+  \label{fig:database_fwreleases}
+\end{figure}
+
+\subsection{Tabulka platforms}
+Tabulka platforms obsahuje informace o jednotlivých platformách.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_platforms}
+  \caption{Tabulka platforms}
+  \label{fig:database_platforms}
+\end{figure}
+
+\subsection{Tabulka products}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_products}
+  \caption{Tabulka products}
+  \label{fig:database_products}
+\end{figure}
+
+\subsection{Tabulka checkout}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_checkout}
+  \caption{Tabulka checkout}
+  \label{fig:database_checkout}
+\end{figure}
+
+\subsection{Tabulka builds platform}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_buildsplatform}
+  \caption{Tabulka builds platform}
+  \label{fig:database_buildsplatform}
+\end{figure}
+
+\subsection{Tabulka build product}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_buildsproduct}
+  \caption{Tabulka builds product}
+  \label{fig:database_buildsproduct}
+\end{figure}
+
+\subsection{Tabulka routers}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_routers}
+  \caption{Tabulka routers}
+  \label{fig:database_routers}
+\end{figure}
+
+\subsection{Tabulka functions}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_functions}
+  \caption{Tabulka functions}
+  \label{fig:database_functions}
+\end{figure}
+
+\subsection{Tabulka dependences}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_dependences}
+  \caption{Tabulka dependences}
+  \label{fig:database_dependences}
+\end{figure}
+
+\subsection{Tabulka procedures}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_procedures}
+  \caption{Tabulka procedures}
+  \label{fig:database_procedures}
+\end{figure}
+
+\subsection{Tabulka routers has functions}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{databse_routershasfunctions}
+  \caption{Tabulka routers has functions}
+  \label{fig:databse_routershasfunctions}
+\end{figure}
+
+\subsection{Tabulka tests router}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_testsrouter}
+  \caption{Tabulka tests router}
+  \label{fig:database_testsrouter}
+\end{figure}
+
+\subsection{Tabulka tests function}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_testsfunction}
+  \caption{Tabulka tests function}
+  \label{fig:database_testsfunction}
+\end{figure}
+
+\subsection{Tabulka tests procedure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_testsprocedure}
+  \caption{Tabulka tests procedure}
+  \label{fig:database_testsprocedure}
+\end{figure}
+
+\subsection{Tabulka logs}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_logs}
+  \caption{Tabulka logs}
+  \label{fig:database_logs}
+\end{figure}
 
 \section{Popis programu}
 
@@ -24,7 +162,7 @@ O průběh celého testu se stará program testlab. Testlab je program psaný v 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=.4\LW]{program_schema}
+  \includegraphics[width=.2\LW]{program_schema}
   \caption{Základní schéma testovacího programu}
   \label{fig:program_schema}
 \end{figure}

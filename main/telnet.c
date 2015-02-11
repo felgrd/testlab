@@ -209,8 +209,8 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	stop += 2;
 
 	if(start == stop) {
-		strcpy(response, "Telnet error: No answer\n.");
-		return 0;
+		strcpy(response, "");
+		return 1;
 	}
 
 	if(start > stop) {

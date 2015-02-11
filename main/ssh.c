@@ -214,8 +214,8 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 	// Kontrola existence odpovedi
 	if(start == stop) {
-		strcpy(response, "SSH error: No answer.\n");
-		return 0;
+		strcpy(response, "");
+		return 1;
 	}
 
 	// Kontrola validni odpovedi
