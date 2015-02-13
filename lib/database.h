@@ -10,9 +10,9 @@
 /// Database server.
 #define DB_SERVER				"localhost"
 /// User name to database server.
-#define DB_USER					"test"
+#define DB_USER					"testlab"
 /// Passwor to database server.
-#define DB_PASSWORD				"test"
+#define DB_PASSWORD				"golias48"
 /// Name of database.
 #define DB_DATABASE				"test"
 /// Socket name for connect to database. NULL - Local database.

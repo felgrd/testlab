@@ -25,7 +25,7 @@ OBJ_UPDATE_FW = tl_updatefw.o
 BIN_UPDATE_CONF = tl_updateconf
 OBJ_UPDATE_CONF = tl_updateconf.o
 
-CFLAGS = -Wall -I/usr/include/testlab -I/usr/include/mysql
+CFLAGS = -Wall -I../lib -I/usr/include/mysql
 LIB_UTILS = -ltl_utils
 LIB_DATABASE = -ltl_database
 LIB_CSPIPE = -ltl_cspipe
