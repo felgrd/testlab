@@ -1,3 +1,6 @@
+SERVER = testlab
+USER = testlab
+
 LIB_DATABASE = libtl_database.so
 OBJ_LIB_DATABASE = database.o
 H_LIB_DATABASE = database.h
@@ -44,3 +47,8 @@ uinstall:
 	sudo rm -rf /usr/lib/libtl_database.so
 	sudo rm -rf /usr/lib/libtl_cspipe.so
 	sudo rm -rf /usr/include/testlab
+
+remote-install: all
+	scp $(LIB_UTILS) $(SERVER)@$(USER):/opt/testlab/lib/$(LIB_UTILS)
+	scp $(LIB_DATABASE) $(SERVER)@$(USER):/opt/testlab/lib/$(LIB_DATABASE)
+	scp $(LIB_CSPIPE) $(SERVER)@$(USER):/opt/testlab/lib/$(LIB_CSPIPE)

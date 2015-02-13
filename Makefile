@@ -12,8 +12,13 @@ install: all
 	make -C lib install
 	make -C main install
 	make -C api install
-	
+
 uinstall:
 	make -C lib uinstall
 	make -C main uinstall
 	make -C api uinstall
+
+remote-install: all
+	make -C lib remote-install
+	make -C main remote-install
+	make -C api remote-install

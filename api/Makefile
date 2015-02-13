@@ -1,3 +1,6 @@
+SERVER = testlab
+USER = testlab
+
 BIN_CHECK_PRODUCT = tl_checkproduct
 OBJ_CHECK_PRODUCT = tl_checkproduct.o
 
@@ -85,11 +88,12 @@ uinstall:
 	sudo rm -rf /usr/bin/$(BIN_UPDATE_CONF)
 	sudo rm -rf /usr/bin/$(BIN_ROUTER_READY)
 
-web:
-	sudo cp -u $(BIN_REMOTE) /var/www/html/api/bin/$(BIN_REMOTE)
-	sudo cp -u $(BIN_REMOTE_CHANGE) /var/www/html/api/bin/$(BIN_REMOTE_CHANGE)
-	sudo cp -u $(BIN_REMOTE_INFO) /var/www/html/api/bin/$(BIN_REMOTE_INFO)
-	sudo cp -u $(BIN_STATUS) /var/www/html/api/bin/$(BIN_STATUS)
-	sudo cp -u $(BIN_UPDATE_FW) /var/www/html/api/bin/$(BIN_UPDATE_FW)
-	sudo cp -u $(BIN_UPDATE_CONF) /var/www/html/api/bin/$(BIN_UPDATE_CONF)
-	sudo cp -u $(BIN_ROUTER_READY) /var/www/html/api/bin/$(BIN_ROUTER_READY)
+remote-install: all
+	scp $(BIN_REMOTE) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_REMOTE)
+	scp $(BIN_REMOTE_CHANGE) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_REMOTE_CHANGE)
+	scp $(BIN_REMOTE_INFO) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_REMOTE_INFO)
+	scp $(BIN_STATUS) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_STATUS)
+	scp $(BIN_CHECK_PRODUCT) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_CHECK_PRODUCT)
+	scp $(BIN_UPDATE_FW) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_UPDATE_FW)
+	scp $(BIN_UPDATE_CONF) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_UPDATE_CONF)
+	scp $(BIN_ROUTER_READY) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_ROUTER_READY)

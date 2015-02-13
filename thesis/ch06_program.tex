@@ -30,7 +30,7 @@ První a základní tabulkou celého systému je fwreleases. V tabulce fwrelease
 \end{figure}
 
 \subsection{Tabulka platforms}
-Tabulka platforms obsahuje informace o jednotlivých platformách.
+Tabulka platforms obsahuje informace o jednotlivých platformách. Platforma je skupina výrobků postavena na společných zdrojových kódech a na jednom procesoru. Platformy se dále dělí na výrobky. Tabulka obsahuje prozatím následující 4 položky. Položka idplatforms, která je primárním klíčem tabulky, položka name slouží k uložení názvu tabulky, dále položky timeout\_checkout a timeout\_build sloužící k nastavení timeoutu skriptu pro stažení zdrojových kódu platfromy a pro přeložení zfrojových kódů platformy.
 
 \begin{figure}[h]
   \centering
@@ -40,6 +40,7 @@ Tabulka platforms obsahuje informace o jednotlivých platformách.
 \end{figure}
 
 \subsection{Tabulka products}
+Tabulka products obsahuje informace o jednotlivých produktech. V této tabulce nejsou produkty chápány jako jednotlivé produkty v testovací laboratoři, ale pouze jednotlivé druhy firmwaru. Rozdělení bylo provedeno z důvodu možnosti nahrání stejného firmwaru do různého hardwaru a tímto vznikne nový výrobek. Tabulka products obsahuje pouze 3 následující položky. Položka idproducts, které je primárním klíčem tabulky, položka idplatforms odkazující na danou platformu v tabulce platforms. Poslední položka name definuje název produktu.
 
 \begin{figure}[h]
   \centering
@@ -49,6 +50,7 @@ Tabulka platforms obsahuje informace o jednotlivých platformách.
 \end{figure}
 
 \subsection{Tabulka checkout}
+Tabulka checkout slouží pro ukládání výsledků ze stažení zdrojových kódů z repozitáře. Tabulka obsahuje 4 položky. Položka idcheckout je primárním klíčem tabulky. Položka idplatforms odkazuje na tabulku platforms a udává o jaké zdrojové kódy platformy se jedná. Položka idfwreleases odkazuje na tabulku fwreleases a udává k jakému testování výsledek odpovídá. Poslední položka state ukládá stav výsledku skriptu pro stažení aktuálních zdrojových kódů platformy.
 
 \begin{figure}[h]
   \centering
@@ -58,6 +60,7 @@ Tabulka platforms obsahuje informace o jednotlivých platformách.
 \end{figure}
 
 \subsection{Tabulka builds platform}
+Tabulka builds\_platform slouží pro ukládání výsledků překladu celé platformy, čili všech výrobků dané platformy. Tabulka obsahuje celkem 4 položky. Položka idbuilds\_platform je primárním klíčem tabulky. Položka idplatforms odkazuje na tabulku platforms a udává jaké platformy se výsledek překladu týká. Položka idfwreleases odkazuje na tabulku fwreleases a udává k jakému vydání firmwaru je zdrojový kód překládán. Poslední položka state představuje stav ukončení překladu firmwaru pro celou platformu.
 
 \begin{figure}[h]
   \centering
@@ -67,6 +70,7 @@ Tabulka platforms obsahuje informace o jednotlivých platformách.
 \end{figure}
 
 \subsection{Tabulka build product}
+Tabulka builds\_product slouží pro ukládání výsledků překladu jednotlivých výrobků. Tabulka obsahuje celkem 4 položky. Položka idbuilds\_product je primárním klíčem tabulky. Položka idproducts odkazuje na tabulku products a udává jakého produktu se výsledek překladu týká. Položka idfwreleases odkazuje na tabulku fwreleases a udává k jakému vydání firmwaru je zdrojový kód překládán. Poslední položka state představuje stav ukončení překladu firmwaru daného produktu.
 
 \begin{figure}[h]
   \centering

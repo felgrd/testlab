@@ -1,0 +1,60 @@
+#!/bin/bash
+
+## @package compile
+#  This program compiles all firmwares.
+#
+#  @param $1: Destination path of firmware.
+#  @param $1: Product name of firmware.
+
+# Kontrola parametru path - Cesta pro ulozeni noveho firmware
+if [ $1 ];then
+	DIRECTORY=$1
+else
+	echo "Missing parameter path" >2
+	exit 1
+fi
+
+# Kontrola parametru name
+if [ $2 ];then
+	PRODUCT=$2
+else
+	echo "Missing parameter name" >2
+	exit 1
+fi
+
+#Parametr platforma
+PLATFORM="RBv2"
+
+# Tvorba parametru appname
+APPNAME=$(echo $PRODUCT | tr - _ | tr v2 V2)
+
+# Otevreni adresare s ltibem
+cd ltib
+
+# Vyber platformy
+if [ ! -e .config ]; then
+	./platform $PLATFORM
+	./ltib -m config --batch &> /dev/null
+fi
+
+# Preklad daneho routeru
+echo "APPNAME=$APPNAME" > appname
+rm -f rpm/RPMS/arm/source-*.rpm rpm/RPMS/m68k/source-*.rpm
+./ltib
+
+# Vysledek prekladu
+RESULT=$?
+		
+# Kopirovani fw do adresare s firmwarem
+if [ $RESULT -eq 0 ]; then
+	for EXT in bin s19 ver; do
+		if [ -f images/$PRODUCT.$EXT ]; then
+			cp images/$PRODUCT.$EXT "$DIRECTORY"
+		fi
+	done
+fi	
+
+# Navrat do testovaciho adresare
+cd ..
+
+exit $RESULT

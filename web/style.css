@@ -1,0 +1,32 @@
+
+body{
+	font-family: 'Oxygen'; 
+	font-size: small;
+}
+
+td, th{
+	border: 1px solid;
+}
+
+table{
+	border-collapse: collapse;
+}
+
+.center{
+	text-align: center;
+}
+
+.test{
+	width: 60px;
+	text-align: center;
+}
+
+/*
+    Definice pouziteho fontu
+*/
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Oxygen'), local('Oxygen-Regular'), url(http://themes.googleusercontent.com/static/fonts/oxygen/v3/OFgyER5uFw7Cy-F01PjbVg.woff) format('woff');
+}

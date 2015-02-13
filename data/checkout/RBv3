@@ -1,0 +1,13 @@
+#!/bin/bash
+
+## @package compile
+#  This program checkout project LTIB
+
+USER="test"
+SERVER="localhost"
+PROJECT="ltib"
+
+# Stahnuti projektu pomoci GITu
+git clone /opt/projects/$PROJECT
+
+exit $?

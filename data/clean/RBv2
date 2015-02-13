@@ -1,0 +1,18 @@
+#!/bin/bash
+
+## @package compile
+#  This program clean a project
+
+# Otevreni adresare s ltibem
+cd ltib
+
+# Uklid dane platformy
+./ltib -m distclean --batch &> /dev/null
+
+# Vysledek prekladu
+RESULT=$?
+
+# Navrat do testovaciho adresare
+cd ..
+
+exit $RESULT

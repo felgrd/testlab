@@ -1,3 +1,6 @@
+SERVER = testlab
+USER = testlab
+
 BIN_TESTLAB = testlab
 OBJ_TESTLAB = testlab.o
 
@@ -74,3 +77,12 @@ uinstall:
 	sudo rm -rf /usr/bin/$(BIN_CLEAR)
 	sudo rm -rf /usr/bin/$(BIN_REMOTE_EXIT)
 	sudo rm -rf /usr/bin/$(BIN_REMOTE_SERVER)
+
+remote-install: all
+	scp $(BIN_TESTLAB) $(SERVER)@$(USER):/opt/testlab/main/$(BIN_TESTLAB)
+	scp $(BIN_CHECKOUT) $(SERVER)@$(USER):/opt/testlab/main/$(BIN_CHECKOUT)
+	scp $(BIN_COMPILE) $(SERVER)@$(USER):/opt/testlab/main/$(BIN_COMPILE)
+	scp $(BIN_TEST) $(SERVER)@$(USER):/opt/testlab/main/$(BIN_TEST)
+	scp $(BIN_CLEAR) $(SERVER)@$(USER):/opt/testlab/main/$(BIN_CLEAR)
+	scp $(BIN_REMOTE_EXIT) $(SERVER)@$(USER):/opt/testlab/main/$(BIN_REMOTE_EXIT)
+	scp $(BIN_REMOTE_SERVER) $(SERVER)@$(USER):/opt/testlab/main/$(BIN_REMOTE_SERVER)
