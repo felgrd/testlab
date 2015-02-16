@@ -80,6 +80,7 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
 \end{figure}
 
 \subsection{Tabulka routers}
+Tabulka routers je určena pro uložení všech routerů přítomných v testovací laboratoři. Položky v této tabulce tedy nepředstavují již dříve zmíněný produkt, ale skutečný výrobek. Každá položka této tabulky představuje model testovaného zařízení, tudíž testovány jsou pouze ty routery které jsou zde uloženy. Kompletní model zařízení netvoří pouze tato tabulka. Pro sestavení kompletního modelu jsou dále potřebné funkce a jejich přiřazení popsané v dalších tabulkách. Tabulka obsahuje tyto položky tvořící model zařízení. Položka idrouters je primárním klíčem tabulky. Položka idproducts odkazuje do tabulky products a definuje jaký firmware má být nahrán do tohoto výrobku. Položka idplatform odkazuje do tabulky platforms a definuje platformu na které je daný výrobek postaven. Další položka name slouží k pojmenování výrobku v testovací laboratoři, tato položka slouží pouze k snadnému rozeznání výrobků v testovací laboratoři. Položka port definuje v jakém portu switche je zapojen primární ethernet testovaného výrobku. Výchozí IP adresu tohoto primárního portu definuje položka address. Prozatím poslední položkou je protocol. Položka protocol určuje primární protocol pomocí kterého testovaný výrobek komunikuje s testovací aplikací.
 
 \begin{figure}[h]
   \centering
@@ -89,6 +90,7 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
 \end{figure}
 
 \subsection{Tabulka functions}
+Další tabulkou pomocí níž se tvoří model testovaného zařízení je tabulka functions. Tabulka functions sdružuje data o jednotlivých funkcích, které mohou testované výrobky podporovat. Tabulka obsahuje následující položky definující informace o dané funkci. Položka idfunctions je primárním klíčem tabulky. Položka name definuje název pod kterým je daná funkcionalita reprezentována všude v testovacím systému. Poslední položkou je položka order určující pořadí v jakém mají být funkcionality testovány.
 
 \begin{figure}[h]
   \centering
@@ -98,6 +100,8 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
 \end{figure}
 
 \subsection{Tabulka dependences}
+Třetí tabulkou tvořící model testovaného zařízení je tabulka dependences. Pomocí teto tabulky je možné definovat závisloti jednotlivých funkcí na jiných. Tudíž je možné definovat spuštění jednoho testu v závislosti na výsledku jednoho nebo více předešlých testů. Popsaná funkcionalita je realizována pomocí následujících třech položek. Položka target odkazuje na určitou funkci a určuje funkci, která je závislá na výsledku jiných funkcí. Položka dependences také odkazuje na určitou funkci a určuje na výsledku jaké funkce závisý provedění testů funkce target.
+Poslední položka určuje typ závislosti. Podporovány jsou dva typy závislosti. Buď musí být správně otestovány všechny předešlé funkce nebo stačí úspěšný výsledek testů pouze jedné ze závislých funkcí.
 
 \begin{figure}[h]
   \centering
@@ -106,16 +110,8 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
   \label{fig:database_dependences}
 \end{figure}
 
-\subsection{Tabulka procedures}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[scale=0.8]{database_procedures}
-  \caption{Tabulka procedures}
-  \label{fig:database_procedures}
-\end{figure}
-
 \subsection{Tabulka routers has functions}
+Poslední tabulkou tvořící model testovaného zařízení je tabulka routers\_has\_functions. Pomocí této tabulky jsou každému modelu přiřazeny funkce, které je možné testovat. Přiřazení je realizováno pomocí dvou cizích klíčů odkazujících do tabulek routers a functions. Do tabulky routers odkazuje položka idrouters a položka idfunctions odkazuje do tabulky functions.
 
 \begin{figure}[h]
   \centering
@@ -124,7 +120,18 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
   \label{fig:databse_routershasfunctions}
 \end{figure}
 
+\subsection{Tabulka procedures}
+Tabulka procedures již neslouží k uchování dat z abstraktního pohledu testování založeného na modelech. Tabulka uchovává jednotlivé spustitelné procedury sloužící k testování jednotlivých funkcí. Procedury jsou definované následujícímy položkami. Položka idprocedures je primárním klíčem tabulky. Položka idfunctions odkazuje na záznam v tabulce functions a definuje funkci kterou má procedura testovat. Položka name definuje název procedury pod kterým se spustitelný skript v testovacím systému reprezentuje. Položka unit slouží k lepší reprezentaci výsledku daného skriptu. Pokud procedura vrací hodnotu která je definována jakoukoliv jednotkou, může být zde tato jednotka definována. Položka timeout určuje čas maximálního běhu testovací procedury. Po uplynutí tohoto času je testovací procedura neúspěšně ukončena.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{database_procedures}
+  \caption{Tabulka procedures}
+  \label{fig:database_procedures}
+\end{figure}
+
 \subsection{Tabulka tests router}
+Výsledky testování jsou ukládány do tří různých tabulek pro jednodušší reportování výsledků testování. První tabulkou je tests\_router do které jsou ukládány informace o testování celého produktu. Za úspěšný se tento test považuje pokud všechny procedury spustěné na testovaném zařízení zkončily úspěšně. Tabulka obsahuje 4 následující položky. Položka idtests\_router je primárním klíčem tabulky. Položka idrouters odkazuje na tabulku routers a určuje jakému zařízení je výsledek testu určen. Položka idfwreleases odkazuje na tabulku fwreleases a určuje k jakému vydání firmwaru je výsledek testu přiřazen. Poslední položkou je samotný výsledek testu a to položka result.
 
 \begin{figure}[h]
   \centering
@@ -134,6 +141,7 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
 \end{figure}
 
 \subsection{Tabulka tests function}
+Druhou tabulkou sloužící k ukládání výsledků testů je tabulka tests\_function. Tato tabulka sdružuje výsledky všech testovacíh procedur dané funkce na jednom testovaném zařízení. Test funkce je považován za úspěšný, pokud všechny testoavné procedury této funkce proběhli úspěšně. Tabulka tests\_function obshauje pět následujících položek. Položka idtests\_function je primárním klíčem tabulky. Položka idfunctions odkazuje na tabulku functions a definuje o jakou testovanou funkci se jedná. Položka idfwreleases odkazuje na tabulku fwreleases a definuje k jakému testovanému firmwaru je výsledek testování funkce přiřazen. Položka idrouters odkazuje na tabulku routers a definuje jakému zařízení je výsledek testu přiřazen. Poslední položka result určuje samotný výsledek testu.
 
 \begin{figure}[h]
   \centering
@@ -143,6 +151,13 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
 \end{figure}
 
 \subsection{Tabulka tests procedure}
+Poslední tabulkou sloužící k ukládání výsledků testů je tabulka tests\_procedures.V této tabulce jsou uloženy vyýsledky ze všech spuštěných testovacích procedur. K identifikaci výsledku testu z každé testovací procedury slouží šest následujících položek. 
+idtests\_procedure
+idprocedures
+idrouters
+idfwreleses
+result
+value
 
 \begin{figure}[h]
   \centering
@@ -152,6 +167,7 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
 \end{figure}
 
 \subsection{Tabulka logs}
+Tabulka logs schromažďuje všechny chybové výpisy vygenerovány testovacímy skripty. Tabulka obsahuje pět následujících položek. Položka idlogs je primárním klíčemm tabulky. Položka idprocedures odkazje na tabulku procedures a definuje jaké testovací procedury se chybová hláška týká. Položka idrouters odkazuje na tabulku routers a definuje jakého testovaného zařízení se chybová hláška týká. Položka idfwreleases odkazuje na tabulka fwreleases a definuje jakého firmwaru se chybová hláška týká. Poslední položka event určuje samotný text chybové hlášky.
 
 \begin{figure}[h]
   \centering

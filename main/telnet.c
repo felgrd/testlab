@@ -165,7 +165,7 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	}
 
 	// Nastaveni timeoutu pro prijem dat
-	tv.tv_sec = 1;
+	tv.tv_sec = 60;
 	tv.tv_usec = 0;
 	setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 
