@@ -210,33 +210,36 @@ Program remote server je pouštěn se třemi povinnými parametry. Prvním param
 Program po zpracování všech parametrů vytvoří pojmenovanou rouru s názvem identifikačního čísla routeru předaného jako parametr. Pojmenované roury jsou vytvářeny v adresáři /tmp. Název rour pomocí kterých server naslouchá příchozím požadavkům je remote\_server\_id\_pipe, kde id je identifikační číslo routeru. Název roury pomocí které server předává odpověď dotazovanému programu je remote\_client\_pid\_pipe, kde pid je process id dotazovaného programu. Po vytvoření komunikační roury přichází fáze, kdy remote server čeká na příjem požadavku. Ćekání na příjem požadavku je provedeno blokovaným otevřením čtecí pojmenované roury. Zde je program blokován až do otevření této roury nějakým klientským programem. Pokud nějaký program z testovacího api otevře tuto roury a zapíše do ní data testovací program je přečte a uloží do datové struktury. Ze zprávy je zjištěno o jaký druh žádosti se jedná a žádost je provedena. Remote server podporuje následující žádosti.
 
 \begin{itemize}
-\item Vykonani prikazu
-\item Zmena adresy pripojeni
-\item Zmena portu pripojeni
-\item Zmena prihlasovaciho jmena
-\item Zmena prihlasovaciho hesla
-\item Zmena protokolu pro prihlaseni
-\item Nastaveni defaultni konfigurace
-\item Znovu pripojeni do routeru
-\item Ukonceni aplikace
-\item Informace o aktualni adrese
-\item Informace o aktualnim portu
-\item Informace o aktualnim uzivateli
-\item Informace o aktualnim hesle
-\item Informace o aktualnim prihlaovacim protokolu
+  \item Vykonani prikazu
+  \item Zmena adresy pripojeni
+  \item Zmena portu pripojeni
+  \item Zmena prihlasovaciho jmena
+  \item Zmena prihlasovaciho hesla
+  \item Zmena protokolu pro prihlaseni
+  \item Nastaveni defaultni konfigurace
+  \item Znovu pripojeni do routeru
+  \item Ukonceni aplikace
+  \item Informace o aktualni adrese
+  \item Informace o aktualnim portu
+  \item Informace o aktualnim uzivateli
+  \item Informace o aktualnim hesle
+  \item Informace o aktualnim prihlaovacim protokolu
 \end{itemize}
 
 Po provedení příkazu remote server odpovídá jedno z těchto možných odpovědí.
 
 \begin{itemize}
-\item Uspesne vykonani
-\item Chyba ve skriptu
+  \item Uspesne vykonani
+  \item Chyba ve skriptu
 \end{itemize}
 
 Funkce všech žádostí jsou zřejmě jasné z jejich výčtů a tak dále bude detailně popsána hlavní a nejvíce používána žádost vykonání příkazu. Samotné vykonání příkazu je provedeno podle zvoleného protokolu.
 
 \subsubsection{Telnet}
-Při provedení příkazu pomocí protokolu telnet je nejdříve kontrolováno jestliže je spojení s testovaným zařízením aktivní. Jestliže spojení aktivní není pokusí se program spojení s testovaným zařízením znovu navázat.
+Při provedení příkazu pomocí protokolu telnet je nejdříve kontrolováno jestliže je spojení s testovaným zařízením aktivní. Jestliže spojení aktivní není pokusí se program spojení s testovaným zařízením znovu navázat. V případě protokolu telnet byla napsána vlastní knihovna pro obsluhování tohoto spojení. Navázání spojení je provedeno navázáním TCP spojení na portu, kde testované zařízení obsluhuje příchozí telnet spojení. Po navázání spojení jsou přijmatu parametry telnet releace a žádost o zadání přihlašovacího hesla. Nejdříve jsou zkontrolovány parametry relace a následně poslána odpověď s parametry a požadovaného chování telnet relace. Dále je odesláno přihlašovací jméno uživatele routeru. Po odeslání uživatelského jména je očekávána žádost o uživatelské heslo, které je také odesláno pomocí tcp spojení do routeru.V případě úspěšného přihlášení navazovací funkce vrací číslo file deskriptoru spojení nebo v případě jakéhokoliv neúspěchu při přihlášení do routeru je ukončeno TCP spojení s routerem.
+
+Po úspěšném navázání spojení se mohou do routeru posílat příkazy, které by měl router vykonat. Samotné posílání příkazů do routeru je velice jednoduché. Příkaz je poslán pomocí vytvořeného TCP spojení do routeru a následně jsou příjmány data dokud není přijmuta sekvence znaků CR, LF, \# a mezera. Pro zamezení chyb při příjmu z routeru je nastaven timeout 60s. Po přečtení celé odpovědi z routeru je odpověď zpracována a pomocí pojmenované roury odeslána dotazovanému programu. Ukončení telnet spojení s testovaným zařízením je prováděno uzavřením daného TCP spojení.
+
 
 \subsubsection{SSH}
 
