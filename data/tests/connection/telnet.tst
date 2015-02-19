@@ -2,7 +2,7 @@
 
 ## @package telnet
 #  Test telnet connect to the router.
-#  
+#
 #  @param $1: ID of router.
 #  @param $2: ID of release.
 
@@ -13,7 +13,7 @@ if [ -z $1 ];then
 	exit 1
 fi
 
-#IP adresa prvniho routeru
+# IP adresa prvniho routeru
 ROUTER1=$1
 
 # Puvodni protokol
@@ -23,7 +23,7 @@ PROTOCOL=$(tl_remoteinfo -t $ROUTER1)
 tl_remotechange -t telnet $ROUTER1
 
 # Zkouska komunikace
-REPLY=$(tl_status $ROUTER1 sys Time)
+REPLY=$(tl_remote $ROUTER1 "echo connection")
 
 # Kontrola vysledku
 if [ $? -eq 0 ] && [ "$REPLY" ]; then

@@ -57,6 +57,8 @@ int main(int argc, char *argv[]){
 	pid_t   pid;                // pid spusteneho proces
 	pid_t   wpid;               // pid ukonceneho procesu
   int     result;
+	char    request[PIPE_BUFFER_SIZE];    // Buffer pro opoved z routeru
+	char    response[PIPE_BUFFER_SIZE];   // Buffer pro opoved z routeru
 
   // Inicializace statavu a promenych
 	state = STATE_OFF;
@@ -139,6 +141,7 @@ int main(int argc, char *argv[]){
 			// Kontrola timeoutu programu
 			if(starttime + timeout < time(NULL)){
 				state = STATE_TIMEOUT;
+				fprintf(stderr, "Timeout expired while ping to router.\n");
 			}
 
 			// Zjisteni uspesnosti pingu
@@ -151,7 +154,29 @@ int main(int argc, char *argv[]){
 
 	}while(!state);
 
+	// Cekani na odpoved od routeru
+	while(state < STATE_CONNECT){
+
+		// Vytvoreni zpravy
+		snprintf(request, sizeof(request), "echo connection");
+
+		// Odeslani zadosti remote serveru
+		result = pipe_request(router, remote_process, request, response);
+
+		// Kontrola timeoutu
+		if(starttime + timeout < time(NULL)){
+			state = STATE_TIMEOUT;
+			fprintf(stderr, "Timeout expired while connect to router.\n");
+		}
+
+		// Kontrola odpovedi od routeru
+		if(strcmp(response, "connection") == 0){
+			state = STATE_CONNECT;
+		}
+	}
+
+	// Tisk celkove doby cekani na nabehnuti routeru
 	printf("%d\n", (int)(time(NULL) - starttime));
 
-	return state == STATE_PING ? 0 : 2;
+	return state == STATE_CONNECT ? 0 : 2;
 }

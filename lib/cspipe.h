@@ -8,9 +8,9 @@
  */
 
 /// Name of fifo for read communication with remote server
-#define SERVER_FIFO_NAME	"/tmp/remote_%d_pipe"
+#define SERVER_FIFO_NAME	"/tmp/remote_server_%d_pipe"
 /// Name of fifo for write communication with remote server
-#define CLIENT_FIFO_NAME	"/tmp/remote_%d_pipe"
+#define CLIENT_FIFO_NAME	"/tmp/remote_client_%d_pipe"
 /// Max size of data write or read from pipe
 #define PIPE_BUFFER_SIZE	8192
 

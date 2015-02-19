@@ -5,6 +5,9 @@
 #include <errno.h>    // errno
 #include <unistd.h>   // chdir
 #include <sys/wait.h> // waitpid
+#include <sys/types.h> // open
+#include <sys/stat.h>  //open
+#include <fcntl.h>
 #include <limits.h>
 #include "database.h"
 #include "utils.h"
@@ -18,16 +21,18 @@
 	*/
 
 int main(int argc, char *argv[]){
-	int    result;              // Navratovy kod funkci
-	char   command[PATH_MAX];   // Buffer pro prikazy
-	pid_t  pid;                 // Pid vytvoreneho procesu
-	pid_t  wpid;                // Pid cekaneho procesu
-	int    status;              // Navratovy status ukonceneho procesu
-	int    release_id;          // ID aktualniho releasu v databazi
-	int    platform_id;         // ID platformy
-	char   *platform_name;      // Nazev platformy
-	int    timeout;             // Timeout pro dokonceni skriptu
-	int    waittime;            // Doba behu skriptu
+	int     result;              // Navratovy kod funkci
+	char    command[PATH_MAX];   // Buffer pro prikazy
+	pid_t   pid;                 // Pid vytvoreneho procesu
+	pid_t   wpid;                // Pid cekaneho procesu
+	int     status;              // Navratovy status ukonceneho procesu
+	int     release_id;          // ID aktualniho releasu v databazi
+	int     platform_id;         // ID platformy
+	char    *platform_name;      // Nazev platformy
+	int     timeout;             // Timeout pro dokonceni skriptu
+	int     waittime;            // Doba behu skriptu
+	int     log_fd;              // File descriptor pro soubor s logem
+	char    log_name[PATH_MAX];  // Nazev souboru s logem
 
 	// Otevreni logu
 	openlog("TestLabCheckout", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
@@ -101,6 +106,17 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
+	// Sestaveni cesty k souboru s logem
+	snprintf(log_name, sizeof(log_name), "%s/logs/checkout/%d/%d.log", \
+	DIRECTORY, release_id, platform_id);
+
+	// Otevreni souboru s logem
+	log_fd = open(log_name, O_CREAT|O_RDWR, 0666);
+	if(log_fd < 0){
+		syslog(LOG_ERR, "Open log file error (%d)", errno);
+		return 1;
+	}
+
 	// Vykonani checkout scriptu
 	switch(pid = vfork()) {
 		case -1:
@@ -109,8 +125,16 @@ int main(int argc, char *argv[]){
 			return 0;
 
 		case 0:
-			// Potlaceni vsech vystupu
-			close_all_fds(-1);
+			// Uzavreni logu
+			closelog();
+
+			// Uzavreni standartniho vystupu a presmerovani do log souboru
+			close(1);
+			dup(log_fd);
+
+			// Uzavreni chyboveho vystupu a presmerovani do log souboru
+			close(2);
+			dup(log_fd);
 
 			// Spusteni skriptu
 			execlp("bash", "bash", "-f", command, NULL);

@@ -60,9 +60,9 @@ int telnetInit(char *ip, int port, const char *username, const char *password){
 					c1 = buffer[i++];
 					c2 = buffer[i];
 					if( c1 == TELNET_DO){
-							trBuffer[trBufferLength++] = TELNET_IAC;
-							trBuffer[trBufferLength++] = TELNET_WANT;
-							trBuffer[trBufferLength++] = c2;
+						trBuffer[trBufferLength++] = TELNET_IAC;
+						trBuffer[trBufferLength++] = TELNET_WANT;
+						trBuffer[trBufferLength++] = c2;
 					}
 				}
 			}
@@ -206,7 +206,7 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	}
 
 	start += trLength;
-	stop += 2;
+	//stop += 2;
 
 	if(start == stop) {
 		strcpy(response, "");

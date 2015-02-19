@@ -24,7 +24,7 @@ První a základní tabulkou celého systému je fwreleases. V tabulce fwrelease
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_fwreleases}
+  \includegraphics[scale=0.6]{database_fwreleases}
   \caption{Tabulka fwreleases}
   \label{fig:database_fwreleases}
 \end{figure}
@@ -34,7 +34,7 @@ Tabulka platforms obsahuje informace o jednotlivých platformách. Platforma je 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_platforms}
+  \includegraphics[scale=0.6]{database_platforms}
   \caption{Tabulka platforms}
   \label{fig:database_platforms}
 \end{figure}
@@ -44,7 +44,7 @@ Tabulka products obsahuje informace o jednotlivých produktech. V této tabulce 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_products}
+  \includegraphics[scale=0.6]{database_products}
   \caption{Tabulka products}
   \label{fig:database_products}
 \end{figure}
@@ -54,7 +54,7 @@ Tabulka checkout slouží pro ukládání výsledků ze stažení zdrojových k�
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_checkout}
+  \includegraphics[scale=0.6]{database_checkout}
   \caption{Tabulka checkout}
   \label{fig:database_checkout}
 \end{figure}
@@ -64,7 +64,7 @@ Tabulka builds\_platform slouží pro ukládání výsledků překladu celé pla
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_buildsplatform}
+  \includegraphics[scale=0.6]{database_buildsplatform}
   \caption{Tabulka builds platform}
   \label{fig:database_buildsplatform}
 \end{figure}
@@ -74,7 +74,7 @@ Tabulka builds\_product slouží pro ukládání výsledků překladu jednotliv�
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_buildsproduct}
+  \includegraphics[scale=0.6]{database_buildsproduct}
   \caption{Tabulka builds product}
   \label{fig:database_buildsproduct}
 \end{figure}
@@ -84,7 +84,7 @@ Tabulka routers je určena pro uložení všech routerů přítomných v testova
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_routers}
+  \includegraphics[scale=0.6]{database_routers}
   \caption{Tabulka routers}
   \label{fig:database_routers}
 \end{figure}
@@ -94,7 +94,7 @@ Další tabulkou pomocí níž se tvoří model testovaného zařízení je tabu
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_functions}
+  \includegraphics[scale=0.6]{database_functions}
   \caption{Tabulka functions}
   \label{fig:database_functions}
 \end{figure}
@@ -105,7 +105,7 @@ Poslední položka určuje typ závislosti. Podporovány jsou dva typy závislos
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_dependences}
+  \includegraphics[scale=0.6]{database_dependences}
   \caption{Tabulka dependences}
   \label{fig:database_dependences}
 \end{figure}
@@ -115,7 +115,7 @@ Poslední tabulkou tvořící model testovaného zařízení je tabulka routers\
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{databse_routershasfunctions}
+  \includegraphics[scale=0.6]{databse_routershasfunctions}
   \caption{Tabulka routers has functions}
   \label{fig:databse_routershasfunctions}
 \end{figure}
@@ -125,7 +125,7 @@ Tabulka procedures již neslouží k uchování dat z abstraktního pohledu test
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_procedures}
+  \includegraphics[scale=0.6]{database_procedures}
   \caption{Tabulka procedures}
   \label{fig:database_procedures}
 \end{figure}
@@ -135,7 +135,7 @@ Výsledky testování jsou ukládány do tří různých tabulek pro jednodušš
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_testsrouter}
+  \includegraphics[scale=0.6]{database_testsrouter}
   \caption{Tabulka tests router}
   \label{fig:database_testsrouter}
 \end{figure}
@@ -145,23 +145,17 @@ Druhou tabulkou sloužící k ukládání výsledků testů je tabulka tests\_fu
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_testsfunction}
+  \includegraphics[scale=0.6]{database_testsfunction}
   \caption{Tabulka tests function}
   \label{fig:database_testsfunction}
 \end{figure}
 
 \subsection{Tabulka tests procedure}
-Poslední tabulkou sloužící k ukládání výsledků testů je tabulka tests\_procedures.V této tabulce jsou uloženy vyýsledky ze všech spuštěných testovacích procedur. K identifikaci výsledku testu z každé testovací procedury slouží šest následujících položek. 
-idtests\_procedure
-idprocedures
-idrouters
-idfwreleses
-result
-value
+Poslední tabulkou sloužící k ukládání výsledků testů je tabulka tests\_procedures.V této tabulce jsou uloženy vyýsledky ze všech spuštěných testovacích procedur. K identifikaci výsledku testu z každé testovací procedury slouží šest následujících položek. Položka idtests\_procedure je primárním klíčem tabulky. Položka idprocedures odkazuje na tabulku procedures a definuje jaké testovací procedury se výsledek týká. Položka idrouters odkazuje na tabulku routers a definuje jakému testovanému zařízení má být výsledek přiřazen. Položka idfwreleses odkazuje na tabulku fwreleases a definuje jakému testovanému releasu má být výsledek testu přiřazen. Položka result určuje výsledk testu. Poslední položka value slouží k uložení jakékoliv pomocné hodnoty, kterou může vygenerovat testovací skript.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_testsprocedure}
+  \includegraphics[scale=0.6]{database_testsprocedure}
   \caption{Tabulka tests procedure}
   \label{fig:database_testsprocedure}
 \end{figure}
@@ -171,14 +165,16 @@ Tabulka logs schromažďuje všechny chybové výpisy vygenerovány testovacímy
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.8]{database_logs}
+  \includegraphics[scale=0.6]{database_logs}
   \caption{Tabulka logs}
   \label{fig:database_logs}
 \end{figure}
 
 \section{Popis programu}
 
-O průběh celého testu se stará program testlab. Testlab je program psaný v jazyc C. Program po spuštění otevře systémový log pro možnost logování chyb do systémového logu. Filtrováný systémový log by měl později být zobrazován na webowém rozhraní testovacího systému. První hláškou do systémového logu je informace o spuštění programu testlab, daným uživatelem a v určený čas. Po otevření systémového logu program rozebírá parametry na příkazové řádce. Parametry jsou rozebíráný pomocí funkce getopts. Pomocí parametrů lze ovlivnit chování programu testlab !!!!!DOPLNIT PARAMETRY!!!!!!
+O průběh celého testu se stará program testlab. Testlab je program psaný v jazyc C. Program po spuštění otevře systémový log pro možnost logování chyb do systémového logu. Filtrováný systémový log by měl později být zobrazován na webowém rozhraní testovacího systému. První hláškou do systémového logu je informace o spuštění programu testlab, daným uživatelem a v určený čas. Po otevření systémového logu program rozebírá parametry na příkazové řádce. Parametry jsou rozebíráný pomocí funkce getopts. Pomocí parametrů lze ovlivnit chování programu testlab.
+
+!!!!!DOPLNIT PARAMETRY!!!!!!
 
 \begin{figure}[h]
   \centering
@@ -187,16 +183,65 @@ O průběh celého testu se stará program testlab. Testlab je program psaný v 
   \label{fig:program_schema}
 \end{figure}
 
-
-Nyní se provádějí přípravné kroky pro samotné testování. Nejdříve je vytvořen nový release firmwaru a následně vložen do databáze. V projektovém adresáři je vytvořen nový adresář se stejným názvem jako identifikační číslo testovaného releasu.
+Po rozebrání parametrů se provádějí přípravné kroky pro samotné testování. V prvním kroku je vytvořen nový release firmwaru a následně vložen do databáze. V adresáři project je vytvořen nový adresář s názvem identifikačního číslo testovaného releasu. Nyní je založen nový release firmwaru a může se přejít k samotnému testování.
 
 \subsection{Checkout}
+V prvním kroku testování jsou stahovány zdrojové kódy všech platforem testovaných výrobků. Informace o všech platformách jsou dotazem získány z databáze. Po získání informací o všech platformách je pro každou platformu spuštěn program checkout. V hlavním programu se pouze čeká na ukončení všech programů checkout. Spouštění obsluhy každé platformy v jednotlivém programu bylo zvoleno z důvodu paralerizace zprácování jednotlivých platforem.
+
+Program checkout je spouštěn se třemi parametry. Prvním parametrem je identifikační číslo testovaného releasu, druhým parametrem je identifikační číslo stahované platformy a posledním parametrem je název stahované platformy. V prvním kroku si program checkou vytvoří adresář s názvem podle zpracovávané platformy v pracovním adresáři testovaného releasu. Adresář tedy pak vypadá například takto /var/testlab/project/5/RBv2. Dále je kontrolováno jestli existuje skript provádějící stažení platformy. Stahování zdrojových kódů pomocí skriptu bylo zavedo z důvodu komplexnosti této operace. Jedním z případů může být stahování zdrojových kódů platformy ze dvou různých repozitářů. Po zkontrolování existence skriptu je checkou skript spuště. Výstup skriptu je přesměrován do souboru s logem. Tento soubor se nachází v adresáři logs, dále v podadresáři s názvem identifikačního čísla releasu, kde jsou samotné soubory pojmenované podle identifikačního čísla stahované platformy. U skriptu je dále kontrolované jestli nepřekračuje čas spuštění nastavený timeout. V případě překročení času spuštění je skript neúspěšně překročen.Nakonec je výsledek stzažení platformy uložen do databáze.
+
 \subsection{Compile}
-\subsection{Test router}
-\subsection{Test tunel}
-\subsection{Clean}
+Další fází každého testování je kompilace zdrojových kódů všech stažených platforem. Pro ukládání přeložených firmwarů je vytvořen adresář s názvem identifikačního čísla releasu v adresáří firmware. Po vytvoření tohoto adresáře je pro každou platformu spuštěn program compile. V programu testlab se dále čeká na ukončení všech programů compile.
+
+Program compile je spuštěn se třemi parametry. Prvním parametrem je identifikační číslo testovaného releasu, druhým parametrem je identifikační číslo překládané platformy a posledním parametrem je název překládané platformy. Program compile nejdříve provede změnu pracovního adresáře na adresář se zdrojovými kódy překládané platformy. Program dále z databáze získá názvy všech produktů patřících pod zpracovávanou platformu. Nyní je provedena kontrola existence skriptu provádějícího samotnou kompilaci zdrojových kódů platformy. Jednotlivé produkty se spouštěnému skriptu předávají jako parametr. V případě existence skriptu pro kompilaci zpracovávané platformy je postupně tento skript spouštěn s parametry všech výrobků. Standardní a chybový výstup spuštěného skriptu je přesměrováván do souboru obdobně jako u programu checkout. Díky uložení všech výstupů jsou informace o překladu firmwarů zpětně dostupné. I u skriptu pro překlad je kontrolován čas běhu programu a případně po uplynutí zadaného timeoutu je skript předčasně ukončen. Toto opatření je prováděno pro předejití zaseknutí celého testovacího systému z důvodu špatně napsaného testovacího skriptu. Každý přeložený firmware je zkopírován z adresáře kde byl přeložen do adresáře určeného pro přeložené firmwary. Po zkopírování firmwaru je výsledek překladu každého výrobku uložen do databáze. Na závěr této části testování je výsledek překladu platformy, čili všech překládaných výrobku, táké uložen do databáze.
+
 \subsection{Remote server}
+Po ukončení překladu všech výrobků končí fáze kontinuální integrace a začíná systémové testování na konkrétním hardwaru. Pro účely testování se s každým routerem udržuje pernamentní spojení pomocí jednoho z protokolů telnet nebo ssh. Způsob komunikace pomocí pernamentního spojení bylo zvoleno jelikož díky častému opětovnému připojování do routeru, router již dále nepříjmal další žádosti o připojení. Nejdříve jsou z databáze vybrány všechny testované routery a pro každý testovaný router je spuště program udržující pernamentní spojení s routerm remote server.
+
+Program remote server je pouštěn se třemi povinnými parametry. Prvním parametrem je identifikátor router. Identifikátor routeru je číslo pomocí kterého mohou testovací aplikace komunikovat s routerem. V rámci testovacího systému je v tomto parametru předáváno identifikační číslo routeru v databázi. Druhým parametrem je ip adresa routeru se kterým má být udržováno spojení. Posledním povinným parametrem je protokol kterým je prováděno spojení s routerem. Nyní jsou podporovány dva protokoly a to telnet a ssh. Dále je možné použít volitelné parametry k úpravě defaultních přihlašovacích informací. Prvním voltelným parametrem lze změnit přihlašovací jméno do routeru. Parametr lze změnit pomocí přepínače -u a defaultní hodnota je uživatel root. Dalším volitelný parametrem lze změnit přihlašovací heslo do routeru. Parametr lze změnit pomocí přepínače -p a jeho defaultní hodnota je přihlašovací heslo root. Posledním volitelný parametrem je port na kterém se sestavuje súpjení s testovaným zařízením. Port lze změnit pomocí přepínače -t a výchozí port se kterým se spojení navazuje jestliže není port změněn je port 23.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.8\LW]{schema_remote}
+  \caption{Schéma komunikace s testovaným výrobkem}
+  \label{fig:schema_remote}
+\end{figure}
+
+Program po zpracování všech parametrů vytvoří pojmenovanou rouru s názvem identifikačního čísla routeru předaného jako parametr. Pojmenované roury jsou vytvářeny v adresáři /tmp. Název rour pomocí kterých server naslouchá příchozím požadavkům je remote\_server\_id\_pipe, kde id je identifikační číslo routeru. Název roury pomocí které server předává odpověď dotazovanému programu je remote\_client\_pid\_pipe, kde pid je process id dotazovaného programu. Po vytvoření komunikační roury přichází fáze, kdy remote server čeká na příjem požadavku. Ćekání na příjem požadavku je provedeno blokovaným otevřením čtecí pojmenované roury. Zde je program blokován až do otevření této roury nějakým klientským programem. Pokud nějaký program z testovacího api otevře tuto roury a zapíše do ní data testovací program je přečte a uloží do datové struktury. Ze zprávy je zjištěno o jaký druh žádosti se jedná a žádost je provedena. Remote server podporuje následující žádosti.
+
+\begin{itemize}
+\item Vykonani prikazu
+\item Zmena adresy pripojeni
+\item Zmena portu pripojeni
+\item Zmena prihlasovaciho jmena
+\item Zmena prihlasovaciho hesla
+\item Zmena protokolu pro prihlaseni
+\item Nastaveni defaultni konfigurace
+\item Znovu pripojeni do routeru
+\item Ukonceni aplikace
+\item Informace o aktualni adrese
+\item Informace o aktualnim portu
+\item Informace o aktualnim uzivateli
+\item Informace o aktualnim hesle
+\item Informace o aktualnim prihlaovacim protokolu
+\end{itemize}
+
+Po provedení příkazu remote server odpovídá jedno z těchto možných odpovědí.
+
+\begin{itemize}
+\item Uspesne vykonani
+\item Chyba ve skriptu
+\end{itemize}
+
+Funkce všech žádostí jsou zřejmě jasné z jejich výčtů a tak dále bude detailně popsána hlavní a nejvíce používána žádost vykonání příkazu. Samotné vykonání příkazu je provedeno podle zvoleného protokolu.
+
 \subsubsection{Telnet}
+Při provedení příkazu pomocí protokolu telnet je nejdříve kontrolováno jestliže je spojení s testovaným zařízením aktivní. Jestliže spojení aktivní není pokusí se program spojení s testovaným zařízením znovu navázat.
+
 \subsubsection{SSH}
+
+\subsection{Test}
+\subsection{Clean}
+
 
 \endinput

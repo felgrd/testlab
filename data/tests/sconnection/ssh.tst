@@ -2,7 +2,7 @@
 
 ## @package ssh
 #  Test ssh connect to the router.
-#  
+#
 #  @param $1: ID of router.
 #  @param $2: ID of release.
 
@@ -23,7 +23,7 @@ PROTOCOL=$(tl_remoteinfo -t $ROUTER1)
 tl_remotechange -t ssh $ROUTER1
 
 # Zkouska komunikace
-REPLY=$(tl_status $ROUTER1 sys Time)
+REPLY=$(tl_remote $ROUTER1 "echo connection")
 
 # Kontrola vysledku
 if [ $? -eq 0 ] && [ "$REPLY" ]; then
@@ -36,4 +36,3 @@ fi
 tl_remotechange -t $PROTOCOL $ROUTER1
 
 exit $RESULT
-

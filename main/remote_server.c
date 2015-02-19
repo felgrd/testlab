@@ -37,25 +37,25 @@ void help(void){
 }
 
 int main(int argc, char **argv ){
-	int		telnet_fd;                     // Deskriptor otevreneho telnet spojeni
-	pid_t	ssh_fd;                        // Deskriptor otevreneho ssh spojeni
-	int		result;                        // Navratovy kod funkce
-	char	parameter;                     // Predany parametr
-	int		port;                          // Port na kterem je spojeni otevreno
-	char	user[REMOTE_USER_LENGTH];      // Retezec pro zadani uzivatele
-	char	pass[REMOTE_PASS_LENGTH];      // Reteze pro zadani hesla
-	char	ip[REMOTE_IP_LENGTH];          // Retezec pro zadani ip adresy
-	char	ip_arg[REMOTE_IP_LENGTH];      // Vychozi IP adresa
-	int		router;                        // Identifikator routeru
-	int 	protocol;                      // Retezec pro zadani protokolu
-	int		server_fifo_fd;                // Roura pro prijem dat
-	int		client_fifo_fd;                // Roura pro odesilani dat
-	int		fifo_read;                     // Velikost prijatych dat
-	int		fifo_write;                    // Velikost odeslanych dat
-	message_remote remote_request;       // Format posilanych dat
-	message_remote remote_response;      // Format posilanych dat
-	char server_pipe_name[PATH_MAX + 1];
-	char client_pipe_name[PATH_MAX + 1];
+	int            telnet_fd;                // Deskriptor otevreneho telnet spojeni
+	pid_t          ssh_fd;                   // Deskriptor otevreneho ssh spojeni
+	int            result;                   // Navratovy kod funkce
+	char           parameter;                // Predany parametr
+	int            port;                     // Port na kterem je spojeni otevreno
+	char           user[REMOTE_USER_LENGTH]; // Retezec pro zadani uzivatele
+	char           pass[REMOTE_PASS_LENGTH]; // Reteze pro zadani hesla
+	char           ip[REMOTE_IP_LENGTH];     // Retezec pro zadani ip adresy
+	char           ip_arg[REMOTE_IP_LENGTH]; // Vychozi IP adresa
+	int            router;                   // Identifikator routeru
+	int            protocol;                 // Retezec pro zadani protokolu
+	int            server_fifo_fd;           // Roura pro prijem dat
+	int            client_fifo_fd;           // Roura pro odesilani dat
+	int            fifo_read;                // Velikost prijatych dat
+	int            fifo_write;               // Velikost odeslanych dat
+	message_remote remote_request;           // Format posilanych dat
+	message_remote remote_response;          // Format posilanych dat
+	char           server_pipe_name[PATH_MAX + 1];
+	char           client_pipe_name[PATH_MAX + 1];
 
 	// Inicializace parametru
 	server_fifo_fd = -1;
@@ -91,23 +91,24 @@ int main(int argc, char **argv ){
 				break;
 			case '\?':
 				help();
-				return 0;
+				return 1;
 			case ':':
 				help();
-				return 0;
+				return 1;
 		}
 	}
 
 	// Kontrola parametru ip address
 	if(optind + 2 >= argc){
 		help();
-		return 0;
+		return 1;
 	}
 
 	// Parametr identifikacni cislo pro komunikace se serverem
 	router = atoi(argv[optind++]);
 	if(router <= 0){
 		syslog(LOG_ERR, "Parameter id is not number.");
+		return 1;
 	}
 
 	// Parametr IP adresa routeru
@@ -116,34 +117,30 @@ int main(int argc, char **argv ){
 	++optind;
 
 	// Parametr protokol pro komunikaci s routerem
-	protocol = strcmp(argv[optind], "ssh") == 0 ? PROTOCOL_SSH : \
-	PROTOCOL_TELNET;
+	protocol = strcmp(argv[optind], "ssh") == 0 ? PROTOCOL_SSH : PROTOCOL_TELNET;
 
 	// Vytvoreni komunikacnich rour
-	snprintf(server_pipe_name, sizeof(server_pipe_name), \
-	SERVER_FIFO_NAME, router);
+	snprintf(server_pipe_name, sizeof(server_pipe_name), SERVER_FIFO_NAME, router);
 	result = mkfifo(server_pipe_name, 0777);
 	if(result != 0){
 		syslog(LOG_ERR, "Create fifo error (%d)", errno);
 		return 1;
 	}
 
-    // Cekani na prichozi pozadavek
+	// Cekani na prichozi pozadavek
 	while(!got_signal){
 
 		// Otereni serverove roury
 		if(server_fifo_fd == -1){
 			server_fifo_fd = open(server_pipe_name, O_RDONLY);
 			if(server_fifo_fd == -1){
-				syslog(LOG_ERR, "Server pipe open error %d %s.", \
-				errno, server_pipe_name);
-				return 0;
+				syslog(LOG_ERR, "Server pipe open error %d %s.", errno, server_pipe_name);
+				return 1;
 			}
 		}
 
 		// Prijem prikazu
-		fifo_read = read(server_fifo_fd, &remote_request, \
-		sizeof(remote_request));
+		fifo_read = read(server_fifo_fd, &remote_request, sizeof(remote_request));
 
 		// Uzavreni roury ze strany klienta
 		if(fifo_read == 0){
@@ -156,7 +153,7 @@ int main(int argc, char **argv ){
 		if(fifo_read != sizeof(remote_request)){
 			syslog(LOG_ERR, "Server pipe read error. Read: %dB. " \
 			"Expect: %luB.", fifo_read, sizeof(remote_request));
-			return 0;
+			continue;
 		}
 
 		// Zpracovani prikazu

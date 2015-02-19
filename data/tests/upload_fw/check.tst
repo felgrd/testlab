@@ -2,7 +2,7 @@
 
 ## @package upload
 #  Test firmware version.
-#  
+#
 #  @param $1: ID of router.
 #  @param $2: ID of release.
 
@@ -32,7 +32,7 @@ if [ "$NEW_FW" == "$ROUTER_FW" ]; then
 	RESULT=0
 else
 	RESULT=1
-	echo "Bad Firmware version. Required: $NEW_FW. Actual: $ROUTER_FW."	1>&2 
+	echo "Bad Firmware version. Required: $NEW_FW. Actual: $ROUTER_FW."	1>&2
 fi
 
 # Ukonceni scriptu
