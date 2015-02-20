@@ -240,10 +240,21 @@ Při provedení příkazu pomocí protokolu telnet je nejdříve kontrolováno j
 
 Po úspěšném navázání spojení se mohou do routeru posílat příkazy, které by měl router vykonat. Samotné posílání příkazů do routeru je velice jednoduché. Příkaz je poslán pomocí vytvořeného TCP spojení do routeru a následně jsou příjmány data dokud není přijmuta sekvence znaků CR, LF, \# a mezera. Pro zamezení chyb při příjmu z routeru je nastaven timeout 60s. Po přečtení celé odpovědi z routeru je odpověď zpracována a pomocí pojmenované roury odeslána dotazovanému programu. Ukončení telnet spojení s testovaným zařízením je prováděno uzavřením daného TCP spojení.
 
-
 \subsubsection{SSH}
+Komunikace s testovaným zařízení skrz ssh protokol je řešeno pomocí programu plink. Program plink je z balíčku putty-tools a vykonává funkci ssh klienta. Důvodem proč je použit program plink oproti standartního ssh klienta je možnost zadání přihlašovacího hesla jako parametr. Inicilaizace ssh spojení je tedy prováděna spuštěním programu plink jako nového procesu. Komunikace remote serveru s programem plink probíhá pomocí standardních vstupů a výstupů. Před spuštěním programu plink je standardní vstup a standardní výstup programu plink připojen na nepojmenované roury vytvořené programu remote server vytvořené pro komunikaci s programem plink. Po spuštění programu plink je čten výstup programu plink a je kontrolováno úspěšné navázání spojení s testovaným zařízením. V případě úspěšného spojení s testovaným zařízením inicializační funkce vrací pid programu plink. Pokud spojení nebylo úspěšně navázáno program plink je ukončen a funkce vrací informaci o neúspěšném připojení.
+
+Po úspěšném přihlášení je možné pomocí remote serveru skrz ssh protokolo posílat do testovaného zařízení příkazy. Při odesílání příkazů je nejdříve zkontrolováno sestavené spojení. Samotné odesílání příkazů je provedeno odeslání skrz nepojmenovanou rouru na standartní vstup aplikace plink. Následně je čten standardní výstup aplikace plink do příjmutí stejné sekvence znaků jako u telnet spojení. Z důvodu zamezení chyb při přenosu je pro příjem odpovědi nastaven timeout 60s. Pokud do vypršení timeoutu není příkaz zpracován spojení je uzavřeno a znovu inicializováno. Po příjmu celé odpvědi je odpověď zpracována a odeslána přes pojmenovanou rouru dotazovanému programu. Ukončení ssh spojení je prováděno posláním signálu kill programu plink.
 
 \subsection{Test}
+Po úspěšném navázání spojení se všemi testovanémy zařízení je započato samotné stestování těchto zařízení. Testování bude rozděleno do několika sekcí podle typu testování. V první fázi bude implementováno testování jednotlivých zařízení. Tento přístup testuje každý router samostatně a testování všech zařízení probíhá paralérně. V dalších fázích bude určitě implementováno testování zařízení proti sobě, typicky testování spojení dvou routerů tunelem. Třetím typem testování bude sekvenční testování routerů, kdy při testování bude využit jedinečný zdroj, tudíž je všechny zařízení testovat postupně.
+
+Pro testování všech routerů je pro každý router spuštěn program test se dvěma parametry. Prvním parametrem je identifikátor testovaného releasu. Druhým parametrem programu test je identifikační číslo testovaného routeru. Po kontrole parametrů program test z databáze vybere všechny podporované funkce testovaného zařízení. Při zpracovávání každé funkce jsou z databáze vybrány všechny testovací procedury pro testování dané funkce. Nyní jsou postupně spouštěny všechny dostupné testovací procedury.
+
+Před samotným spuštění je nejdříve kontrolována existence testovacího skriptu. Dále jsou vytvořeny nepojmenované roury pro předávání informací ze skriptu do testovacího programu. K předávání výsledné hodnoty testu je na rouru testovacího programu připojen standardní výstup spuštěného skriptu. Předávání chybových hlášek z testovaného skriptu je prováděno propojení chybového výstupu a nepojmenované roury testovacího programu. Po správném nastavení vstupů a výstupů je spuštěn testovací skript. Při běhu testovacího skriptu samotný program čeká jestli mu ze skriptu nepřicházejí nějaká data, či již nevypršel timeout pro provedení skriptu. Po ukončení skriptu je do databáze zapsán výsledek testu, hodnota testu předaná přes standardní výstup skriptu a chybové hlášky předané přes chybový výstup skriptu. 
+
+
+
+
 \subsection{Clean}
 
 

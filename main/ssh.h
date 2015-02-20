@@ -11,7 +11,7 @@
 
 // Timeouts
 #define SSH_CONNECT_TIMEOUT 30
-#define	SSH_RECEIVE_TIMEOUT 20
+#define	SSH_RECEIVE_TIMEOUT 60
 
 int pipes_stdin[2];     // Roura pro komunikaci s PLINK
 int pipes_stdout[2];    // Roura pro komunikaci s PLINK

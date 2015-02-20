@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
 	// Kontrola poctu parametru
 	if(argc != 3){
 		syslog(LOG_ERR, "Bad number of parameters. " \
-		" Usage: checkout <release> <platform_id> <platform_name>.");
+		" Usage: tl_test <release_id> <router_id>.");
 		return 1;
 	}
 
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]){
 	router = argv[2];
 	router_id = atoi(router);
 	if(router_id <= 0){
-		syslog(LOG_ERR, "Number project id error.");
+		syslog(LOG_ERR, "Number router id error.");
 		return 1;
 	}
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]){
 	// Zjisteni timeoutu pro test script
 	timeout = database_sel_timeout(STATE_TESTROUTER);
 	if(timeout <= 0){
-		syslog(LOG_ERR, "Timeout for checkou script does not read.");
+		syslog(LOG_ERR, "Timeout for test script does not read.");
 		return 1;
 	}
 
