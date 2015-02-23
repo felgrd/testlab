@@ -16,34 +16,11 @@ if [ -z $1 ]; then
 	exit 1
 fi
 
-#IP adresa prvniho routeru
+# IP adresa prvniho routeru
 ROUTER1=$1
 
-# 10 pokusu o provedeni testu
-for (( a=1; $a-11; a=$a+1 ))
-do
-	# Zjisteni IP adresy mobilniho pripojeni
-	REPLY=$(tl_status $ROUTER1 ppp "IP Address")
+# Cekani na pripojeni routeru do mobilni site
+tl_mobileready $ROUTER1
 
-	# Kontrola odpovedi
-	if [ -z "$REPLY" ]; then
-		echo "No answer from router." 1>&2
-		exit 1
-	fi
-
-	# Kontrola pripojeni
-	if [ "$REPLY" != "Unassigned" ]; then
-		break
-	fi
-
-	# Pauza pro moznonst navazani spojeni
-	sleep 10
-done
-
-# Kontrola pripojeni
-if [ "$REPLY" == "Unassigned" ]; then
-	echo "PPP connection is not established. IP: $REPLY." 1>&2
-	exit 1
-fi
-
-exit 0
+#
+exit $?

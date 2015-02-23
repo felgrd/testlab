@@ -210,10 +210,9 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 	}
 
 	start += strlen(request);
-	//stop += 2;
 
 	// Kontrola existence odpovedi
-	if(start == stop) {
+	if(start == (stop + 2)) {
 		strcpy(response, "");
 		return 1;
 	}

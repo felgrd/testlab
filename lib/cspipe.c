@@ -149,7 +149,7 @@ int pipe_request(int pid, client_request type, char *request, char *response){
 	if(remote_response.request == remote_response_ok){
 		strcpy(response, remote_response.data);
 	}else{
-		fprintf(stderr, "No response from router.\n");
+		fprintf(stderr, "%s\n", remote_response.data);
 		return 0;
 	}
 

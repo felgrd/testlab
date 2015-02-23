@@ -1,15 +1,15 @@
-#include <sys/types.h>		// pipe
-#include <stdlib.h>			// atoi
-#include <stdio.h>			// printf
+#include <sys/types.h>   // pipe
+#include <stdlib.h>      // atoi
+#include <stdio.h>       // printf
 #include <string.h>
 #include "cspipe.h"
 
 int main(int argc, char *argv[]){
-	int		fifo_fd;						// Roura pro prijem dat
-	int		router;
-	int		result;
-	message_remote remote_request;			// Format posilanych dat
-	message_remote remote_response;			// Format posilanych dat
+	int             fifo_fd;           // Roura pro prijem dat
+	int             router;
+	int             result;
+	message_remote  remote_request;    // Format posilanych dat
+	message_remote  remote_response;   // Format posilanych dat
 
 	// Kontrola parametru command
 	if(argc != 2){
@@ -41,6 +41,6 @@ int main(int argc, char *argv[]){
 
 	// Ukonceni komunikace
 	client_ending(router, fifo_fd);
-	
+
 	return remote_response.request != remote_response_ok;
 }

@@ -1,5 +1,6 @@
 SERVER = testlab
 USER = testlab
+REMOTE_DIR = /opt/testlab/api
 
 BIN_CHECK_PRODUCT = tl_checkproduct
 OBJ_CHECK_PRODUCT = tl_checkproduct.o
@@ -25,6 +26,21 @@ OBJ_UPDATE_FW = tl_updatefw.o
 BIN_UPDATE_CONF = tl_updateconf
 OBJ_UPDATE_CONF = tl_updateconf.o
 
+BIN_SLOG = tl_slog
+OBJ_SLOG = tl_slog.o
+
+BIN_KLOG = tl_klog
+OBJ_KLOG = tl_klog.o
+
+BIN_RLOG = tl_rlog
+OBJ_RLOG = tl_rlog.o
+
+BIN_CHANGE_PARAM = tl_changeparam
+OBJ_CHANGE_PARAM = tl_changeparam.o
+
+BIN_MOBILE_READY = tl_mobileready
+OBJ_MOBILE_READY = tl_mobileready.o
+
 CFLAGS = -Wall -I../lib -I/usr/include/mysql
 LIB_UTILS = -ltl_utils
 LIB_DATABASE = -ltl_database
@@ -32,7 +48,8 @@ LIB_CSPIPE = -ltl_cspipe
 
 all: $(BIN_CHECK_PRODUCT) $(BIN_REMOTE) $(BIN_REMOTE_CHANGE) \
 	 $(BIN_REMOTE_INFO) $(BIN_STATUS) $(BIN_UPDATE_FW) \
-	 $(BIN_UPDATE_CONF) $(BIN_ROUTER_READY)
+	 $(BIN_UPDATE_CONF) $(BIN_ROUTER_READY) $(BIN_SLOG) $(BIN_RLOG) $(BIN_KLOG) \
+	 $(BIN_CHANGE_PARAM) $(BIN_MOBILE_READY)
 
 $(BIN_REMOTE) : $(OBJ_REMOTE)
 	$(CC) -Wall -o $(BIN_REMOTE) $(OBJ_REMOTE) $(LIB_CSPIPE)
@@ -58,6 +75,21 @@ $(BIN_UPDATE_FW) : $(OBJ_UPDATE_FW)
 $(BIN_UPDATE_CONF) : $(OBJ_UPDATE_CONF)
 	$(CC) -Wall -o $(BIN_UPDATE_CONF) $(OBJ_UPDATE_CONF) $(LIB_CSPIPE) $(LIB_UTILS)
 
+$(BIN_SLOG) : $(OBJ_SLOG)
+	$(CC) -Wall -o $(BIN_SLOG) $(OBJ_SLOG) $(LIB_CSPIPE)
+
+$(BIN_KLOG) : $(OBJ_KLOG)
+	$(CC) -Wall -o $(BIN_KLOG) $(OBJ_KLOG) $(LIB_CSPIPE)
+
+$(BIN_RLOG) : $(OBJ_RLOG)
+	$(CC) -Wall -o $(BIN_RLOG) $(OBJ_RLOG) $(LIB_CSPIPE)
+
+$(BIN_CHANGE_PARAM) : $(OBJ_CHANGE_PARAM)
+	$(CC) -Wall -o $(BIN_CHANGE_PARAM) $(OBJ_CHANGE_PARAM) $(LIB_CSPIPE)
+
+$(BIN_MOBILE_READY) : $(OBJ_MOBILE_READY)
+	$(CC) -Wall -o $(BIN_MOBILE_READY) $(OBJ_MOBILE_READY) $(LIB_CSPIPE)
+
 clean:
 	rm -rf $(BIN_REMOTE) $(OBJ_REMOTE)
 	rm -rf $(BIN_REMOTE_CHANGE) $(OBJ_REMOTE_CHANGE)
@@ -67,6 +99,11 @@ clean:
 	rm -rf $(BIN_UPDATE_FW) $(OBJ_UPDATE_FW)
 	rm -rf $(BIN_UPDATE_CONF) $(OBJ_UPDATE_CONF)
 	rm -rf $(BIN_ROUTER_READY) $(OBJ_ROUTER_READY)
+	rm -rf $(BIN_SLOG) $(OBJ_SLOG)
+	rm -rf $(BIN_KLOG) $(OBJ_KLOG)
+	rm -rf $(BIN_RLOG) $(OBJ_RLOG)
+	rm -rf $(BIN_CHANGE_PARAM) $(OBJ_CHANGE_PARAM)
+	rm -rf $(BIN_MOBILE_READY) $(OBJ_MOBILE_READY)
 
 install: all
 	sudo cp -u $(BIN_REMOTE) /usr/bin/$(BIN_REMOTE)
@@ -77,23 +114,38 @@ install: all
 	sudo cp -u $(BIN_UPDATE_FW) /usr/bin/$(BIN_UPDATE_FW)
 	sudo cp -u $(BIN_UPDATE_CONF) /usr/bin/$(BIN_UPDATE_CONF)
 	sudo cp -u $(BIN_ROUTER_READY) /usr/bin/$(BIN_ROUTER_READY)
+	sudo cp -u $(BIN_SLOG) /usr/bin/$(BIN_SLOG)
+	sudo cp -u $(BIN_KLOG) /usr/bin/$(BIN_KLOG)
+	sudo cp -u $(BIN_RLOG) /usr/bin/$(BIN_RLOG)
+	sudo cp -u $(BIN_CHANGE_PARAM) /usr/bin/$(BIN_CHANGE_PARAM)
+	sudo cp -u $(BIN_MOBILE_READY) /usr/bin/$(BIN_MOBILE_READY)
 
 uinstall:
-	sudo rm -rf /usr/bin/$(BIN_REMOTE)
-	sudo rm -rf /usr/bin/$(BIN_REMOTE_CHANGE)
-	sudo rm -rf /usr/bin/$(BIN_REMOTE_INFO)
-	sudo rm -rf /usr/bin/$(BIN_STATUS)
-	sudo rm -rf /usr/bin/$(BIN_CHECK_PRODUCT)
-	sudo rm -rf /usr/bin/$(BIN_UPDATE_FW)
-	sudo rm -rf /usr/bin/$(BIN_UPDATE_CONF)
-	sudo rm -rf /usr/bin/$(BIN_ROUTER_READY)
+	sudo rm -f /usr/bin/$(BIN_REMOTE)
+	sudo rm -f /usr/bin/$(BIN_REMOTE_CHANGE)
+	sudo rm -f /usr/bin/$(BIN_REMOTE_INFO)
+	sudo rm -f /usr/bin/$(BIN_STATUS)
+	sudo rm -f /usr/bin/$(BIN_CHECK_PRODUCT)
+	sudo rm -f /usr/bin/$(BIN_UPDATE_FW)
+	sudo rm -f /usr/bin/$(BIN_UPDATE_CONF)
+	sudo rm -f /usr/bin/$(BIN_ROUTER_READY)
+	sudo rm -f /usr/bin/$(BIN_SLOG)
+	sudo rm -f /usr/bin/$(BIN_KLOG)
+	sudo rm -f /usr/bin/$(BIN_RLOG)
+	sudo rm -f /usr/bin/$(BIN_CHANGE_PARAM)
+	sudo rm -f /usr/bin/$(BIN_MOBILE_READY)
 
 remote-install: all
-	scp $(BIN_REMOTE) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_REMOTE)
-	scp $(BIN_REMOTE_CHANGE) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_REMOTE_CHANGE)
-	scp $(BIN_REMOTE_INFO) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_REMOTE_INFO)
-	scp $(BIN_STATUS) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_STATUS)
-	scp $(BIN_CHECK_PRODUCT) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_CHECK_PRODUCT)
-	scp $(BIN_UPDATE_FW) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_UPDATE_FW)
-	scp $(BIN_UPDATE_CONF) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_UPDATE_CONF)
-	scp $(BIN_ROUTER_READY) $(SERVER)@$(USER):/opt/testlab/api/$(BIN_ROUTER_READY)
+	scp $(BIN_REMOTE) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_REMOTE)
+	scp $(BIN_REMOTE_CHANGE) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_REMOTE_CHANGE)
+	scp $(BIN_REMOTE_INFO) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_REMOTE_INFO)
+	scp $(BIN_STATUS) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_STATUS)
+	scp $(BIN_CHECK_PRODUCT) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_CHECK_PRODUCT)
+	scp $(BIN_UPDATE_FW) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_UPDATE_FW)
+	scp $(BIN_UPDATE_CONF) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_UPDATE_CONF)
+	scp $(BIN_ROUTER_READY) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_ROUTER_READY)
+	scp $(BIN_SLOG) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_SLOG)
+	scp $(BIN_KLOG) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_KLOG)
+	scp $(BIN_RLOG) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_RLOG)
+	scp $(BIN_CHANGE_PARAM) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_CHANGE_PARAM)
+	scp $(BIN_MOBILE_READY) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_MOBILE_READY)

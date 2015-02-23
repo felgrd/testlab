@@ -19,14 +19,20 @@ fi
 #IP adresa prvniho routeru
 ROUTER1=$1
 
-# Zmena parametru
-sed -e "s/\(PPP_APN=\).*/\1internet/" -i /etc/settings.ppp
-
-# Nahrani konfigurace s APN conel.agnep.cz
-tl_updateconf -f apn -t mobile $ROUTER1
-
-# Nahrani konfigurace s APN conel.agnep.cz
+# Zmena APN na conel.agnep.cz
 tl_changeparam -c ppp -p APN $ROUTER1 conel.agnep.cz
+
+# Restart ppp
+tl_remote $ROUTER1 "service ppp restart"
+
+# Cekani na spojeni
+tl_mobileready $ROUTER1
 
 # Ping na vychozi branu
 tl_remote $ROUTER1 "ping -c 1 10.0.0.1"
+
+# Navratova hodnota pingu
+RESULT=$(tl_remote $ROUTER1 "echo $?")
+
+# Ukonceni skriptu
+exit $RESULT

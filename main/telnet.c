@@ -206,9 +206,8 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	}
 
 	start += trLength;
-	//stop += 2;
 
-	if(start == stop) {
+	if(start == (stop + 2)) {
 		strcpy(response, "");
 		return 1;
 	}

@@ -210,26 +210,26 @@ Program remote server je pouštěn se třemi povinnými parametry. Prvním param
 Program po zpracování všech parametrů vytvoří pojmenovanou rouru s názvem identifikačního čísla routeru předaného jako parametr. Pojmenované roury jsou vytvářeny v adresáři /tmp. Název rour pomocí kterých server naslouchá příchozím požadavkům je remote\_server\_id\_pipe, kde id je identifikační číslo routeru. Název roury pomocí které server předává odpověď dotazovanému programu je remote\_client\_pid\_pipe, kde pid je process id dotazovaného programu. Po vytvoření komunikační roury přichází fáze, kdy remote server čeká na příjem požadavku. Ćekání na příjem požadavku je provedeno blokovaným otevřením čtecí pojmenované roury. Zde je program blokován až do otevření této roury nějakým klientským programem. Pokud nějaký program z testovacího api otevře tuto roury a zapíše do ní data testovací program je přečte a uloží do datové struktury. Ze zprávy je zjištěno o jaký druh žádosti se jedná a žádost je provedena. Remote server podporuje následující žádosti.
 
 \begin{itemize}
-  \item Vykonani prikazu
-  \item Zmena adresy pripojeni
-  \item Zmena portu pripojeni
-  \item Zmena prihlasovaciho jmena
-  \item Zmena prihlasovaciho hesla
-  \item Zmena protokolu pro prihlaseni
-  \item Nastaveni defaultni konfigurace
-  \item Znovu pripojeni do routeru
-  \item Ukonceni aplikace
-  \item Informace o aktualni adrese
-  \item Informace o aktualnim portu
-  \item Informace o aktualnim uzivateli
-  \item Informace o aktualnim hesle
-  \item Informace o aktualnim prihlaovacim protokolu
+  \item Vykonaní příkazu
+  \item Změna adresy připojení
+  \item Změna portu připojení
+  \item Změna přihlašovacího jména
+  \item Změna přihlašovacího hesla
+  \item Změna protokolu pro přihlášení
+  \item Nastavení defaultní konfigurace
+  \item Znovu připojení do routeru
+  \item Ukončení aplikace
+  \item Informace o aktualní adrese
+  \item Informace o aktualním portu
+  \item Informace o aktualním uživateli
+  \item Informace o aktualním hesle
+  \item Informace o aktualním přihlašovacím protokolu
 \end{itemize}
 
 Po provedení příkazu remote server odpovídá jedno z těchto možných odpovědí.
 
 \begin{itemize}
-  \item Uspesne vykonani
+  \item Úspěšné vykonání
   \item Chyba ve skriptu
 \end{itemize}
 
@@ -253,9 +253,8 @@ Pro testování všech routerů je pro každý router spuštěn program test se 
 Před samotným spuštění je nejdříve kontrolována existence testovacího skriptu. Dále jsou vytvořeny nepojmenované roury pro předávání informací ze skriptu do testovacího programu. K předávání výsledné hodnoty testu je na rouru testovacího programu připojen standardní výstup spuštěného skriptu. Předávání chybových hlášek z testovaného skriptu je prováděno propojení chybového výstupu a nepojmenované roury testovacího programu. Po správném nastavení vstupů a výstupů je spuštěn testovací skript. Při běhu testovacího skriptu samotný program čeká jestli mu ze skriptu nepřicházejí nějaká data, či již nevypršel timeout pro provedení skriptu. Po ukončení skriptu je do databáze zapsán výsledek testu, hodnota testu předaná přes standardní výstup skriptu a chybové hlášky předané přes chybový výstup skriptu. 
 
 
-
-
 \subsection{Clean}
+Nyní když jsou všechny testy provedeny přichází fáze úklidu, kdy jsou ukončovány běžící programy a odstraňovány dočasné soubory. Nejdříve jsou ukončovány programy remote udržující spojení s testovanými zařízeními. Ukončení programu je provedeno spuštěním programu remote\_exit, který pouze odesílá příslušnému remote procesu komand ukončení aplikace. Po odlesání pokuny o ukončení všem programů remote je čekáno na ukončení všech programů remote a remote\_exit. V dalším kroku je provedeno odstranění všech projektů. Na každý projekt je zavolán program clear, který spouští příslušný skript pro úklid projektu. Úkol tohoto skriptu je odstranit nesmazatelné soubory. Například pokud je platforma překládána pomocí ltibu, tak je zavolán příkaz ./ltib -m distclean. Průběh tohoto skriptu je obdobně jako u skriptu checkou a compile logován do souborů v adresáři logs.  Po vyčištění všech platforem jsou všechny soubory v adresáři project odstraněny. Nakonec je uvolněna všechna dynamicky alokované paměť, uzavřen log a program testlab je ukončen.
 
 
 \endinput

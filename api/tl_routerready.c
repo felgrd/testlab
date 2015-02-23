@@ -23,7 +23,7 @@
  * @date 29.1.2015
  *
  * Program tl_ready wait for router run and answer seconds of wait. <br>
- * Example command: tl_ready 1. Answer: 20. Router wait 20 seconds.
+ * Example command: tl_routerready 1. Answer: 20. Program wait 20 seconds.
  *
  * @param -t <timeout> Maximal time for try ping to the router.
  * @param -i <ip> IP address of router.
