@@ -103,14 +103,21 @@ int main(int argc, char *argv[]){
 		result = pipe_request(router, request[i], commands[i], answer);
 
 		// Kontrola odpovedi
-		response_result |= !result;
+		if(result < 0){
+			response_result |= 1;
+		}
+
+		// Uvolneni pameti
+		free(commands[i]);
 	}
 
 	// Odeslani zadosti remote serveru
 	result = pipe_request(router, remote_reconnect, NULL, answer);
 
 	// Kontrola odpovedi
-	response_result |= !result;
+	if(result < 0){
+		response_result |= 1;
+	}
 
 	return response_result;
 }

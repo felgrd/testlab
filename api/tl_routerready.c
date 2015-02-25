@@ -16,7 +16,7 @@
 /**
  * @file tl_routerready.c
  *
- * @brief usage tl_routerready [-t <timeout>] [-i <ip> || <id>]
+ * @brief usage tl_routerready [-t <timeout>] <id>
  *
  * @author David Felgr
  * @version 1.0.0
@@ -26,7 +26,6 @@
  * Example command: tl_routerready 1. Answer: 20. Program wait 20 seconds.
  *
  * @param -t <timeout> Maximal time for try ping to the router.
- * @param -i <ip> IP address of router.
  * @param <id> ID of router.
  *
  * @return 0 - Answer is valid.<br>
@@ -43,7 +42,7 @@
 #define STATE_ERROR    4
 
 void help(void){
-	printf("usage tl_routerready [-t <timeout>] [-i <ip> || <id>]\n");
+	printf("usage tl_routerready [-t <timeout>] <id>\n");
 }
 
 int main(int argc, char *argv[]){
@@ -63,15 +62,10 @@ int main(int argc, char *argv[]){
   // Inicializace statavu a promenych
 	state = STATE_OFF;
 	timeout = DEFUALT_TIMEOUT;
-	ip[0] = '\0';
-	router = 0;
 
 	// Rozebirani parametru na prikazove radce
-	while ((parameter = getopt(argc, argv, "i:t:")) != -1) {
+	while ((parameter = getopt(argc, argv, "t:")) != -1) {
 		switch (parameter) {
-			case 'i':
-				strncpy(ip, optarg, sizeof(ip));
-				break;
 			case 't':
 				timeout = atoi(optarg);
 				if(timeout <= 0){
@@ -87,26 +81,23 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-  // Zjisteni ip adresy z identifikatoru routeru
-	if(strlen(ip) == 0){
-		// Kontrola parametru id routeru
-		if(optind >= argc){
-			help();
-			return 1;
-		}
+	// Kontrola parametru id routeru
+	if(optind >= argc){
+		help();
+		return 1;
+	}
 
-		// Kontola platneho hodnoty parametru
-		router = atoi(argv[optind]);
-		if(router <= 0){
-			help();
-			return 1;
-		}
+	// Kontola platneho hodnoty parametru
+	router = atoi(argv[optind]);
+	if(router <= 0){
+		help();
+		return 1;
+	}
 
-		// Zjisteni IP adresy routeru podle identifikatoru
-		result = pipe_request(router, remote_status_address, NULL, ip);
-		if(!result){
-			return 1;
-		}
+	// Zjisteni IP adresy routeru podle identifikatoru
+	result = pipe_request(router, remote_status_address, NULL, ip);
+	if(result < 0){
+		return 1;
 	}
 
 	// Zacatek kontroly stavu routeru
@@ -170,7 +161,7 @@ int main(int argc, char *argv[]){
 		}
 
 		// Kontrola odpovedi od routeru
-		if(strcmp(response, "connection") == 0){
+		if(result == 0 && strcmp(response, "connection") == 0){
 			state = STATE_CONNECT;
 		}
 	}

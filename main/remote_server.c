@@ -57,6 +57,9 @@ int main(int argc, char **argv ){
 	char           server_pipe_name[PATH_MAX + 1];
 	char           client_pipe_name[PATH_MAX + 1];
 
+	char           result_buffer[512];         // Navratovy kod funkce na zarizeni
+	int            result_code;
+
 	// Inicializace parametru
 	server_fifo_fd = -1;
 	telnet_fd = 0;
@@ -172,6 +175,14 @@ int main(int argc, char **argv ){
 					result = telnetExec(telnet_fd, remote_request.data, \
 					remote_response.data, sizeof(remote_response.data));
 
+					// Ziskani navratove hodnoty provedene funkce
+					if(result){
+						result = telnetExec(telnet_fd, "echo $?", result_buffer, \
+						sizeof(result_buffer));
+
+						remote_response.result_code = atoi(result_buffer);
+					}
+
 					// Uzavreni spojeni v pripade chyby
 					if(!result && telnet_fd){
 						telnetDone(telnet_fd);
@@ -187,6 +198,14 @@ int main(int argc, char **argv ){
 					// Provedeni prikazu
 					result = sshExec(ssh_fd, remote_request.data, \
 					remote_response.data, sizeof(remote_response.data));
+
+					// Ziskani navratove hodnoty provedene funkce
+					if(result){
+						result = sshExec(telnet_fd, "echo $?", result_buffer, \
+						sizeof(result_buffer));
+
+						remote_response.result_code = atoi(result_buffer);
+					}
 
 					// Uzavreni spojeni v pripade chyby
 					if(!result && ssh_fd){

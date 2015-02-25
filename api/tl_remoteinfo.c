@@ -30,8 +30,8 @@
  */
 
 void help(void){
-	fprintf(stderr, "usage tl_remoteinfo [-p] or [-i] or [-u] or [-s]"\
-	" or [-t] <id>\n");
+	fprintf(stderr, "usage tl_remoteinfo [-p] or [-i] or [-u] or [-s] or [-t]"  \
+	" <id>\n");
 }
 
 int main(int argc, char *argv[]){
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
 	result = pipe_request(router, request, NULL, answer);
 
 	// Kontrola odpovedi
-	if(result){
+	if(result >= 0){
 		printf("%s", answer);
 		return 0;
 	}

@@ -6,7 +6,7 @@
 #include "cspipe.h"
 
 // Defaultni cas zkouseni stavu routeru
-#define DEFUALT_TIMEOUT		300
+#define DEFUALT_TIMEOUT		120
 
 /**
 * @file tl_mobileready.c
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
     }
 
     // Kontrola odpovedi od routeru
-    if(result && strstr(response, "Unassigned") == NULL){
+    if(result == 0 && strstr(response, "Unassigned") == NULL){
       state = STATE_CONNECT;
     }else{
       sleep(1);

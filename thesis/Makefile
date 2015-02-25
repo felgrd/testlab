@@ -1,7 +1,6 @@
 all:
 	pdflatex felgr_david.tex
 	pdflatex felgr_david.tex
-	cp felgr_david.pdf /var/www/html/felgr_david.pdf
 
 start: all
 	evince felgr_david.pdf

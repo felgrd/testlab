@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
   result = pipe_request(router, remote_process, command, answer);
 
   // Kontrola odpovedi
-  if(!result){
+  if(result != 0){
     fprintf(stderr, "No answer from router.\r");
     return 1;
   }

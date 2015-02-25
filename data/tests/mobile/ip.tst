@@ -22,5 +22,5 @@ ROUTER1=$1
 # Cekani na pripojeni routeru do mobilni site
 tl_mobileready $ROUTER1
 
-#
+# Ukonceni skriptu s navratovou hodnotou tl_mobileready
 exit $?

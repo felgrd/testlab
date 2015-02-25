@@ -7,29 +7,33 @@
 #include "cspipe.h"
 
 /**
-* @file tl_changeparam.c
-*
-* @brief usage tl_changeparam -f <function> -p <param> [-r <profile>] <id> <value>
-*
-* @author David Felgr
-* @version 1.0.0
-* @date 11.2.2015
-*
-* Program tl_slog return system log of remote router. <br>
-* Example command: tl_slog 1. Answer: System log router with id 1.
-*
-* @param <id> ID of router.
-*
-* @return 0 - Answer is valid.<br>
-*         1 - Parameter is not valid.<br>
-*         2 - Timeout is expired.
-*
-* @cond
-*/
+ * @file tl_changeparam.c
+ *
+ * @brief usage tl_changeparam -f \<function\> -p \<param\> [-r \<profile\>]
+ * \<id\> \<value\>
+ *
+ * @author David Felgr
+ * @version 1.0.0
+ * @date 11.2.2015
+ *
+ * Program tl_changeparam change configuration parameter in router. <br>
+ * Example command: tl_changeparam -f ppp -p apn 1 conel.agnep.cz.
+ * Answer: Change parameter APN im mobile network configuration
+ * to conel.agnep.cz.
+ *
+ * @param <id> ID of router.
+ *
+ * @return 0 - Answer is valid.<br>
+ *         1 - Parameter is not valid.<br>
+ *         2 - Comunicate with router error.<br>
+ *         3 - Change parameter error.
+ *
+ * @cond
+ */
 
 void help(void){
-  fprintf(stderr, "usage tl_changeparam -f <function> -p <param> \
-  [-r <profile>] <id> <value>\n");
+  fprintf(stderr, "usage tl_changeparam -f <function> -p <param>" \
+  "[-r <profile>] <id> <value>\n");
 }
 
 char *toUpperCase(char *text){
@@ -149,15 +153,19 @@ int main(int argc, char *argv[]){
   // Odeslani zadosti remote serveru
   result = pipe_request(router, remote_process, command, answer);
 
-  // Kontrola odpovedi
-  if(!result){
-    fprintf(stderr, "No answer from router.\r");
-    return 1;
-  }
-
   // Uvolneni pameti
   free(function_upper);
   free(function_lower);
+
+  // Kontrola odpovedi
+  if(result < 0){
+    fprintf(stderr, "Comunaction error: %s\n", answer);
+    return 2;
+  }else if(result > 0){
+    fprintf(stderr, "Error with change item %s in configuration %s to value" \
+    " %s\n", parameter, function, value);
+    return 3;
+  }
 
   return 0;
 }

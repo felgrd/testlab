@@ -145,13 +145,18 @@ int pipe_request(int pid, client_request type, char *request, char *response){
 	// Ukonceni komunikace
 	client_ending(pid, fifo_fd);
 
-	// Ziskani vysledku
-	if(remote_response.request == remote_response_ok){
-		strcpy(response, remote_response.data);
-	}else{
-		fprintf(stderr, "%s\n", remote_response.data);
-		return 0;
+	// Kopirovani vzsledku do bufferu
+	strcpy(response, remote_response.data);
+
+	// Kontrola validni odpovedi
+	if(remote_response.request != remote_response_ok){
+		return  -1;
 	}
 
-	return 1;
+	// Navrat navratoveho kodu prikazu v testovanem zarizeni
+	if(type == remote_process){
+		return remote_response.result_code;
+	}
+
+	return 0;
 }

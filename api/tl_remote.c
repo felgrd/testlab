@@ -19,8 +19,8 @@
  * @param <id> Router ID of your tested router.
  * @param <command> The command that will be execute in the router.
  *
- * @returns 0 - Command is execute.<br>
- *          1 - Commnad is not execute.
+ * @returns 0-119 - Command is execute with same return value.<br>
+ *          120   - Commnad is not execute.
  *
  * @cond
  */
@@ -37,24 +37,28 @@ int main(int argc, char *argv[]){
 	// Kontrola parametru command
 	if(argc != 3){
 		help();
-		return 1;
+		return 120;
 	}
 
 	// Nazev serverove roury
 	router = atoi(argv[1]);
 	if(router <= 0){
 		help();
-		return 1;
+		return 120;
 	}
 
 	// Odeslani zadosti remote serveru
 	result = pipe_request(router, remote_process, argv[2], answer);
 
 	// Kontrola odpovedi
-	if(result){
-		printf("%s", answer);
+	if(result <= 0){
+		fprintf(stderr, "%s\n", answer);
+		return 120;
 	}
 
+	// Tisk korektni odpovedi
+	printf("%s\n", answer);
+
 	// Ukonceni s navratovou hodnotou z remote serveru
-	return !result;
+	return result;
 }

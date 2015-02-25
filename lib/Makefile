@@ -29,7 +29,7 @@ $(LIB_CSPIPE): $(OBJ_LIB_CSPIPE)
 
 clean:
 	rm -rf $(LIB_DATABASE) $(OBJ_LIB_DATABASE)
-	rm -rf $(LIB_UTLIS) $(OBJ_LIB_UTILS)
+	rm -rf $(LIB_UTILS) $(OBJ_LIB_UTILS)
 	rm -rf $(LIB_CSPIPE) $(OBJ_LIB_CSPIPE)
 
 install: all

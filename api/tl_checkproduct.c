@@ -14,10 +14,11 @@
  * Program returns firmware name of tested router. <br>
  * Example command: tl_checkproduct 4. Answer: LR77-v2.
  *
- * @param <id> Router ID of your tested router.
+ * @param \<id\> Router ID of tested router.
  *
  * @return 0 - Name of router firmware is valid<br>
- *         1 - Name of router firmware is not valid
+ *         1 - Parameter is not valid<br>
+ *         2 - Name of router firmware is not valid
  *
  * @cond
  */
@@ -32,12 +33,14 @@ int main(int argc, char *argv[]){
 
 	// Kontrola poctu parametru
 	if(argc != 2){
+		help();
 		return 1;
 	}
 
 	// Kontrola parametru id routeru
 	router = atoi(argv[1]);
 	if(router <= 0){
+		help();
 		return 1;
 	}
 
@@ -46,7 +49,7 @@ int main(int argc, char *argv[]){
 
 	// Kontrola vysledku dotazu
 	if(product == NULL){
-		return 1;
+		return 2;
 	}
 
 	// Tisk vysledku

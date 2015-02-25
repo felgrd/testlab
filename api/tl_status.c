@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
 	result = pipe_request(router, remote_process, request, response);
 
 	// Kontrola odpovedi
-	if(!result){
+	if(result != 0){
 		return 2;
 	}
 

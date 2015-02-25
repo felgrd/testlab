@@ -36,7 +36,8 @@
  */
 
 void help(void){
-  printf("usage tl_updateconf -f <config> -t <function> [-d <confdir>] <router>\n");
+  printf("usage tl_updateconf -f <config> -t <function> [-d <confdir>] " \
+  "<router>\n");
 }
 
 int main(int argc, char *argv[]){
@@ -99,21 +100,21 @@ int main(int argc, char *argv[]){
 
   // Kontola platneho hodnoty parametru
   router = atoi(argv[optind]);
-  if(router <= 0){
+  if(router < 0){
     help();
     return 1;
   }
 
   // Ziskani IP adresy
   result = pipe_request(router, remote_status_address, NULL, ip);
-  if(!result){
+  if(result < 0){
     fprintf(stderr, "No response from router.\n");
     return 1;
   }
 
   // Ziskani komunikacniho protokolu
   result = pipe_request(router, remote_status_protocol, NULL, protocol);
-  if(!result){
+  if(result < 0){
     fprintf(stderr, "No response from router.\n");
     return 1;
   }
@@ -127,14 +128,14 @@ int main(int argc, char *argv[]){
 
   // Ziskani prihlasovaciho jmena
   result = pipe_request(router, remote_status_user, NULL, user);
-  if(!result){
+  if(result < 0){
     fprintf(stderr, "No response from router.\n");
     return 1;
   }
 
   // Ziskani prihlasovaciho hesla
   result = pipe_request(router, remote_status_pass, NULL, pass);
-  if(!result){
+  if(result < 0){
     fprintf(stderr, "No response from router.\n");
     return 1;
   }

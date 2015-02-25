@@ -39,6 +39,7 @@ typedef enum{
 typedef struct message_remote {
 	pid_t           client_pid;               ///< Id of router
 	client_request  request;                  ///< Type of request
+	int             result_code;              ///< Return code from tested device
 	char            data[PIPE_BUFFER_SIZE];   ///< Buffer for data
 }message_remote;
 
