@@ -90,8 +90,11 @@ int main(int argc, char *argv[]){
   // Kontrola odpovedi
   if(result != 0){
     fprintf(stderr, "No answer from router.\r");
-    return 1;
+    return 2;
   }
+
+  // Inicializace navratoveho kodu
+  result = 0;
 
   // Prvni radek
   line = strtok(answer, "\n");
@@ -102,12 +105,13 @@ int main(int argc, char *argv[]){
     // Vypis urcitych radku logu
     if(program == NULL || strstr(line, program) != NULL){
       printf("%s", line);
+      result++;
     }
 
     // Dalsi radek logu
     line = strtok(NULL, "\r");
   }
 
-  // Ukonceni s navratovou hodnotou z remote serveru
-  return !result;
+  // Ukonceni s navratovou hodnotou
+  return result > 0 ? 0 : 3;
 }

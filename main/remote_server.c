@@ -201,7 +201,7 @@ int main(int argc, char **argv ){
 
 					// Ziskani navratove hodnoty provedene funkce
 					if(result){
-						result = sshExec(telnet_fd, "echo $?", result_buffer, \
+						result = sshExec(ssh_fd, "echo $?", result_buffer, \
 						sizeof(result_buffer));
 
 						remote_response.result_code = atoi(result_buffer);

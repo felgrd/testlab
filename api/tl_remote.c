@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
 	result = pipe_request(router, remote_process, argv[2], answer);
 
 	// Kontrola odpovedi
-	if(result <= 0){
+	if(result < 0){
 		fprintf(stderr, "%s\n", answer);
 		return 120;
 	}

@@ -28,9 +28,9 @@ $(LIB_CSPIPE): $(OBJ_LIB_CSPIPE)
 	$(CC) -shared -o $(LIB_CSPIPE) $(OBJ_LIB_CSPIPE)
 
 clean:
-	rm -rf $(LIB_DATABASE) $(OBJ_LIB_DATABASE)
-	rm -rf $(LIB_UTILS) $(OBJ_LIB_UTILS)
-	rm -rf $(LIB_CSPIPE) $(OBJ_LIB_CSPIPE)
+	rm -f $(LIB_DATABASE) $(OBJ_LIB_DATABASE)
+	rm -f $(LIB_UTILS) $(OBJ_LIB_UTILS)
+	rm -f $(LIB_CSPIPE) $(OBJ_LIB_CSPIPE)
 
 install: all
 	sudo cp -u $(LIB_UTILS) /usr/lib/$(LIB_UTILS)
@@ -43,10 +43,10 @@ install: all
 	sudo cp -u $(H_LIB_CSPIPE) /usr/include/testlab/$(H_LIB_CSPIPE)
 
 uinstall:
-	sudo rm -rf /usr/lib/libtl_utils.so
-	sudo rm -rf /usr/lib/libtl_database.so
-	sudo rm -rf /usr/lib/libtl_cspipe.so
-	sudo rm -rf /usr/include/testlab
+	sudo rm -f /usr/lib/libtl_utils.so
+	sudo rm -f /usr/lib/libtl_database.so
+	sudo rm -f /usr/lib/libtl_cspipe.so
+	sudo rm -f /usr/include/testlab
 
 remote-install: all
 	scp $(LIB_UTILS) $(SERVER)@$(USER):/opt/testlab/lib/$(LIB_UTILS)

@@ -136,6 +136,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 	char            *stop;
 	char            rcvBuffer[SSH_RCV_BUFFER];
 	char            strBuffer[SSH_STR_BUFFER];
+	char            trBuffer[SSH_TR_BUFFER];
 	fd_set          read_fd_set;
 	int             result;
 	struct timeval  tv;
@@ -150,10 +151,11 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 	strBuffer[0] = '\0';
 
 	// Pripojeni konce radku k zadosti
-	strcat(request, "\r\n");
+	strcpy(trBuffer, request);
+	strcat(trBuffer, "\r\n");
 
 	// Odeslani zadosti programu PLINK
-	rcvLength = write(pipes_stdin[1], request, strlen(request));
+	rcvLength = write(pipes_stdin[1], trBuffer, strlen(trBuffer));
 
 	// Nastaveni timeoutu prijmu dat
 	tv.tv_sec = SSH_RECEIVE_TIMEOUT;
@@ -200,7 +202,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 	}while(strstr(strBuffer, "\r\n# ") == NULL);
 
 	// Zpracovani odpovedi
-	start = strstr(strBuffer, request);
+	start = strstr(strBuffer, trBuffer);
 	stop = strstr(strBuffer, "\r\n# ");
 
 	// Kontrola validni odpovedi
@@ -209,7 +211,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 		return 0;
 	}
 
-	start += strlen(request);
+	start += strlen(trBuffer);
 
 	// Kontrola existence odpovedi
 	if(start == (stop + 2)) {
