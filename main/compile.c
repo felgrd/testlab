@@ -196,7 +196,7 @@ int main(int argc, char *argv[]){
 	database_ins_build_platform(release_id, platform_id, platform_build);
 
 	// Uvolneni pameti
-	database_result_free(products);
+	database_results_free(products);
 
 	// Uzavreni logu
 	closelog();

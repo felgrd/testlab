@@ -13,7 +13,7 @@
 
 # Ukonceni skriptu v pripade chyby
 function umts_error {
-  tl_changeparam -f ppp -p nettype $ROUTER1 0
+  tl_paramchange -f ppp -p nettype $ROUTER1 0
   echo $1 1>&2
   exit 1
 }
@@ -28,7 +28,7 @@ fi
 ROUTER1=$1
 
 # Zmena typu site na UMTS
-tl_changeparam -f ppp -p nettype $ROUTER1 2
+tl_paramchange -f ppp -p nettype $ROUTER1 2
 if [ $? -ne 0 ]; then
   umts_error "Router does not change parameter Network type."
 fi
@@ -57,7 +57,7 @@ if [ $NETTYPE != "UMTS" ]; then
 fi
 
 # Vraceni nastaveni
-tl_changeparam -f ppp -p nettype $ROUTER1 0
+tl_paramchange -f ppp -p nettype $ROUTER1 0
 if [ $? -ne 0 ]; then
   umts_error "Router does not change parameter Network type."
 fi

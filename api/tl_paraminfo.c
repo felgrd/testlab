@@ -7,33 +7,32 @@
 #include "cspipe.h"
 
 /**
- * @file tl_changeparam.c
- *
- * @brief usage tl_changeparam -f \<function\> -p \<param\> [-r \<profile\>]
- * \<id\> \<value\>
- *
- * @author David Felgr
- * @version 1.0.0
- * @date 11.2.2015
- *
- * Program tl_changeparam change configuration parameter in router. <br>
- * Example command: tl_changeparam -f ppp -p apn 1 conel.agnep.cz.
- * Answer: Change parameter APN im mobile network configuration
- * to conel.agnep.cz.
- *
- * @param <id> ID of router.
- *
- * @return 0 - Answer is valid.<br>
- *         1 - Parameter is not valid.<br>
- *         2 - Comunicate with router error.<br>
- *         3 - Change parameter error.
- *
- * @cond
- */
+* @file tl_paraminfo.c
+*
+* @brief usage tl_paraminfo -f \<function\> -p \<param\> [-r \<profile\>]
+* \<id\>
+*
+* @author David Felgr
+* @version 1.0.0
+* @date 11.2.2015
+*
+* Program tl_paraminfo informs about configuration parameter in router. <br>
+* Example command: tl_paraminfo -f ppp -p apn 1.
+* Answer: conel.agnep.cz.
+*
+* @param <id> ID of router.
+*
+* @return 0 - Answer is valid.<br>
+*         1 - Parameter is not valid.<br>
+*         2 - Comunicate with router error.<br>
+*         3 - Change parameter error.
+*
+* @cond
+*/
 
 void help(void){
-  fprintf(stderr, "usage tl_changeparam -f <function> -p <param>" \
-  "[-r <profile>] <id> <value>\n");
+  fprintf(stderr, "usage tl_paramchange -f <function> -p <param>" \
+  "[-r <profile>] <id> \n");
 }
 
 char *toUpperCase(char *text){
@@ -67,7 +66,6 @@ int main(int argc, char *argv[]){
   char    *function;                  // Funkce u ktere bude zmenen parametr
   char    *parameter;                 // Parametr ktery bude menen
   char    *profile;                   // Profil kde bude parametr menen
-  char    *value;                     // Nova hodnota parametru
   char    *function_upper;            // Funkce prevedena na velka pismena
   char    *function_lower;            // Funkce prevedena na mala pismena
 
@@ -90,10 +88,10 @@ int main(int argc, char *argv[]){
         break;
       case '\?':
         help();
-      return 1;
-        case ':':
+        return 1;
+      case ':':
         help();
-      return 1;
+        return 1;
     }
   }
 
@@ -126,15 +124,6 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  // Kontrola parametru hodnota konfigurace
-  if(++optind >= argc){
-    help();
-    return 1;
-  }
-
-  // Nova hodnota polozky konfigurace
-  value = argv[optind];
-
   // Prevedeni funkce na velke pismena
   parameter = toUpperCase(parameter);
 
@@ -147,8 +136,8 @@ int main(int argc, char *argv[]){
   function_lower = toLowerCase(function_lower);
 
   // Sestaveni komandu
-  sprintf(command, "sed -e \"s/\\(%s_%s=\\).*/\\1%s/\" -i /etc/%s/settings.%s", \
-  function_upper, parameter, value, profile, function_lower);
+  sprintf(command, "grep %s_%s= /etc/%s/settings.%s", function_upper, \
+  parameter, profile, function_lower);
 
   // Odeslani zadosti remote serveru
   result = pipe_request(router, remote_process, command, answer);
@@ -162,10 +151,13 @@ int main(int argc, char *argv[]){
     fprintf(stderr, "Comunaction error: %s\n", answer);
     return 2;
   }else if(result > 0){
-    fprintf(stderr, "Error with change item %s in configuration %s to value" \
-    " %s\n", parameter, function, value);
+    fprintf(stderr, "Error with search item %s in configuration %s.\n", \
+    parameter, function);
     return 3;
   }
+
+  // Tisk odpovedi
+  printf("%s", strchr(answer, '=') + 1);
 
   return 0;
 }

@@ -262,7 +262,7 @@ int main(int argc, char *argv[]){
 
 		// Uvolneni pameti
 		if(procedures != NULL){
-			database_result_free(procedures);
+			database_results_free(procedures);
 			procedures = NULL;
 		}
 
@@ -276,7 +276,7 @@ int main(int argc, char *argv[]){
 
 	// Uvolneni pameti
 	if(functions != NULL){
-		database_result_free(functions);
+		database_results_free(functions);
 		functions = NULL;
 	}
 

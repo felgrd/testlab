@@ -35,11 +35,23 @@ OBJ_KLOG = tl_klog.o
 BIN_RLOG = tl_rlog
 OBJ_RLOG = tl_rlog.o
 
-BIN_CHANGE_PARAM = tl_changeparam
-OBJ_CHANGE_PARAM = tl_changeparam.o
+BIN_CHANGE_PARAM = tl_paramchange
+OBJ_CHANGE_PARAM = tl_paramchange.o
+
+BIN_INFO_PARAM = tl_paraminfo
+OBJ_INFO_PARAM = tl_paraminfo.o
 
 BIN_MOBILE_READY = tl_mobileready
 OBJ_MOBILE_READY = tl_mobileready.o
+
+BIN_SIM = tl_sim
+OBJ_SIM = tl_sim.o
+
+BIN_PORT = tl_port
+OBJ_PORT = tl_port.o
+
+BIN_INTERFACE = tl_interface
+OBJ_INTERFACE = tl_interface.o
 
 CFLAGS = -Wall -I../lib -I/usr/include/mysql
 LIB_UTILS = -ltl_utils
@@ -47,9 +59,10 @@ LIB_DATABASE = -ltl_database
 LIB_CSPIPE = -ltl_cspipe
 
 all: $(BIN_CHECK_PRODUCT) $(BIN_REMOTE) $(BIN_REMOTE_CHANGE) \
-	 $(BIN_REMOTE_INFO) $(BIN_STATUS) $(BIN_UPDATE_FW) \
-	 $(BIN_UPDATE_CONF) $(BIN_ROUTER_READY) $(BIN_SLOG) $(BIN_RLOG) $(BIN_KLOG) \
-	 $(BIN_CHANGE_PARAM) $(BIN_MOBILE_READY)
+	$(BIN_REMOTE_INFO) $(BIN_STATUS) $(BIN_UPDATE_FW) \
+	$(BIN_UPDATE_CONF) $(BIN_ROUTER_READY) $(BIN_SLOG) $(BIN_RLOG) $(BIN_KLOG) \
+	$(BIN_CHANGE_PARAM) $(BIN_MOBILE_READY) $(BIN_INTERFACE) $(BIN_PORT) \
+	$(BIN_SIM) $(BIN_INFO_PARAM)
 
 $(BIN_REMOTE) : $(OBJ_REMOTE)
 	$(CC) -Wall -o $(BIN_REMOTE) $(OBJ_REMOTE) $(LIB_CSPIPE)
@@ -87,8 +100,20 @@ $(BIN_RLOG) : $(OBJ_RLOG)
 $(BIN_CHANGE_PARAM) : $(OBJ_CHANGE_PARAM)
 	$(CC) -Wall -o $(BIN_CHANGE_PARAM) $(OBJ_CHANGE_PARAM) $(LIB_CSPIPE)
 
+$(BIN_INFO_PARAM) : $(OBJ_INFO_PARAM)
+	$(CC) -Wall -o $(BIN_INFO_PARAM) $(OBJ_INFO_PARAM) $(LIB_CSPIPE)
+
 $(BIN_MOBILE_READY) : $(OBJ_MOBILE_READY)
 	$(CC) -Wall -o $(BIN_MOBILE_READY) $(OBJ_MOBILE_READY) $(LIB_CSPIPE)
+
+$(BIN_SIM) : $(OBJ_SIM)
+	$(CC) -Wall -o $(BIN_SIM) $(OBJ_SIM) $(LIB_DATABASE)
+
+$(BIN_PORT) : $(OBJ_PORT)
+	$(CC) -Wall -o $(BIN_PORT) $(OBJ_PORT) $(LIB_DATABASE)
+
+$(BIN_INTERFACE) : $(OBJ_INTERFACE)
+	$(CC) -Wall -o $(BIN_INTERFACE) $(OBJ_INTERFACE) $(LIB_DATABASE)
 
 clean:
 	rm -f $(BIN_REMOTE) $(OBJ_REMOTE)
@@ -103,7 +128,11 @@ clean:
 	rm -f $(BIN_KLOG) $(OBJ_KLOG)
 	rm -f $(BIN_RLOG) $(OBJ_RLOG)
 	rm -f $(BIN_CHANGE_PARAM) $(OBJ_CHANGE_PARAM)
+	rm -f $(BIN_INFO_PARAM) $(OBJ_INFO_PARAM)
 	rm -f $(BIN_MOBILE_READY) $(OBJ_MOBILE_READY)
+	rm -f $(BIN_SIM) $(OBJ_SIM)
+	rm -f $(BIN_PORT) $(OBJ_PORT)
+	rm -f $(BIN_INTERFACE) $(OBJ_INTERFACE)
 
 install: all
 	sudo cp -u $(BIN_REMOTE) /usr/bin/$(BIN_REMOTE)
@@ -118,7 +147,11 @@ install: all
 	sudo cp -u $(BIN_KLOG) /usr/bin/$(BIN_KLOG)
 	sudo cp -u $(BIN_RLOG) /usr/bin/$(BIN_RLOG)
 	sudo cp -u $(BIN_CHANGE_PARAM) /usr/bin/$(BIN_CHANGE_PARAM)
+	sudo cp -u $(BIN_INFO_PARAM) /usr/bin/$(BIN_INFO_PARAM)
 	sudo cp -u $(BIN_MOBILE_READY) /usr/bin/$(BIN_MOBILE_READY)
+	sudo cp -u $(BIN_SIM) /usr/bin/$(BIN_SIM)
+	sudo cp -u $(BIN_PORT) /usr/bin/$(BIN_PORT)
+	sudo cp -u $(BIN_INTERFACE) /usr/bin/$(BIN_INTERFACE)
 
 uinstall:
 	sudo rm -f /usr/bin/$(BIN_REMOTE)
@@ -133,7 +166,11 @@ uinstall:
 	sudo rm -f /usr/bin/$(BIN_KLOG)
 	sudo rm -f /usr/bin/$(BIN_RLOG)
 	sudo rm -f /usr/bin/$(BIN_CHANGE_PARAM)
+	sudo rm -f /usr/bin/$(BIN_INFO_PARAM)
 	sudo rm -f /usr/bin/$(BIN_MOBILE_READY)
+	sudo rm -f /usr/bin/$(BIN_SIM)
+	sudo rm -f /usr/bin/$(BIN_PORT)
+	sudo rm -f /usr/bin/$(BIN_INTERFACE)
 
 remote-install: all
 	scp $(BIN_REMOTE) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_REMOTE)
@@ -148,4 +185,8 @@ remote-install: all
 	scp $(BIN_KLOG) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_KLOG)
 	scp $(BIN_RLOG) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_RLOG)
 	scp $(BIN_CHANGE_PARAM) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_CHANGE_PARAM)
+	scp $(BIN_INFO_PARAM) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_INFO_PARAM)
 	scp $(BIN_MOBILE_READY) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_MOBILE_READY)
+	scp $(BIN_SIM) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_SIM)
+	scp $(BIN_PORT) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_PORT)
+	scp $(BIN_INTERFACE) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_INTERFACE)

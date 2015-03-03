@@ -4,22 +4,22 @@
 #include "database.h"
 
 /**
- * @file tl_sim.c
+ * @file tl_interface.c
  *
- * @brief usage tl_sim [-i] [-n] [-o] [-p \<position\>] \<id\>
+ * @brief usage tl_interface [-i] [-n] [-p] [-t \<type\>] \<id\>
  *
  * @author David Felgr
  * @version 1.0.0
  * @date 3.2.2015
  *
- * Program returns selected information about SIM cards in tested routers. <br>
- * Example command: tl_sim -i 4. Answer: 739541339.
+ * Program returns selected information about interface in tested routers. <br>
+ * Example command: tl_interface -i 4. Answer: 172.16.5.25.
  *
- * @param -i Program returns IP address of sim card.
- * @param -n Program return phone number of SIM card.
- * @param -o Program return operator of SIM card.
- * @param -p\<postion\> Parameter position selected which SIM card in router is
- * selected. Default position is 1.
+ * @param -i Program returns IP address of interface.
+ * @param -n Program return netmask of interface.
+ * @param -p Program return port of switch.
+ * @param -t\<type\> Parameter type selected which interface in router is
+ * selected. Default interface is Primary Lan (1).
  * @param \<id\> Router ID of tested router.
  *
  * @return 0 - Return value is valid<br>
@@ -30,33 +30,33 @@
  */
 
 void help(void){
-  fprintf(stderr, "usage tl_sim [-i] [-n] [-o] [-p <position>] <id>\n");
+  fprintf(stderr, "usage tl_interface [-i] [-n] [-p] [-t <type>] <id>\n");
 }
 
 int main(int argc, char *argv[]){
   int     router;             // Identifikator routeru
   int     parameter;          // Zpracovani prepinacu programu
   int     command;            // Příkaz provedený routerem
-  int     position;           // Pozice vybrane SIM karty
-  char    **sim;              // Informace o SIM karte
+  int     position;           // Typ pozadovaneho interfacu
+  char    **interface;        // Informace o interfacu
 
   // Inicializace stavu promenych
-  command = DB_SIMS_ID;
+  command = DB_INTERFACES_ID;
   position = 1;
 
   // Rozbor parametru na prikazove radce
-  while ((parameter = getopt(argc, argv, "inop:")) != -1){
+  while ((parameter = getopt(argc, argv, "inpt:")) != -1){
     switch (parameter){
       case 'i':
-        command = DB_SIMS_IP;
+        command = DB_INTERFACES_IP;
         break;
       case 'n':
-        command = DB_SIMS_NUMBER;
-        break;
-      case 'o':
-        command = DB_SIMS_OPERATOR;
+        command = DB_INTERFACES_NETMASK;
         break;
       case 'p':
+        command = DB_INTERFACES_PORT;
+        break;
+      case 't':
         position = atoi(optarg);
         if(position <= 0){
           help();
@@ -86,18 +86,18 @@ int main(int argc, char *argv[]){
   }
 
   // Ziskani data z databaze
-  sim = database_sel_sim(router, position);
+  interface = database_sel_interface(router, position);
 
   // Kontrola dat z databaze
-  if(sim == NULL || sim[command] == NULL){
+  if(interface == NULL || interface[command] == NULL){
     return 2;
   }
 
   // Tisk vysledku
-  printf("%s", sim[command]);
+  printf("%s", interface[command]);
 
   // Uvolneni pameti
-  database_result_free(sim);
+  database_result_free(interface);
 
   return 0;
 }

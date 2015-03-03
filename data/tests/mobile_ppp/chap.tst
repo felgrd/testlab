@@ -13,7 +13,7 @@
 
 # Ukonceni skriptu v pripade chyby
 function chap_error {
-  tl_changeparam -f ppp -p auth $ROUTER1 0
+  tl_paramchange -f ppp -p auth $ROUTER1 0
   echo $1 1>&2
   exit 1
 }
@@ -28,7 +28,7 @@ fi
 ROUTER1=$1
 
 # Zmena autentizace na CHAP
-tl_changeparam -f ppp -p auth $ROUTER1 2
+tl_paramchange -f ppp -p auth $ROUTER1 2
 if [ $? -ne 0 ]; then
   chap_error "Router does not change parameter Authentication."
 fi
@@ -52,7 +52,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Vraceni nastaveni
-tl_changeparam -f ppp -p auth $ROUTER1 0
+tl_paramchange -f ppp -p auth $ROUTER1 0
 if [ $? -ne 0 ]; then
   chap_error "Router does not change parameter Authentication."
 fi

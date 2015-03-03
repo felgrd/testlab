@@ -8,54 +8,73 @@
  */
 
 /// Database server.
-#define DB_SERVER				"localhost"
+#define DB_SERVER            "localhost"
 /// User name to database server.
-#define DB_USER					"testlab"
+#define DB_USER              "testlab"
 /// Passwor to database server.
-#define DB_PASSWORD				"golias48"
+#define DB_PASSWORD          "golias48"
 /// Name of database.
-#define DB_DATABASE				"test"
+#define DB_DATABASE          "test"
 /// Socket name for connect to database. NULL - Local database.
-#define DB_SOCKET_NAME			NULL
+#define DB_SOCKET_NAME       NULL
 /// Port number for connect to database. 0 - Local database.
-#define DB_PORT_NUMBER			0
+#define DB_PORT_NUMBER       0
 /// Connection flags for connect to database. 0 - Local database.
-#define DB_CONNECTION_FLAGS		0
+#define DB_CONNECTION_FLAGS  0
 
 /// Table platform, column idplatforms.
-#define DB_PLATFORMS_ID		0
+#define DB_PLATFORMS_ID      0
 /// Table platform, column name.
-#define DB_PLATFORMS_NAME	1
+#define DB_PLATFORMS_NAME    1
 
 /// Table products, column idproducts.
-#define DB_PRODUCTS_ID			0
+#define DB_PRODUCTS_ID       0
 /// Table products, column name
-#define DB_PRODUCTS_NAME		1
+#define DB_PRODUCTS_NAME     1
 
 /// Table Routers, column idrouters
-#define DB_ROUTERS_ID			0
+#define DB_ROUTERS_ID         0
 /// Table Routers, column name
-#define DB_ROUTERS_NAME			1
+#define DB_ROUTERS_NAME       1
 /// Table Routers, column port
-#define DB_ROUTERS_PORT			2
+#define DB_ROUTERS_PORT       2
 /// Table Routers, column address
-#define DB_ROUTERS_ADDRESS		3
+#define DB_ROUTERS_ADDRESS    3
 /// Table Routers, column protocol
-#define DB_ROUTERS_PROTOCOL		4
+#define DB_ROUTERS_PROTOCOL   4
 
 /// Table Functions, column idfunctions
-#define DB_FUNCTIONS_ID			0
+#define DB_FUNCTIONS_ID       0
 /// Table Functions, column name
-#define DB_FUNCTIONS_NAME		1
+#define DB_FUNCTIONS_NAME     1
 /// Table Functions, column order
-#define DB_FUNCTIONS_ORDER		2
+#define DB_FUNCTIONS_ORDER    2
 
 /// Table procedures, column idprocedures
-#define DB_PROCEDURES_ID		0
+#define DB_PROCEDURES_ID      0
 /// Table procedures, column name
-#define DB_PROCEDURES_NAME		1
+#define DB_PROCEDURES_NAME    1
 /// Table procedures, column unit
-#define DB_PROCEDURES_UNIT		2
+#define DB_PROCEDURES_UNIT    2
+
+/// Table sims, column idsims
+#define DB_SIMS_ID            0
+/// Table sims, column ip
+#define DB_SIMS_IP            1
+/// Table sims, column number
+#define DB_SIMS_NUMBER        2
+/// Table sims, column operator
+#define DB_SIMS_OPERATOR      3
+
+/// Table interfaces, column idinterfaces
+#define DB_INTERFACES_ID      0
+/// Table interfaces, column ip
+#define DB_INTERFACES_IP      1
+/// Table interfaces, column netmask
+#define DB_INTERFACES_NETMASK 2
+/// Table interfaces, column port
+#define DB_INTERFACES_PORT    3
+
 
 /**
  * Function database_connect connect to the database and return pointer
@@ -212,9 +231,15 @@ char*** database_sel_procedures(int function);
 
 char* database_sel_product(int router);
 
+char** database_sel_sim(int router, int position);
+
+char** database_sel_interface(int router, int position);
+
 int database_sel_timeout(int state);
 
-void database_result_free(char ***items);
+void database_result_free(char **items);
+
+void database_results_free(char ***items);
 
 int database_result_size(char ***items);
 

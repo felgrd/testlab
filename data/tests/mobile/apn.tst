@@ -12,8 +12,8 @@
 ##          1 - APN is not changed.
 
 # Ukonceni skriptu v pripade chyby
-function apn_error {
-  tl_changeparam -f ppp -p APN $ROUTER1 conel.agnep.cz
+function error {
+  tl_paramchange -f ppp -p APN $ROUTER1 conel.agnep.cz
   echo $1 1>&2
   exit 1
 }
@@ -28,56 +28,56 @@ fi
 ROUTER1=$1
 
 # Zmena APN na conel.agnep.cz
-tl_changeparam -f ppp -p APN $ROUTER1 ""
+tl_paramchange -f ppp -p APN $ROUTER1 ""
 if [ $? -ne 0 ]; then
-  apn_error "Router does not change parameter APN."
+  error "Router does not change parameter APN."
 fi
 
 # Restart ppp
 tl_remote $ROUTER1 "service ppp restart" >/dev/null
 if [ $? -ne 0 ]; then
-  apn_error "Router does not restart service ppp."
+  error "Router does not restart service ppp."
 fi
 
 # Cekani na spojeni
 tl_mobileready $ROUTER1 >/dev/null
 if [ $? -ne 0 ]; then
-  apn_error "Router does not connect to mobile network."
+  error "Router does not connect to mobile network."
 fi
 
 # Zjisteni IP adresy prazdneho APN
 IP_BLANK=$(tl_status $ROUTER1 ppp "IP Address")
 if [ -z $IP_BLANK ] || [ $IP_BLANK == "Unassigned" ]; then
-  apn_error "Router has not assigned IP Address with empty APN."
+  error "Router has not assigned IP Address with empty APN."
 fi
 
 # Zmena APN na conel.agnep.cz
-tl_changeparam -f ppp -p APN $ROUTER1 conel.agnep.cz
+tl_paramchange -f ppp -p APN $ROUTER1 conel.agnep.cz
 if [ $? -ne 0 ]; then
-  apn_error "Router does not change parameter APN."
+  error "Router does not change parameter APN."
 fi
 
 # Restart ppp
 tl_remote $ROUTER1 "service ppp restart" >/dev/null
 if [ $? -ne 0 ]; then
-  apn_error "Router does not restart service ppp."
+  error "Router does not restart service ppp."
 fi
 
 # Cekani na spojeni
 tl_mobileready $ROUTER1 >/dev/null
 if [ $? -ne 0 ]; then
-  apn_error "Router does not connect to mobile network."
+  error "Router does not connect to mobile network."
 fi
 
-# Zjisteni IP adresy prazdneho APN
+# Zjisteni IP adresy prazdneho APN (internet)
 IP_AGNEP=$(tl_status $ROUTER1 ppp "IP Address")
 if [ -z $IP_AGNEP ] || [ $IP_AGNEP == "Unassigned" ]; then
-  apn_error "Router has not assigned IP Address with conel.agnep.cz APN."
+  error "Router has not assigned IP Address with conel.agnep.cz APN."
 fi
 
 # Kontrola zmeny APN
 if [ IP_BLANK == IP_AGNEP ]; then
-  apn_error "APN is not changed."
+  error "APN is not changed."
 fi
 
 # Uspesne ukonceni testu

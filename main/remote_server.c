@@ -56,9 +56,7 @@ int main(int argc, char **argv ){
 	message_remote remote_response;          // Format posilanych dat
 	char           server_pipe_name[PATH_MAX + 1];
 	char           client_pipe_name[PATH_MAX + 1];
-
 	char           result_buffer[512];         // Navratovy kod funkce na zarizeni
-	int            result_code;
 
 	// Inicializace parametru
 	server_fifo_fd = -1;

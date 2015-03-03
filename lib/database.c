@@ -397,6 +397,7 @@ char* database_sel_product(int router){
 	routers ON routers.idproducts = products.idproducts WHERE \
 	routers.idrouters = '%d'", router);
 
+	// Kontrola sestaveneho dotazu
 	if(result < 3){
 		return NULL;
 	}
@@ -411,6 +412,60 @@ char* database_sel_product(int router){
 
 	// Vraceni vysledku
 	return products[0][0];
+}
+
+char** database_sel_sim(int router, int position){
+	int   result;
+	char  ***sims;
+	char  buffer_query[512];
+
+	// Sestaveni SQL dotazu
+	result = snprintf(buffer_query, sizeof(buffer_query), "SELECT idsims," \
+	" ip, number, operator FROM sims WHERE sims.idrouters = '%d'" \
+	" AND sims.position = '%d'", router, position);
+
+	// Kontrola sestaveneho dotazu
+	if(result < 3){
+		return NULL;
+	}
+
+	// Provedeni SQL dotazu
+	sims = database_select(buffer_query);
+
+	// Kontrola vysledku
+	if(sims == NULL){
+		return NULL;
+	}
+
+	// Vraceni vysledku
+	return sims[0];
+}
+
+char** database_sel_interface(int router, int position){
+	int    result;
+	char   ***interfaces;
+	char   buffer_query[512];
+
+	// Sestaveni SQL dotazu
+	result = snprintf(buffer_query, sizeof(buffer_query), "SELECT idinterfaces,"\
+	" type, ip, netmask, port FROM interfaces WHERE idrouters = '%d'"\
+	" AND type = '%d'", router, position);
+
+	// Kontrola sestaveneho dotazu
+	if(result < 3){
+		return NULL;
+	}
+
+	// Provedeni SQL dotazu
+	interfaces = database_select(buffer_query);
+
+	// Kontrola vysledku
+	if(interfaces == NULL){
+		return NULL;
+	}
+
+	// Vraceni vysledku
+	return interfaces[0];
 }
 
 int database_sel_timeout(int state){
@@ -439,7 +494,7 @@ int database_sel_timeout(int state){
 	return atoi(timeout[0][0]);
 }
 
-void database_result_free(char ***items){
+void database_results_free(char ***items){
 	int	i, j;
 
 	if(items != NULL){
@@ -447,6 +502,17 @@ void database_result_free(char ***items){
 			for(j = 0; items[i][j] != NULL; j++){
 				free(items[i][j]);
 			}
+			free(items[i]);
+		}
+		free(items);
+	}
+}
+
+void database_result_free(char **items){
+	int	i;
+
+	if(items != NULL){
+		for(i = 0; items[i] != NULL; i++){
 			free(items[i]);
 		}
 		free(items);

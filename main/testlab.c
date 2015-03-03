@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 
 	// Uvolneni pameti routers
 	if(routers != NULL){
-		database_result_free(routers);
+		database_results_free(routers);
 		routers = NULL;
 	}
 
@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
 
 	// Uvolneni pameti
 	if(platforms != NULL){
-		database_result_free(platforms);
+		database_results_free(platforms);
 		platforms = NULL;
 	}
 
