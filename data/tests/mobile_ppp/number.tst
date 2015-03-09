@@ -1,15 +1,15 @@
 #!/bin/bash
 
-## @file address.tst
-## @brief Test address.tst tests select IP address for mobile network.
+## @file number.tst
+## @brief Test number.tst tests select phone number.
 ##
 ## @author David Felgr
 ## @version 1.0.0
 ##
 ## @param $1: ID of router.
 ## @param $2: ID of release.
-## @returns 0 - Router is connected to UMTS network. <br>
-##          1 - Router is not connected to UMTS network.
+## @returns 0 - Router is changed phone number. <br>
+##          1 - Router is not changed phone number.
 
 # Ukonceni skriptu v pripade chyby
 function error {
@@ -72,8 +72,7 @@ for a in $( seq 5 ); do
     break
   fi
 
-  # Cekani na odeslani cisla
-  sleep 5
+  sleep 1
 done
 
 # Restart mobilniho spojeni
@@ -87,7 +86,6 @@ tl_mobileready $ROUTER1 >/dev/null
 if [ $? -ne 0 ]; then
   error "Router does not connect to mobile network."
 fi
-
 
 # Ukonceni skriptu
 exit $RESULT

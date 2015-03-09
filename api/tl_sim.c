@@ -6,7 +6,7 @@
 /**
  * @file tl_sim.c
  *
- * @brief usage tl_sim [-i] [-n] [-o] [-p \<position\>] \<id\>
+ * @brief usage tl_sim [-i] [-n] [-o] [-c] [-k] [-p \<position\>] \<id\>
  *
  * @author David Felgr
  * @version 1.0.0
@@ -18,6 +18,8 @@
  * @param -i Program returns IP address of sim card.
  * @param -n Program return phone number of SIM card.
  * @param -o Program return operator of SIM card.
+ * @param -c Program return PIN of SIM card.
+ * @param -k Program return PUK of SIM card.
  * @param -p\<postion\> Parameter position selected which SIM card in router is
  * selected. Default position is 1.
  * @param \<id\> Router ID of tested router.
@@ -30,7 +32,7 @@
  */
 
 void help(void){
-  fprintf(stderr, "usage tl_sim [-i] [-n] [-o] [-p <position>] <id>\n");
+  fprintf(stderr, "usage tl_sim [-i] [-n] [-o] [-c] [-k] [-p <position>] <id>\n");
 }
 
 int main(int argc, char *argv[]){
@@ -45,7 +47,7 @@ int main(int argc, char *argv[]){
   position = 1;
 
   // Rozbor parametru na prikazove radce
-  while ((parameter = getopt(argc, argv, "inop:")) != -1){
+  while ((parameter = getopt(argc, argv, "inockp:")) != -1){
     switch (parameter){
       case 'i':
         command = DB_SIMS_IP;
@@ -55,6 +57,12 @@ int main(int argc, char *argv[]){
         break;
       case 'o':
         command = DB_SIMS_OPERATOR;
+        break;
+      case 'c':
+        command = DB_SIMS_PIN;
+        break;
+      case 'k':
+        command = DB_SIMS_PUK;
         break;
       case 'p':
         position = atoi(optarg);

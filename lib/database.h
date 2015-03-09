@@ -65,6 +65,10 @@
 #define DB_SIMS_NUMBER        2
 /// Table sims, column operator
 #define DB_SIMS_OPERATOR      3
+/// Table sims, column PIN
+#define DB_SIMS_PIN           4
+/// Table sims, column PUK
+#define DB_SIMS_PUK           5
 
 /// Table interfaces, column idinterfaces
 #define DB_INTERFACES_ID      0

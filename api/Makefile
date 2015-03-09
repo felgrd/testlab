@@ -53,6 +53,12 @@ OBJ_PORT = tl_port.o
 BIN_INTERFACE = tl_interface
 OBJ_INTERFACE = tl_interface.o
 
+BIN_TCPDUMP = tl_tcpdump
+OBJ_TCPDUMP = tl_tcpdump.o
+
+BIN_PINGB = tl_pingb
+OBJ_PINGB = tl_pingb.o
+
 CFLAGS = -Wall -I../lib -I/usr/include/mysql
 LIB_UTILS = -ltl_utils
 LIB_DATABASE = -ltl_database
@@ -62,7 +68,7 @@ all: $(BIN_CHECK_PRODUCT) $(BIN_REMOTE) $(BIN_REMOTE_CHANGE) \
 	$(BIN_REMOTE_INFO) $(BIN_STATUS) $(BIN_UPDATE_FW) \
 	$(BIN_UPDATE_CONF) $(BIN_ROUTER_READY) $(BIN_SLOG) $(BIN_RLOG) $(BIN_KLOG) \
 	$(BIN_CHANGE_PARAM) $(BIN_MOBILE_READY) $(BIN_INTERFACE) $(BIN_PORT) \
-	$(BIN_SIM) $(BIN_INFO_PARAM)
+	$(BIN_SIM) $(BIN_INFO_PARAM) $(BIN_TCPDUMP) $(BIN_PINGB)
 
 $(BIN_REMOTE) : $(OBJ_REMOTE)
 	$(CC) -Wall -o $(BIN_REMOTE) $(OBJ_REMOTE) $(LIB_CSPIPE)
@@ -80,7 +86,8 @@ $(BIN_CHECK_PRODUCT) : $(OBJ_CHECK_PRODUCT)
 	$(CC) -Wall -o $(BIN_CHECK_PRODUCT) $(OBJ_CHECK_PRODUCT) $(LIB_DATABASE)
 
 $(BIN_ROUTER_READY) : $(OBJ_ROUTER_READY)
-	$(CC) -Wall -o $(BIN_ROUTER_READY) $(OBJ_ROUTER_READY) $(LIB_DATABASE) $(LIB_CSPIPE) $(LIB_UTILS)
+	$(CC) -Wall -o $(BIN_ROUTER_READY) $(OBJ_ROUTER_READY) $(LIB_DATABASE) \
+	$(LIB_CSPIPE) $(LIB_UTILS)
 
 $(BIN_UPDATE_FW) : $(OBJ_UPDATE_FW)
 	$(CC) -Wall -o $(BIN_UPDATE_FW) $(OBJ_UPDATE_FW) $(LIB_CSPIPE) $(LIB_UTILS)
@@ -115,6 +122,12 @@ $(BIN_PORT) : $(OBJ_PORT)
 $(BIN_INTERFACE) : $(OBJ_INTERFACE)
 	$(CC) -Wall -o $(BIN_INTERFACE) $(OBJ_INTERFACE) $(LIB_DATABASE)
 
+$(BIN_TCPDUMP) : $(OBJ_TCPDUMP)
+	$(CC) -Wall -o $(BIN_TCPDUMP) $(OBJ_TCPDUMP) $(LIB_CSPIPE)
+
+$(BIN_PINGB) : $(OBJ_PINGB)
+	$(CC) -Wall -o $(BIN_PINGB) $(OBJ_PINGB) $(LIB_CSPIPE)
+
 clean:
 	rm -f $(BIN_REMOTE) $(OBJ_REMOTE)
 	rm -f $(BIN_REMOTE_CHANGE) $(OBJ_REMOTE_CHANGE)
@@ -133,6 +146,8 @@ clean:
 	rm -f $(BIN_SIM) $(OBJ_SIM)
 	rm -f $(BIN_PORT) $(OBJ_PORT)
 	rm -f $(BIN_INTERFACE) $(OBJ_INTERFACE)
+	rm -f $(BIN_TCPDUMP) $(OBJ_TCPDUMP)
+	rm -f $(BIN_PINGB) $(OBJ_PINGB)
 
 install: all
 	sudo cp -u $(BIN_REMOTE) /usr/bin/$(BIN_REMOTE)
@@ -152,6 +167,8 @@ install: all
 	sudo cp -u $(BIN_SIM) /usr/bin/$(BIN_SIM)
 	sudo cp -u $(BIN_PORT) /usr/bin/$(BIN_PORT)
 	sudo cp -u $(BIN_INTERFACE) /usr/bin/$(BIN_INTERFACE)
+	sudo cp -u $(BIN_TCPDUMP) /usr/bin/$(BIN_TCPDUMP)
+	sudo cp -u $(BIN_PINGB) /usr/bin/$(BIN_PINGB)
 
 uinstall:
 	sudo rm -f /usr/bin/$(BIN_REMOTE)
@@ -171,6 +188,8 @@ uinstall:
 	sudo rm -f /usr/bin/$(BIN_SIM)
 	sudo rm -f /usr/bin/$(BIN_PORT)
 	sudo rm -f /usr/bin/$(BIN_INTERFACE)
+	sudo rm -f /usr/bin/$(BIN_TCPDUMP)
+	sudo rm -f /usr/bin/$(BIN_PINGB)
 
 remote-install: all
 	scp $(BIN_REMOTE) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_REMOTE)
@@ -190,3 +209,5 @@ remote-install: all
 	scp $(BIN_SIM) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_SIM)
 	scp $(BIN_PORT) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_PORT)
 	scp $(BIN_INTERFACE) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_INTERFACE)
+	scp $(BIN_TCPDUMP) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_TCPDUMP)
+	scp $(BIN_PINGB) $(SERVER)@$(USER):$(REMOTE_DIR)/$(BIN_PINGB)

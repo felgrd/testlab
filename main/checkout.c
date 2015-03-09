@@ -36,6 +36,7 @@ int main(int argc, char *argv[]){
 
 	// Otevreni logu
 	openlog("TestLabCheckout", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+	syslog (LOG_NOTICE, "Start checkout project %s", argv[3]);
 
 	// Inicializace promenych
 	waittime = 0;
@@ -118,7 +119,7 @@ int main(int argc, char *argv[]){
 	}
 
 	// Vykonani checkout scriptu
-	switch(pid = vfork()) {
+	switch(pid = fork()) {
 		case -1:
 			syslog(LOG_ERR, "Create new process for checkout error" \
 			" (%d).", errno);
@@ -137,9 +138,10 @@ int main(int argc, char *argv[]){
 			dup(log_fd);
 
 			// Spusteni skriptu
-			execlp("bash", "bash", "-f", command, NULL);
+			execl("/bin/sh", "sh", command, NULL);
 
 			// Ukonceni programu v pripade chyby
+			syslog (LOG_NOTICE, "Script %s is not running. (errno %d)", command, errno);
 			return 1;
 
 		default:

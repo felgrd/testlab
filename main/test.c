@@ -152,7 +152,7 @@ int main(int argc, char *argv[]){
 			}
 
 			// Vykonani testovaciho scriptu
-			switch (pid = vfork()) {
+			switch (pid = fork()) {
 			case -1:
 				syslog(LOG_ERR, "Create new process error (%d).", errno);
 				return 1;

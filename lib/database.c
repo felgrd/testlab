@@ -421,7 +421,7 @@ char** database_sel_sim(int router, int position){
 
 	// Sestaveni SQL dotazu
 	result = snprintf(buffer_query, sizeof(buffer_query), "SELECT idsims," \
-	" ip, number, operator FROM sims WHERE sims.idrouters = '%d'" \
+	" ip, number, operator, pin, puk FROM sims WHERE sims.idrouters = '%d'" \
 	" AND sims.position = '%d'", router, position);
 
 	// Kontrola sestaveneho dotazu

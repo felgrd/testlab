@@ -42,6 +42,7 @@ int main(int argc, char *argv[]){
 
 	// Otevreni logu
 	openlog("TestLabCompile", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+	syslog (LOG_NOTICE, "Start compile project %s", argv[3]);
 
 	// Inicializace promenych
 	platform_build = 1;
@@ -135,7 +136,7 @@ int main(int argc, char *argv[]){
 		}
 
 		// Vykonani compile scriptu
-		switch (pid = vfork()) {
+		switch (pid = fork()) {
 			case -1:
 				syslog(LOG_ERR, "Create new process for compile error (%d).", errno);
 				return 1;

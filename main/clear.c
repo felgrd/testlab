@@ -37,6 +37,7 @@ int main(int argc, char *argv[]){
 
 	// Otevreni logu
 	openlog("TestLabCLear", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+	syslog (LOG_NOTICE, "Start clear project %s", argv[3]);
 
 	// Inicializace promenych
 	waittime = 0;
@@ -109,7 +110,7 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
-	switch(pid = vfork()){
+	switch(pid = fork()){
 		case -1:
 			syslog(LOG_ERR, "Create new process for clean error (%d).", errno);
 			return 0;

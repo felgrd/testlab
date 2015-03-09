@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 	for(i = 0; platforms[i] != NULL; i++){
 
 		// Vytvoreni procesu pro stazeni projektu
-		switch (pid = vfork()) {
+		switch (pid = fork()) {
 			case -1:
 				syslog(LOG_ERR, "Create new process for checkout error (%d).", errno);
 				return 0;
@@ -168,14 +168,14 @@ int main(int argc, char *argv[])
 	for(i = 0; platforms[i] != NULL; i++){
 
 		// Vytvoreni procesu pro stazeni projektu
-		switch (pid = vfork()) {
+		switch (pid = fork()) {
 			case -1:
 				syslog(LOG_ERR, "Create new process for compile error" \
 				" (%d).", errno);
 				return 0;
 			case 0:
 				// Potlaceni vsech vystupu
-				close_all_fds(-1);
+				//close_all_fds(-1);
 
 				// Spusteni skriptu
 				execlp("tl_compile", "tl_compile", release, \
@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
 	 for(i = 0; routers[i] != NULL; i++){
 
 		 // Vytvoreni procesu pro komunikaci s routerem
-		 switch(pid = vfork()){
+		 switch(pid = fork()){
 			case -1:
 				syslog(LOG_ERR, "Create new process for test error" \
 				" (%d).", errno);
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
 	for(i = 0; routers[i] != NULL; i++){
 
 		// Vytvoreni procesu pro stazeni projektu
-		switch (pid = vfork()) {
+		switch (pid = fork()) {
 			case -1:
 				syslog(LOG_ERR, "Create new process for test error" \
 				" (%d).", errno);
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 	 for(i = 0; routers[i] != NULL; i++){
 
 		 // Ukonceni procesu pro komunikaci s routerem
-		 switch(pid = vfork()){
+		 switch(pid = fork()){
 			case -1:
 				syslog(LOG_ERR, "Create new process for test error" \
 				" (%d).", errno);
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
 	for(i = 0; platforms[i] != NULL; i++){
 
 		// Vytvoreni procesu pro distclean projektu
-		switch (pid = vfork()) {
+		switch (pid = fork()) {
 			case -1:
 				syslog(LOG_ERR, "Create new process for clean error" \
 				" (%d).", errno);

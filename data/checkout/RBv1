@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## @package compile
 #  This program checkout project LTIB

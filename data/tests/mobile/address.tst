@@ -91,7 +91,7 @@ fi
 
 # Zjisteni prirazene IP adresy mobilniho spojeni
 M_IP=$(tl_status $ROUTER1 ppp "IP Address")
-if [ $? -ne 0 ] || [ -z $SIM_IP ]; then
+if [ $? -ne 0 ] || [ -z $M_IP ]; then
   error "Error with check IP address of mobile wan connection"
 fi
 
