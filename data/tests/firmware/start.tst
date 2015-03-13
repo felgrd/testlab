@@ -7,7 +7,7 @@
 #  @param $2: ID of release.
 
 # Kontrola parametru ID testovaneho routeru
-if [ -z $1 ];then
+if [ -z $1 ]; then
 	echo "Missing parameter ID of router" 1>&2
 	exit 1
 fi
@@ -15,11 +15,15 @@ fi
 #ID prvniho routeru
 ROUTER1=$1
 
-# Cekani na ukonceni programovani
+# Cekani na reboot routeru po ukonceni programovani
 sleep 1
 
 # Cekani na nabehnuti routeru
 tl_routerready $ROUTER1
+if [ $? -eq 0 ]; then
+	echo "Router is not running after upload new firmware." 1>&2
+	exit 1
+fi
 
 # Ukonceni scriptu
-exit $?
+exit 0

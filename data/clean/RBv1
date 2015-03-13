@@ -7,7 +7,7 @@
 cd ltib
 
 # Uklid dane platformy
-./ltib -m distclean --batch &> /dev/null
+./ltib -m distclean --batch
 
 # Vysledek prekladu
 RESULT=$?

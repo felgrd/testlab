@@ -1,9 +1,68 @@
 \chapter{Návrh testů pro Conel routery}
+V této fázi je připraven celý systém pro testování routerů. Testovací laboratoř se všemi výrobky je kompletně postavena. Testovací server je nainstalován a nakonfigurován. Máme navrhnutou databázi a adresářovou strukturu tetovacího systému. Systém pro stahování zdrojový kódů, kompilování projektů a následné spouštění testů již také funguje správně. Pro provádění jednotlivých kroků testů jsou k dispozici programy z testovacího API a výsledky všech testů je možné zobrazit pomocí webového interfacu.
 
-\subsection{Checkout}
-\subsection{Compile}
-\subsection{Test}
-\subsection{Clean}
+V neposlední řadě je navrhnut přístup testování založený na modelech. Pomocí tohoto přístupu rozdělíme všechny funkcionality všech routerů do funkcí. Následně každou funkci rozdělme na jednotlivé procedury, kdy každá procedura testuje elementární chování této funkce. Například pokud je dána funkce připojení routeru do mobilní sítě a v této funkci je testovací procedura testující změny APN tohoto připojení. Pomocí těchto funkcí je možné možné namodelovat všechny routery. Pomocí těchto modelů jsou pro každý router vybírány a spouštěny konkrétní testy.
+
+Pro základní testování funkčnosti celého portfolia výrobků společnosti Conel byli navržený následující funkce a testovací procedury. V první fázi implementace testovacího systému budou spouštěny tyto níže popisované procedury.
+
+Testovací skripty jsou spouštěny se dvěma parametry. Prvním parametre je identifikační číslo testovaného zařízení. Pomocí tohoto čísla je možné komunikovat s daným zařízením a zjišťovat detailní informace o zařízení z databáze pomocí programů posaných v sekci věnující se testovacímu API. Druhým parametrem je předáváno identifikační číslo testovaného releasu.
+
+\section{Checkout}
+Testování každého projektu je započato stažením zdrojových kódů daného projektu. Způsob stažení zdrojového kódu je zajištěno pomocí skriptů checkout. V tomoto skriptu definujeme způsob stažení zdrojový kódu. Například stažení pomocí verzovacích systémů git, či cvs nebo zkopírování projektu z určiého místa. Všechny projekty testovacího systému se stahují pomocí verzovacího systému git přímo ze serveru testovací laboratoře, kde jsou vytvořeny kopie repozitářů všech testovaných projektů. Kopie je pravidelně každou minutu udržována aktuální. Tento postup byl zaveden z důvodu zrychlení samotného testování a rapidní zmenšení datových toků. Primárně je stahována hlavní větev master.
+
+\section{Compile}
+Pro každý projekt je dále napsán skript zajišťující kompilaci daného projektu a vybraného produktu. Skript je pouště se dvěma parametry. Prvním parametrem je cílový adresář kam má být výsledný firmware nakopírován a druhým parametrem je název překládaného výrobku. Prozatím se pro všechny testované projekty používá buildovací systém ltib, tudíž skipty zajišťující překlad projektů vypadají velice obdobně. Každý skript je prováděn v adresáři kde je projekt stažen. V prvním kroku je otevřen adresář ltib. Dále pokud se překládá první výrobek platformy, tak je vybrána zpracovávaná platforma. Samotné vybrání platformy je provedeno ve dvou krocích. V prvním kroku je spuštěn skript platform s parametrem název platformy. Skript platform byl do buildovacího systému doplněn v rámci testovací laboratoře, jelikož ltib nepodporoval překládání bez interakce uživatele. Výběr platformy je dokončen spuštěním programu ltib v konfiguračním režimu. V dalším kroku je vybrán produkt, který má být překládán. Vybrání produktu je provedeno zapsáním jeho názvu do soubouru appname. Nyní jsou smazány přeložené části závisející na výrobku a spuštěn samotný překlad. V případě úspěšného ukončení překladu jsou přeložené firmwary nakopírovány do adresáře předaného jako paramter skriptu. Překládání projektů pomocí skriptů bylo zvoleno z důvodu univerzálnosti a jednoduchém přidávání nových projektů založených na různých buildovacích systémech.
+
+\section{Clean}
+Před ukončením testování je prováděn úklid po kompilaci projektů. Aby bylo možné smazat všechny soubory a adresáře zdrojových kódu a soubory vytvořené při samotoném překladu je nutné provést clean nad projektem. Jelikož clean každého projektu je prováděn odlišným způsobem  je pro každý projekt vytvořen vlastní skript. Pro projekty, které jsou zatím testovány v testovací laboratoři je nejdří otevře adresář ltib. Samotný úklid po překladu je provededen spuštěním programu ltib v módu distclean. Na závěr se skript vrátí do výchozího adresáře a je ukončen s návratovým kódem programu ltib.
+
+\section{Funkce firmware}
+Základní funkcionalitou každého výrobku je možnost nahrání nového firmwaru. Na funkci nahrání nového firmwaru je založeno všechno další testování. Pokud se nepodaří nahrát nový firmare není důvod testovat jakoukoliv funkcionalitu, jelikož tyto testy neodpovídají danému firmwaru.
+
+\subsection{Procedura upload}
+První testovací procedura funkce firmware testuje nahrání firmwaru do testovaného zaříení. V prvním kroku je zjištěn název firmwaru testovaného zařízení z databáze testovacího systému. Dále je správný firmware nahrán do testovaného zařízení pomocí utility updatefw z testovacího API. Test je ukončen úspěšně pokud se podaří nahrát firmware do zařízen.
+
+\subsection{Procedura start}
+Dalši testovací procedura funkce firmware testuje jestli router po nahrání firmwaru nastartoval. V tomto testu se nejdříve jednu sekundu čeká na reboot routeru po ukončení programování, jelikož pokud by se router testoval ihned po naládování testoval by se ještě běžící starý firmware. Dále je spuštěn program testující připojení routeru do testovací sítě. V tomto programu je nejdříve testován ping na router a v případě úspěšného pingu je testováno odezva routeru na příkaz echo. Test končí úspěšně pokud se na routeru podaří ping a také se k němu podaří připojit jedním z podporovaných protokolů. Tento test vrací také čas v sekundách za jak dlouho trval start routeru.
+
+\subsection{Procedura check}
+Poslední procedura funkce firmware check testuje shodu verzi firmwaru v routeru s nahrávanou verzí.
+
+\section{Funkce configuration}
+\subsection{Procedura backup}
+\subsection{Procedura restore}
+\subsection{Procedura profile change}
+\subsection{Procedura profile copy}
+
+\section{Funkce connect}
+\subsection{Procedura telnet}
+
+\section{Funkce connect ssh}
+\subsection{Procedura ssh}
+
+\section{Funkce mobile}
+\subsection{Procedura address}
+\subsection{Procedura apn}
+\subsection{Procedura connect}
+\subsection{Procedura mtu}
+\subsection{Procedura operator}
+\subsection{Procedura ping}
+
+\section{Funkce mobile edge}
+\subsection{Procedura type edge}
+
+\section{Funkce mobile umts}
+\subsection{Procedura type umts}
+
+\section{Funkce mobile lte}
+\subsection{Procedura type lte}
+
+\section{Funkce mobile ppp}
+\subsection{Procedura chap}
+\subsection{Procedura pap}
+\subsection{Procedura number}
+
+
 
 
 \endinput

@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
   int     router;                     // Identifikator routeru
   int     result;                     // Navratovy kod funkci
   char    answer[PIPE_BUFFER_SIZE];   // Buffer pro opoved z routeru
-  char    command[512];               // Prikaz pro zmenu parametru
+  char    command[PIPE_BUFFER_SIZE];  // Prikaz pro zmenu parametru
   int     options;                    // Promena pro rozebirani parametru
   char    *function;                  // Funkce u ktere bude zmenen parametr
   char    *parameter;                 // Parametr ktery bude menen

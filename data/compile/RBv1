@@ -23,25 +23,25 @@ else
 fi
 
 #Parametr platforma
-PLATFORM=RBv1
+PLATFORM="RBv1"
 
 # Otevreni adresare s ltibem
 cd ltib
 
 # Vyber platformy
 if [ ! -e .config ]; then
-	./platform $PLATFORM 
-	./ltib -m config --batch &> /dev/null
+	./platform $PLATFORM
+	./ltib -m config --batch 
 fi
 
 # Preklad daneho routeru
 echo "APPNAME=$PRODUCT" > appname
 rm -f rpm/RPMS/arm/source-*.rpm rpm/RPMS/m68k/source-*.rpm
-./ltib &> /dev/null
-		
+./ltib
+
 # Vysledek prekladu
 RESULT=$?
-		
+
 # Kopirovani fw do adresare s firmwarem
 if [ $RESULT -eq 0 ]; then
 	for EXT in bin s19 ver; do
@@ -49,7 +49,7 @@ if [ $RESULT -eq 0 ]; then
 			cp images/$PRODUCT.$EXT "$DIRECTORY"
 		fi
 	done
-fi	
+fi
 
 # Navrat do testovaciho adresare
 cd ..

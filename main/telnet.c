@@ -153,6 +153,8 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	char	*stop;
 	struct timeval tv;
 
+	int cnt;
+
 	// Inicializace promenych
 	strBuffer[0] = '\0';
 	rcvLength = 0;
@@ -170,7 +172,7 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
 
 	// Odeslani prikazu
-	strcpy(trBuffer, request);
+	strncpy(trBuffer, request, sizeof(trBuffer) - 2);
 	strcat(trBuffer, "\r\n");
 	trLength = telnetSend(sockfd, trBuffer, strlen(trBuffer));
 	if(trLength != strlen(trBuffer)){
@@ -197,11 +199,37 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	} while(strstr(strBuffer, "\r\n# ") == NULL);
 
 	// Zpracovani odpovedi
-	start = strstr(strBuffer, trBuffer);
-	stop = strstr(strBuffer, "\r\n# ");
+  printf("-----------------------\n");
+	printf("%s\n", strBuffer);
+	printf("%s\n", trBuffer);
+	printf("StrLength: %d\n", strlen(strBuffer));
+	printf("TrLength: %d\n", strlen(trBuffer));
+	printf("-----------------------\n\n\n");
 
-	if(start == NULL || stop == NULL) {
-		strcpy(response, "Telnet error: Start or stop is not find.\n");
+	// Uprava prijmuteho retezce - odstrnaneni backspace 0x08
+	// strchr(strBuffer, 0x08)
+	// har word[] = "abcdef";
+	// int idxToDel = 2;
+	// memmove(&word[idxToDel], &word[idxToDel + 1], strlen(word) - idxToDel);
+
+	for(cnt = 0; cnt < strlen(trBuffer); cnt++){
+
+		if(trBuffer[cnt] != strBuffer[cnt]){
+
+			printf("error %d [%c][%c]\n", cnt, strBuffer[cnt], trBuffer[cnt]);
+
+		}
+	}
+
+	start = strstr(strBuffer, trBuffer);
+	if(start == NULL) {
+		strcpy(response, "Telnet error: start is not find.\n");
+		return 0;
+	}
+
+	stop = strstr(strBuffer, "\r\n# ");
+	if(stop == NULL) {
+		strcpy(response, "Telnet error: stop is not find.\n");
 		return 0;
 	}
 
