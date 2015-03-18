@@ -21,7 +21,6 @@ function error {
 # Inicializace testovacich hodnot
 TEST_MTU=500
 TEST_SIZE=1000
-B_MTU=1500
 
 # Kontrola parametru adresy testovaneho routeru
 if [ -z $1 ]; then

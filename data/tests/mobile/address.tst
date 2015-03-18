@@ -19,10 +19,6 @@ function error {
   exit 1
 }
 
-# Inicializace defaultnich hodnot
-B_IP=""
-B_APN="conel.agnep.cz"
-
 # Kontrola parametru adresy testovaneho routeru
 if [ -z $1 ]; then
   echo "Missing parameter address of router" 1>&2
@@ -49,8 +45,7 @@ fi
 # Zjisteni adresy SIM karty
 SIM_IP=$(tl_sim -i $ROUTER1)
 if [ $? -ne 0 ] || [ -z $SIM_IP ]; then
-  echo "Error with check IP address of SIM card ($SIM_IP)." 1>&2
-  exit 1
+  error "Error with check IP address of SIM card ($SIM_IP)."
 fi
 
 # Zmena IP adresy mobilniho spojeni
@@ -72,21 +67,9 @@ if [ $? -ne 0 ]; then
 fi
 
 # Cekani na sestaveni mobilniho spojeni
-tl_mobileready $ROUTER1 >/dev/null
+tl_mobileready $ROUTER1
 if [ $? -ne 0 ]; then
   error "Router does not connect to mobile network."
-fi
-
-# Vraceni hodnot parametru IP adresa
-tl_paramchange -f ppp -p ipaddr $ROUTER1 "$B_IP"
-if [ $? -ne 0 ]; then
-  error "Router does not change parameter ipaddr."
-fi
-
-# Vraceni Hodnot parametru APN
-tl_paramchange -f ppp -p apn $ROUTER1 "$B_APN"
-if [ $? -ne 0 ]; then
-  error "Router does not change parameter APN."
 fi
 
 # Zjisteni prirazene IP adresy mobilniho spojeni
@@ -97,7 +80,19 @@ fi
 
 # Kontrola prirazene adresy adresy
 if [ $SIM_IP != $M_IP ]; then
-  error "Assigned IP address is not IP address of SIM card."
+  error "Assigned IP address is not IP address of SIM card. SIM: $SIM_IP."
+fi
+
+# Navraceni hodnot parametru IP adresa
+tl_paramchange -f ppp -p ipaddr $ROUTER1 "$B_IP"
+if [ $? -ne 0 ]; then
+  error "Router does not change parameter ipaddr."
+fi
+
+# Navraceni hodnot parametru APN
+tl_paramchange -f ppp -p apn $ROUTER1 "$B_APN"
+if [ $? -ne 0 ]; then
+  error "Router does not change parameter APN."
 fi
 
 # Ukonceni skriptu

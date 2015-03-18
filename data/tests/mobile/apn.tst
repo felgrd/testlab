@@ -13,7 +13,7 @@
 
 # Ukonceni skriptu v pripade chyby
 function error {
-  tl_paramchange -f ppp -p APN $ROUTER1 conel.agnep.cz
+  tl_paramchange -f ppp -p APN $ROUTER1 "$B_APN"
   echo $1 1>&2
   exit 1
 }
@@ -24,8 +24,15 @@ if [ -z $1 ]; then
   exit 1
 fi
 
-#IP adresa prvniho routeru
+# IP adresa prvniho routeru
 ROUTER1=$1
+
+# Záloh APN
+B_APN=$(tl_paraminfo -f ppp -p apn $ROUTER1)
+if [ $? -ne 0 ]; then
+  echo "Error with check value of parameter apn." 1>&2
+  exit 1
+fi
 
 # Zmena APN na conel.agnep.cz
 tl_paramchange -f ppp -p APN $ROUTER1 ""
@@ -78,6 +85,12 @@ fi
 # Kontrola zmeny APN
 if [ IP_BLANK == IP_AGNEP ]; then
   error "APN is not changed."
+fi
+
+# Zmena APN na puvodni
+tl_paramchange -f ppp -p APN $ROUTER1 "$B_APN"
+if [ $? -ne 0 ]; then
+  error "Router does not change parameter APN."
 fi
 
 # Uspesne ukonceni testu

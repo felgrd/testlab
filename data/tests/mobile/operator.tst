@@ -18,9 +18,6 @@ function error {
   exit 1
 }
 
-# Inicializace defaultnich hodnot
-B_OPERATOR=""
-
 # Kontrola parametru adresy testovaneho routeru
 if [ -z $1 ]; then
   echo "Missing parameter address of router" 1>&2
@@ -40,8 +37,7 @@ fi
 # Zjisteni operatora SIM karty
 SIM_OPERATOR=$(tl_sim -o $ROUTER1)
 if [ $? -ne 0 ] || [ -z $SIM_OPERATOR ]; then
-  echo "Error with check operator of SIM card ($SIM_OPERATOR)." 1>&2
-  exit 1
+  error "Error with check operator of SIM card ($SIM_OPERATOR)."
 fi
 
 # Zmena operatora mobilniho spojeni
@@ -57,15 +53,9 @@ if [ $? -ne 0 ]; then
 fi
 
 # Cekani na sestaveni mobilniho spojeni
-tl_mobileready $ROUTER1 >/dev/null
+tl_mobileready $ROUTER1
 if [ $? -ne 0 ]; then
   error "Router does not connect to mobile network."
-fi
-
-# Vraceni hodnot parametru operator mobilniho spojeni
-tl_paramchange -f ppp -p operator $ROUTER1 "$B_OPERATOR"
-if [ $? -ne 0 ]; then
-  error "Router does not change parameter operator."
 fi
 
 # Zjisteni prirazeneho operatora mobilniho spojeni
@@ -77,6 +67,12 @@ fi
 # Kontrola prirazene adresy adresy
 if [ $SIM_OPERATOR != $M_OPERATOR ]; then
   error "Assigned operator address is not operator of SIM card."
+fi
+
+# Vraceni hodnot parametru operator mobilniho spojeni
+tl_paramchange -f ppp -p operator $ROUTER1 "$B_OPERATOR"
+if [ $? -ne 0 ]; then
+  error "Router does not change parameter operator."
 fi
 
 # Ukonceni skriptu

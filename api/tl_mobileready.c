@@ -6,7 +6,7 @@
 #include "cspipe.h"
 
 // Defaultni cas zkouseni stavu routeru
-#define DEFUALT_TIMEOUT		120
+#define DEFUALT_TIMEOUT		180
 
 /**
 * @file tl_mobileready.c
@@ -38,14 +38,14 @@ void help(void){
 }
 
 int main(int argc, char *argv[]){
-  int     timeout;            // Cas maximalniho cekani na odpoved routeru
-  int     starttime;          // Cas spusteni programu
-  int     router;             // Identifikator routeru
-  int     parameter;          // Parametr prichazejici na prikazove radcec
-  int     result;
-  int     state;              // Stav testovani
-  char    request[PIPE_BUFFER_SIZE];    // Buffer pro opoved z routeru
-  char    response[PIPE_BUFFER_SIZE];   // Buffer pro opoved z routeru
+  int     timeout;                    // Cas maximalniho cekani na odpoved routeru
+  int     starttime;                  // Cas spusteni programu
+  int     router;                     // Identifikator routeru
+  int     parameter;                  // Parametr prichazejici na prikazove radcec
+  int     result;                     // Navratovy kod funkci
+  int     state;                      // Stav testovani
+  char    request[PIPE_BUFFER_SIZE];  // Buffer pro opoved z routeru
+  char    response[PIPE_BUFFER_SIZE]; // Buffer pro opoved z routeru
 
   // Inicializace promenych
   state = STATE_DISCONNECT;

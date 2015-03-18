@@ -14,6 +14,7 @@
 
 # Ukonceni skriptu v pripade chyby
 function error {
+  tl_paramchange -f ppp -p APN $ROUTER1 "$B_APN"
   echo $1 1>&2
   exit 1
 }
@@ -25,6 +26,13 @@ fi
 
 #IP adresa prvniho routeru
 ROUTER1=$1
+
+# Záloh APN
+B_APN=$(tl_paraminfo -f ppp -p apn $ROUTER1)
+if [ $? -ne 0 ]; then
+  echo "Error with check value of parameter apn." 1>&2
+  exit 1
+fi
 
 # Zmena APN na conel.agnep.cz
 tl_paramchange -f ppp -p APN $ROUTER1 conel.agnep.cz
@@ -44,10 +52,19 @@ if [ $? -ne 0 ]; then
   error "Router does not connect to mobile network."
 fi
 
+# Cekani na ustaleni spojeni pred pingem
+sleep 2
+
 # Ping na vychozi branu
 tl_remote $ROUTER1 "ping -c 5 10.0.0.1" >/dev/null
 if [ $? -ne 0 ]; then
   error "Router does not ping to 10.0.0.1."
+fi
+
+# Zmena APN na puvodni
+tl_paramchange -f ppp -p APN $ROUTER1 "$B_APN"
+if [ $? -ne 0 ]; then
+  error "Router does not change parameter APN."
 fi
 
 # Uspesne ukonceni skriptu

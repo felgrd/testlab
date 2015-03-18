@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ## @package upload
-#  Test upload firmware to the router.
-#
-#  @param $1: ID of router.
-#  @param $2: ID of release.
+## Test upload firmware to the router.
+##
+## @param $1: ID of router.
+## @param $2: ID of release.
 
 # Kontrola parametru ID testovaneho routeru
 if [ -z $1 ] || [ -z $2 ];then

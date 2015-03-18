@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ## @package upload
-#  Wait for start of router.
-#
-#  @param $1: ID of router.
-#  @param $2: ID of release.
+## Wait for start of router.
+##
+## @param $1: ID of router.
+## @param $2: ID of release.
 
 # Kontrola parametru ID testovaneho routeru
 if [ -z $1 ]; then
