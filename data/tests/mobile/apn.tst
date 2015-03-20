@@ -34,7 +34,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Zmena APN na conel.agnep.cz
+# Zmena APN na prazdne apn (internet)
 tl_paramchange -f ppp -p APN $ROUTER1 ""
 if [ $? -ne 0 ]; then
   error "Router does not change parameter APN."
@@ -54,12 +54,12 @@ fi
 
 # Zjisteni IP adresy prazdneho APN
 IP_BLANK=$(tl_status $ROUTER1 ppp "IP Address")
-if [ -z $IP_BLANK ] || [ $IP_BLANK == "Unassigned" ]; then
+if [ $? -ne 0 ] || [ -z $IP_BLANK ] || [ $IP_BLANK == "Unassigned" ]; then
   error "Router has not assigned IP Address with empty APN."
 fi
 
 # Zmena APN na conel.agnep.cz
-tl_paramchange -f ppp -p APN $ROUTER1 conel.agnep.cz
+tl_paramchange -f ppp -p APN $ROUTER1 "conel.agnep.cz"
 if [ $? -ne 0 ]; then
   error "Router does not change parameter APN."
 fi
@@ -78,13 +78,13 @@ fi
 
 # Zjisteni IP adresy prazdneho APN (internet)
 IP_AGNEP=$(tl_status $ROUTER1 ppp "IP Address")
-if [ -z $IP_AGNEP ] || [ $IP_AGNEP == "Unassigned" ]; then
-  error "Router has not assigned IP Address with conel.agnep.cz APN."
+if [ $? -ne 0 ] || [ -z $IP_AGNEP ] || [ $IP_AGNEP == "Unassigned" ]; then
+  error "Router has not assigned IP Address with APN conel.agnep.cz."
 fi
 
 # Kontrola zmeny APN
-if [ IP_BLANK == IP_AGNEP ]; then
-  error "APN is not changed."
+if [ "$IP_BLANK" == "$IP_AGNEP" ]; then
+  error "APN is not changed. Both IP: $IP_BLANK."
 fi
 
 # Zmena APN na puvodni

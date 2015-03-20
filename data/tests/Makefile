@@ -13,4 +13,3 @@ all:
 	scp -rp mobile_umts $(SERVER)@$(USER):/var/testlab/tests/
 	scp -rp mobile_lte $(SERVER)@$(USER):/var/testlab/tests/
 	scp -rp mobile_sim2 $(SERVER)@$(USER):/var/testlab/tests/
-	scp -rp sms $(SERVER)@$(USER):/var/testlab/tests/

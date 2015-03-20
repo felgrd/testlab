@@ -30,12 +30,9 @@ int sshInit(char *ip, int port, const char *username, const char *password){
 	snprintf(command, sizeof(command), "%s@%s", username, ip);
 
 	// Vytvoreni procesu starajici se o SSH spojeni
-	pid = vfork();
-
-	switch(pid){
+	switch(pid = vfork()){
 		case -1:
 			return 0;
-			break;
 
 		case 0:
 			// Nastaveni vstupu a vystup programu PLINK
@@ -52,7 +49,8 @@ int sshInit(char *ip, int port, const char *username, const char *password){
 			// Spusteni programu plink
 			execlp("plink", "plink", "-pw", password, command, NULL);
 
-			break;
+			// Ukonceni v pripade nespusteni programu plink
+			return 0;
 
 		default:
 			// Uzavreni nepouzivanych rour
@@ -67,8 +65,7 @@ int sshInit(char *ip, int port, const char *username, const char *password){
 			FD_SET(pipes_stdout[0], &read_fd_set);
 
 			// Cekani na prijem dat ze standatrniho vystupu PLINK
-			result = select(pipes_stdout[0] + 1, &read_fd_set, NULL, \
-			NULL, &tv);
+			result = select(pipes_stdout[0] + 1, &read_fd_set, NULL, NULL, &tv);
 
 			if(result){
 				// Precteni prijatych dat
@@ -80,7 +77,6 @@ int sshInit(char *ip, int port, const char *username, const char *password){
 					return pid;
 				}
 			}
-
 			break;
 	}
 
@@ -143,7 +139,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 	// Kontrola sestaveneho spojeni
 	if(!sshCheck(pid)){
-		strcpy(response, "SSH error: Program PLINK is not running.\n");
+		strcpy(response, "SSH error: Program PLINK is not running.");
 		return 0;
 	}
 
@@ -178,14 +174,14 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 				// Kontrola platnosti dat
 				if(rcvLength < 0){
-					strcpy(response, "SSH error: Error while read data.\n");
+					strcpy(response, "SSH error: Error while read data.");
 					return 0;
 				}
 			}
 
 			// Kontrola velikosti prijmaciho bufferu
 			if(strlen(strBuffer) + rcvLength > sizeof(strBuffer)){
-				strcpy(response, "SSH error: Output si too large.\n");
+				strcpy(response, "SSH error: Output si too large.");
 				return 0;
 			}
 
@@ -195,25 +191,36 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 		// Data nebyla prijata do vyprseni timeoutu
 		}else{
-			strcpy(response, "SSH error: Read timeout expired.\n");
+			strcpy(response, "SSH error: Read timeout expired.");
 			return 0;
 		}
 
-	}while(strstr(strBuffer, "\r\n# ") == NULL);
+	} while(strstr(strBuffer, "\r\n# ") == NULL);
 
-	// Zpracovani odpovedi
+	// Uprava prijmuteho retezce - odstrnaneni backspace 0x08 a predchazejicim znaku
+	while((start = strchr(strBuffer, 0x08)) != NULL){
+		memmove(start - 1, start + 1, strlen(strBuffer) - \
+		(size_t)(start - strBuffer) + 1);
+	}
+
+	// Nalezeni zacatku zpravy
 	start = strstr(strBuffer, trBuffer);
-	stop = strstr(strBuffer, "\r\n# ");
-
-	// Kontrola validni odpovedi
-	if(start == NULL || stop == NULL) {
-		strcpy(response, "SSH error: Answer is not valid.\n");
+	if(start == NULL) {
+		strcpy(response, "SSH error: Start is not find.");
 		return 0;
 	}
 
+	// Odriznuti echa zadosti
 	start += strlen(trBuffer);
 
-	// Kontrola existence odpovedi
+	// Nalezeni konce zpravy
+	stop = strstr(strBuffer, "\r\n# ");
+	if(stop == NULL) {
+		strcpy(response, "SSH error: Stop is not find.");
+		return 0;
+	}
+
+	// Prichozi prazdna odpoved
 	if(start == (stop + 2)) {
 		strcpy(response, "");
 		return 1;
@@ -221,7 +228,7 @@ int sshExec(pid_t pid, char *request, char *response, int length){
 
 	// Kontrola validni odpovedi
 	if(start > stop) {
-		strcpy(response, "SSH error: Answer is not valid.\n");
+		strcpy(response, "SSH error: Answer is not valid.");
 		return 0;
 	}
 

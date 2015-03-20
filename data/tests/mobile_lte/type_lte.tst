@@ -12,8 +12,8 @@
 ##          1 - Router is not connected to UMTS network.
 
 # Ukonceni skriptu v pripade chyby
-function lte_error {
-  tl_paramchange -f ppp -p nettype $ROUTER1 0
+function error {
+  tl_paramchange -f ppp -p nettype $ROUTER1 "$B_NETTYPE"
   echo $1 1>&2
   exit 1
 }
@@ -27,39 +27,46 @@ fi
 # IP adresa prvniho routeru
 ROUTER1=$1
 
-# Zmena typu site na UMTS
+# Zalohovani nastaveni ppp nettype
+B_NETTYPE=$(tl_paraminfo -f ppp -p nettype $ROUTER1)
+if [ $? -ne 0 ]; then
+  echo "Error with check value of parameter nettype." 1>&2
+  exit 1
+fi
+
+# Zmena typu site na LTE
 tl_paramchange -f ppp -p nettype $ROUTER1 3
 if [ $? -ne 0 ]; then
-  lte_error "Router does not change parameter Network type."
+  error "Router does not change parameter Network type."
 fi
 
 # Restart ppp
 tl_remote $ROUTER1 "service ppp restart" >/dev/null
 if [ $? -ne 0 ]; then
-  lte_error "Router does not restart service ppp."
+  error "Router does not restart service ppp."
 fi
 
 # Cekani na sestaveni spojeni
 tl_mobileready $ROUTER1 >/dev/null
 if [ $? -ne 0 ]; then
-  lte_error "Router does not connect to LTE mobile network."
+  error "Router does not connect to LTE mobile network."
 fi
 
 # Zjisteni nastaveneho typu site
 NETTYPE=$(tl_status $ROUTER1 mobile Technology)
 if [ $? -ne 0 ] || [ -z $NETTYPE ]; then
-  lte_error "Router has not selected network type."
+  error "Router has not selected network type."
 fi
 
 # Kontrola nastavene typu site
 if [ $NETTYPE != "LTE" ]; then
-  lte_error "Selected network type is not LTE, but network type is $NETTYPE."
+  error "Selected network type is not LTE, but network type is $NETTYPE."
 fi
 
 # Vraceni nastaveni
-tl_paramchange -f ppp -p nettype $ROUTER1 0
+tl_paramchange -f ppp -p nettype $ROUTER1 "$B_NETTYPE"
 if [ $? -ne 0 ]; then
-  lte_error "Router does not change parameter Network type."
+  error "Router does not change parameter Network type."
 fi
 
 # Uspesne ukonceni testu

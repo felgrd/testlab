@@ -20,7 +20,7 @@ sleep 1
 
 # Cekani na nabehnuti routeru
 tl_routerready $ROUTER1
-if [ $? -eq 0 ]; then
+if [ $? -ne 0 ]; then
 	echo "Router is not running after upload new firmware." 1>&2
 	exit 1
 fi

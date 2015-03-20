@@ -101,7 +101,6 @@ int telnetInit(char *ip, int port, const char *username, const char *password){
 }
 
 int telnetSend(int sockfd, char *buffer, int length){
-
 	return send(sockfd, buffer, length, MSG_NOSIGNAL);
 }
 
@@ -153,8 +152,6 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	char	*stop;
 	struct timeval tv;
 
-	int cnt;
-
 	// Inicializace promenych
 	strBuffer[0] = '\0';
 	rcvLength = 0;
@@ -162,7 +159,7 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 
 	// Kontrola platnosti socketu
 	if(sockfd <= 0){
-		strcpy(response, "Telnet error: Connection is not established.\n");
+		strcpy(response, "Telnet error: Connection is not established.");
 		return 0;
 	}
 
@@ -176,7 +173,7 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 	strcat(trBuffer, "\r\n");
 	trLength = telnetSend(sockfd, trBuffer, strlen(trBuffer));
 	if(trLength != strlen(trBuffer)){
-		strcpy(response, "Telnet error: No data is send.\n");
+		strcpy(response, "Telnet error: No data is send.");
 		return 0;
 	}
 
@@ -185,12 +182,12 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 		rcvLength = recv(sockfd, rcvBuffer, sizeof(rcvBuffer) - 1, 0);
 
 		if(rcvLength < 0){
-			strcpy(response, "Telnet error: No data is received.\n");
+			strcpy(response, "Telnet error: No data is received.");
 			return 0;
 		}
 
 		if(strlen(strBuffer) + rcvLength > sizeof(strBuffer)){
-			strcpy(response, "Telnet error: Output si too large.\n");
+			strcpy(response, "Telnet error: Output si too large.");
 			return 0;
 		}
 
@@ -198,48 +195,36 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 		strncat(strBuffer, rcvBuffer, sizeof(strBuffer));
 	} while(strstr(strBuffer, "\r\n# ") == NULL);
 
-	// Zpracovani odpovedi
-  printf("-----------------------\n");
-	printf("%s\n", strBuffer);
-	printf("%s\n", trBuffer);
-	printf("StrLength: %d\n", strlen(strBuffer));
-	printf("TrLength: %d\n", strlen(trBuffer));
-	printf("-----------------------\n\n\n");
-
-	// Uprava prijmuteho retezce - odstrnaneni backspace 0x08
-	// strchr(strBuffer, 0x08)
-	// har word[] = "abcdef";
-	// int idxToDel = 2;
-	// memmove(&word[idxToDel], &word[idxToDel + 1], strlen(word) - idxToDel);
-
-	for(cnt = 0; cnt < strlen(trBuffer); cnt++){
-
-		if(trBuffer[cnt] != strBuffer[cnt]){
-
-			printf("error %d [%c][%c]\n", cnt, strBuffer[cnt], trBuffer[cnt]);
-
-		}
+	// Uprava prijmuteho retezce - odstrnaneni backspace 0x08 a predchazejiciho znaku
+	while((start = strchr(strBuffer, 0x08)) != NULL){
+		memmove(start - 1, start + 1, strlen(strBuffer) - \
+		(size_t)(start - strBuffer) + 1);
 	}
 
+	// Nalezeni zacatku odpovedi
 	start = strstr(strBuffer, trBuffer);
 	if(start == NULL) {
-		strcpy(response, "Telnet error: start is not find.\n");
+		strcpy(response, "Telnet error: start is not find.");
 		return 0;
 	}
 
-	stop = strstr(strBuffer, "\r\n# ");
-	if(stop == NULL) {
-		strcpy(response, "Telnet error: stop is not find.\n");
-		return 0;
-	}
-
+	// Odrizunuti echa zadosti
 	start += trLength;
 
+	// Nalezeni konce odpovedi
+	stop = strstr(strBuffer, "\r\n# ");
+	if(stop == NULL) {
+		strcpy(response, "Telnet error: stop is not find.");
+		return 0;
+	}
+
+	// Prichozi prazdna odpoved
 	if(start == (stop + 2)) {
 		strcpy(response, "");
 		return 1;
 	}
 
+	// Kontrola validni odpovedi
 	if(start > stop) {
 		strcpy(response, "Telnet error: Answer is not valid\n.");
 		return 0;
@@ -251,6 +236,7 @@ int telnetExec(int sockfd, char *request, char *response, int length){
 		rspLength = length;
 	}
 
+	// Kopirovani odpovedi
 	strncpy(response, start, stop - start);
 	response[stop - start] = '\0';
 

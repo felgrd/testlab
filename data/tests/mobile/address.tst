@@ -48,16 +48,11 @@ if [ $? -ne 0 ] || [ -z $SIM_IP ]; then
   error "Error with check IP address of SIM card ($SIM_IP)."
 fi
 
-# Zmena IP adresy mobilniho spojeni
-tl_paramchange -f ppp -p ipaddr $ROUTER1 "$SIM_IP"
-if [ $? -ne 0 ]; then
-  error "Router does not change parameter ipaddr."
-fi
-
-# Zmena APN
+# Zmena IP adresy mobilniho spojeni a APN
+tl_paramchange -f ppp -p ipaddr $ROUTER1 "$SIM_IP" &&
 tl_paramchange -f ppp -p apn $ROUTER1 conel.agnep.cz
 if [ $? -ne 0 ]; then
-  error "Router does not change parameter APN."
+  error "Router does not change parameters IP adress or APN."
 fi
 
 # Restart mobilniho spojeni

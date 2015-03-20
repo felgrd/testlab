@@ -14,12 +14,13 @@
 # Ukonceni skriptu v pripade chyby
 function error {
   tl_paramchange -f ppp -p phone $ROUTER1 "$B_NUMBER"
+  tl_remote $ROUTER1 "service ppp restart" >/dev/null
+  tl_mobileready $ROUTER1 >/dev/null
   echo $1 1>&2
   exit 1
 }
 
-# Inicializace defaultnich hodnot
-B_NUMBER=""
+# Inicializace hodnot
 RESULT=1
 
 # Kontrola parametru adresy testovaneho routeru
@@ -57,23 +58,22 @@ if [ $? -ne 0 ]; then
   error "Router does not restart service ppp."
 fi
 
-# Vraceni hodnot parametru IP adresa
-tl_paramchange -f ppp -p phone $ROUTER1 "$B_NUMBER"
-if [ $? -ne 0 ]; then
-  error "Router does not change parameter phone."
-fi
-
 # Kontrola zadani cisla pro vytaceni spojeni
-for a in $( seq 5 ); do
+for a in $( seq 30 ); do
   # Vycteni systemoveho logu
   tl_slog -p "send (\dATD$SIM_NUMBER^M)" $ROUTER1 >/dev/null
   if [ $? -eq 0 ]; then
     RESULT=0
     break
   fi
-
   sleep 1
 done
+
+# Vraceni hodnot parametru IP adresa
+tl_paramchange -f ppp -p phone $ROUTER1 "$B_NUMBER"
+if [ $? -ne 0 ]; then
+  error "Router does not change parameter phone."
+fi
 
 # Restart mobilniho spojeni
 tl_remote $ROUTER1 "service ppp restart" >/dev/null

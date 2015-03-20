@@ -13,7 +13,7 @@
 
 # Ukonceni skriptu v pripade chyby
 function error {
-  tl_paramchange -f ppp -p nettype $ROUTER1 0
+  tl_paramchange -f ppp -p nettype $ROUTER1 "$B_NETTYPE"
   echo $1 1>&2
   exit 1
 }
@@ -27,7 +27,7 @@ fi
 # IP adresa prvniho routeru
 ROUTER1=$1
 
-# Zalohovani nastaveni ppp mtu
+# Zalohovani nastaveni ppp nettype
 B_NETTYPE=$(tl_paraminfo -f ppp -p nettype $ROUTER1)
 if [ $? -ne 0 ]; then
   echo "Error with check value of parameter nettype." 1>&2

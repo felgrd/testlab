@@ -57,7 +57,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Cekani na ustaleni spojeni pred pingem
-sleep 2
+sleep 5
 
 # Zjisteni interfacu mobilniho spojeni
 M_INT=$(tl_status $ROUTER1 ppp Interface)
@@ -65,17 +65,17 @@ if [ $? -ne 0 ] || [ -z $M_INT ] || [ $M_INT == "N/A" ]; then
   error "Error with check interface of mobile connection ($M_INTs)."
 fi
 
+# Spravne nastaveni MTU v tcpdumpu
+PATTERN="IP \(.*length $TEST_MTU\)"
+
 # Spusteni pingu z routeru na do mobilni site
 tl_pingb -c 5 -s $TEST_SIZE $ROUTER1 10.0.0.1
 if [ $? -ne 0 ]; then
   error "Router does not start ping to mobile network."
 fi
 
-# Spravne nastaveni MTU v tcpdumpu
-PATTERN="IP \(.*length $TEST_MTU\)"
-
 # Monitorovani dat na mobilni siti
-tl_tcpdump -i $M_INT -t 3 $ROUTER1 "icmp[icmptype]==8" | grep -q "$PATTERN"
+tl_tcpdump -i $M_INT -t 5 $ROUTER1 "icmp[icmptype]==8" | grep -q "$PATTERN"
 if [ $? -ne 0 ]; then
   tl_tcpdump -r $ROUTER1 1>&2
   error "Required traffic is not found in tcpdump."
