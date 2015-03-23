@@ -1,4 +1,4 @@
-#include <unistd.h>      // pipe
+ssh#include <unistd.h>      // pipe
 #include <stdio.h>       // snprintf
 #include <string.h>      // strcat
 #include <signal.h>      // kill
