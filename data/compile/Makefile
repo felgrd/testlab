@@ -1,4 +1,4 @@
-SERVER = testlab
+SERVER = 10.40.28.46
 USER = testlab
 
 all:
