@@ -1,8 +1,3 @@
-# C program
-*.o
-*.so
-*.a
-
 # Latex
 *.aux
 *.bcf
@@ -12,6 +7,3 @@
 felgr_david.out
 felgr_david.pdf
 felgr_david.run.xml
-
-# Database
-*.bak
