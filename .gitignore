@@ -4,6 +4,8 @@
 *.idx
 *.log
 *.toc
+*.bbl
+*.blg
 felgr_david.out
 felgr_david.pdf
 felgr_david.run.xml

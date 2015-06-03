@@ -1,5 +1,6 @@
 all:
 	pdflatex felgr_david.tex
+	biber felgr_david
 	pdflatex felgr_david.tex
 
 start: all

@@ -13,18 +13,19 @@
 %%\usepackage[notref]{showkeys} % show labels for referencies
 %%\usepackage{showlabels}       % similar
 %%\usepackage{showidx}          % show index entries on every page
+\usepackage{indentfirst}        % odsazeni prvniho odstavce
 
 %% ======================================================== thesis info
 \startThesisInfo
   \Title{Metody automatizace testů síťových prvků}
   \Author{Bc. David Felgr}
   \AuthorEmail{felgrdav@fel.cvut.cz} % optional
-  \Date{May 2015}
+  \Date{Květen 2015}
   \Department{Katedra Řídící techniky}
   \Advisor{Ing. Pavel Kopecký, doc. Ing. Jiří Novák, Ph.D.}
   \KeywordsCz{Systémové testování, testování založené na modelech, embedded zařízení, automatizované testování.}
   \KeywordsEn{System testing, model based testing, embedded device, automated testing.}
-  %\AssignmentPage{assignment.pdf} % insert official assignment if given
+  \AssignmentPage{assignment.pdf} % insert official assignment if given
 \stopThesisInfo
 
 %% ============================== your definitions (abbreviations etc.)
@@ -60,11 +61,6 @@
   \include{ch10_praxe}
   \include{ch11_rozsireni}
   \include{ch12_zaver}
-
-
-  \startAppendices
-    \include{app01}
-  \stopAppendices
 \stopBodyMatter
 
 \startBackMatter
